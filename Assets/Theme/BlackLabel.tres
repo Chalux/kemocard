@@ -1,0 +1,8 @@
+[gd_resource type="LabelSettings" load_steps=2 format=3 uid="uid://cfnkb5x84r55y"]
+
+[ext_resource type="FontFile" uid="uid://dx5n4h2jl6map" path="res://Assets/Font/SourceHanSansSC-VF.ttf" id="1_b2ile"]
+
+[resource]
+font = ExtResource("1_b2ile")
+font_size = 50
+font_color = Color(0, 0, 0, 1)

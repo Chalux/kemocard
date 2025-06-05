@@ -1,0 +1,70 @@
+[gd_scene load_steps=5 format=3 uid="uid://bqntymuvktdnt"]
+
+[ext_resource type="Script" uid="uid://f8lrkm477aoo" path="res://Scenes/TeamEditView.cs" id="1_klise"]
+[ext_resource type="Texture2D" uid="uid://dy020thxp7s2c" path="res://Assets/Texture/GUI/panel2.tres" id="1_lxhar"]
+[ext_resource type="PackedScene" uid="uid://bpggq3dr3dycs" path="res://Components/Hero/HeroTeamItem.tscn" id="2_klise"]
+[ext_resource type="Texture2D" uid="uid://b7w4kvutlqmrt" path="res://Assets/Texture/cross_small.png" id="4_wj686"]
+
+[node name="TeamEditView" type="Control" node_paths=PackedStringArray("_flowContainer", "_btnClose")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_klise")
+_flowContainer = NodePath("ScrollContainer/VBoxContainer")
+_heroTeamItem = ExtResource("2_klise")
+_btnClose = NodePath("CloseBtn")
+
+[node name="NinePatchRect" type="NinePatchRect" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 256.0
+offset_top = 128.0
+offset_right = -264.0
+offset_bottom = -152.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_lxhar")
+region_rect = Rect2(0, 0, 48, 32)
+patch_margin_left = 6
+patch_margin_top = 6
+patch_margin_right = 6
+patch_margin_bottom = 5
+
+[node name="ScrollContainer" type="ScrollContainer" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.17
+anchor_top = 0.178
+anchor_right = 0.83
+anchor_bottom = 0.815
+offset_left = -0.399994
+offset_top = 5.75999
+offset_right = 0.399902
+offset_bottom = -8.20007
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="FlowContainer" parent="ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="CloseBtn" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.83
+anchor_top = 0.111
+anchor_right = 0.868
+anchor_bottom = 0.178
+offset_left = 0.399902
+offset_top = 0.119987
+offset_right = -0.560059
+offset_bottom = -0.240005
+grow_horizontal = 2
+grow_vertical = 2
+icon = ExtResource("4_wj686")

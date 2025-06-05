@@ -1,0 +1,29 @@
+[gd_scene load_steps=5 format=3 uid="uid://o730khbn4fyq"]
+
+[ext_resource type="Texture2D" uid="uid://be7810oyyhadb" path="res://Assets/Texture/Bar/EmptyBar.tres" id="1_5u1nf"]
+[ext_resource type="Texture2D" uid="uid://cv1ita601ug8" path="res://Assets/Texture/Bar/FullBarRed.tres" id="2_1me6i"]
+[ext_resource type="Script" uid="uid://cat0ocfamx264" path="res://Prefabs/ProgressBarLinkLab.cs" id="3_dbw6r"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_shmu5"]
+font_size = 7
+
+[node name="TextureProgressBar" type="TextureProgressBar" node_paths=PackedStringArray("ProgLab")]
+offset_left = -16.0
+offset_top = -24.0
+offset_right = 16.0
+offset_bottom = -16.0
+value = 50.0
+rounded = true
+nine_patch_stretch = true
+texture_under = ExtResource("1_5u1nf")
+texture_progress = ExtResource("2_1me6i")
+script = ExtResource("3_dbw6r")
+ProgLab = NodePath("Label")
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 0
+offset_right = 32.0
+offset_bottom = 9.0
+text = "100%"
+label_settings = SubResource("LabelSettings_shmu5")
+horizontal_alignment = 1

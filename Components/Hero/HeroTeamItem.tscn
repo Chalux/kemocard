@@ -1,0 +1,197 @@
+[gd_scene load_steps=6 format=3 uid="uid://bpggq3dr3dycs"]
+
+[ext_resource type="Script" uid="uid://bx5glkmhtxlmh" path="res://Components/Hero/HeroTeamItem.cs" id="1_1h2kb"]
+[ext_resource type="Texture2D" uid="uid://dkiu3qtyhaima" path="res://Assets/Texture/GUI/panel.tres" id="1_05pqf"]
+[ext_resource type="Texture2D" uid="uid://kms2uygohqg8" path="res://Assets/Texture/GUI/GUI.png" id="2_1h2kb"]
+[ext_resource type="LabelSettings" uid="uid://cfnkb5x84r55y" path="res://Assets/Theme/BlackLabel.tres" id="3_gjk3r"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_wj686"]
+font_size = 24
+font_color = Color(0, 0, 0, 1)
+
+[node name="Control" type="Control" node_paths=PackedStringArray("Head", "NameLab", "DeckLab", "HealthLab", "PAttackLab", "MAttackLab", "PDefenseLab", "MDefenseLab", "HealLab")]
+custom_minimum_size = Vector2(632, 312)
+layout_mode = 3
+anchor_right = 0.329
+anchor_bottom = 0.289
+offset_right = 0.319946
+offset_bottom = -0.119995
+script = ExtResource("1_1h2kb")
+Head = NodePath("TextureRect/CenterContainer/TextureRect")
+NameLab = NodePath("NameLab")
+DeckLab = NodePath("DeckLab")
+HealthLab = NodePath("HealthLab")
+PAttackLab = NodePath("PAttackLab")
+MAttackLab = NodePath("MAttackLab")
+PDefenseLab = NodePath("PDefenseLab")
+MDefenseLab = NodePath("MDefenseLab")
+HealLab = NodePath("HealLab")
+
+[node name="NinePatchRect" type="NinePatchRect" parent="."]
+layout_mode = 0
+offset_right = 63.0
+offset_bottom = 31.0
+scale = Vector2(10, 10)
+texture = ExtResource("1_05pqf")
+region_rect = Rect2(0, 0, 30, 30)
+patch_margin_left = 2
+patch_margin_top = 2
+patch_margin_right = 2
+patch_margin_bottom = 2
+axis_stretch_horizontal = 2
+axis_stretch_vertical = 2
+
+[node name="TextureRect" type="Control" parent="."]
+clip_contents = true
+anchors_preset = 0
+offset_left = 26.0
+offset_top = 26.0
+offset_right = 218.0
+offset_bottom = 282.0
+
+[node name="CenterContainer" type="CenterContainer" parent="TextureRect"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -208.0
+offset_top = -244.0
+offset_right = 208.0
+offset_bottom = 244.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TextureRect" type="TextureRect" parent="TextureRect/CenterContainer"]
+layout_mode = 2
+texture = ExtResource("2_1h2kb")
+stretch_mode = 5
+
+[node name="NameLab" type="Label" parent="."]
+layout_mode = 0
+offset_left = 234.0
+offset_top = 26.0
+offset_right = 594.0
+offset_bottom = 86.0
+text = "名字"
+label_settings = ExtResource("3_gjk3r")
+
+[node name="DeckLab" type="Label" parent="."]
+layout_mode = 0
+offset_left = 234.0
+offset_top = 98.0
+offset_right = 602.0
+offset_bottom = 162.0
+text = "属性·卡组简介 水字数水字数水字数水字数水字数水字数水字数水字水字数水字数水字数水字数水字数"
+label_settings = SubResource("LabelSettings_wj686")
+autowrap_mode = 3
+text_overrun_behavior = 4
+
+[node name="NameLab3" type="Label" parent="."]
+layout_mode = 0
+offset_left = 234.0
+offset_top = 170.0
+offset_right = 338.0
+offset_bottom = 199.0
+text = "生命上限"
+label_settings = SubResource("LabelSettings_wj686")
+
+[node name="NameLab4" type="Label" parent="."]
+layout_mode = 0
+offset_left = 234.0
+offset_top = 210.0
+offset_right = 330.0
+offset_bottom = 239.0
+text = "物理攻击"
+label_settings = SubResource("LabelSettings_wj686")
+
+[node name="NameLab5" type="Label" parent="."]
+layout_mode = 0
+offset_left = 410.0
+offset_top = 210.0
+offset_right = 506.0
+offset_bottom = 239.0
+text = "魔法攻击"
+label_settings = SubResource("LabelSettings_wj686")
+
+[node name="NameLab6" type="Label" parent="."]
+layout_mode = 0
+offset_left = 234.0
+offset_top = 250.0
+offset_right = 330.0
+offset_bottom = 279.0
+text = "物理防御"
+label_settings = SubResource("LabelSettings_wj686")
+
+[node name="NameLab7" type="Label" parent="."]
+layout_mode = 0
+offset_left = 410.0
+offset_top = 250.0
+offset_right = 506.0
+offset_bottom = 279.0
+text = "魔法防御"
+label_settings = SubResource("LabelSettings_wj686")
+
+[node name="HealthLab" type="Label" parent="."]
+layout_mode = 0
+offset_left = 338.0
+offset_top = 170.0
+offset_right = 434.0
+offset_bottom = 199.0
+text = "999999"
+label_settings = SubResource("LabelSettings_wj686")
+
+[node name="PAttackLab" type="Label" parent="."]
+layout_mode = 0
+offset_left = 338.0
+offset_top = 210.0
+offset_right = 434.0
+offset_bottom = 239.0
+text = "999999"
+label_settings = SubResource("LabelSettings_wj686")
+
+[node name="MAttackLab" type="Label" parent="."]
+layout_mode = 0
+offset_left = 514.0
+offset_top = 210.0
+offset_right = 610.0
+offset_bottom = 239.0
+text = "999999"
+label_settings = SubResource("LabelSettings_wj686")
+
+[node name="PDefenseLab" type="Label" parent="."]
+layout_mode = 0
+offset_left = 338.0
+offset_top = 250.0
+offset_right = 434.0
+offset_bottom = 279.0
+text = "999999"
+label_settings = SubResource("LabelSettings_wj686")
+
+[node name="MDefenseLab" type="Label" parent="."]
+layout_mode = 0
+offset_left = 514.0
+offset_top = 250.0
+offset_right = 610.0
+offset_bottom = 279.0
+text = "999999"
+label_settings = SubResource("LabelSettings_wj686")
+
+[node name="NameLab8" type="Label" parent="."]
+layout_mode = 0
+offset_left = 410.0
+offset_top = 170.0
+offset_right = 506.0
+offset_bottom = 199.0
+text = "回复量"
+label_settings = SubResource("LabelSettings_wj686")
+
+[node name="HealLab" type="Label" parent="."]
+layout_mode = 0
+offset_left = 514.0
+offset_top = 170.0
+offset_right = 610.0
+offset_bottom = 199.0
+text = "999999"
+label_settings = SubResource("LabelSettings_wj686")

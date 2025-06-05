@@ -1,0 +1,365 @@
+[gd_scene load_steps=11 format=3 uid="uid://ci3ks1wv5bqlo"]
+
+[ext_resource type="Script" uid="uid://bjxa6iqvgf4xp" path="res://Scenes/DeckEditView.cs" id="1_lhxxj"]
+[ext_resource type="Texture2D" uid="uid://dy020thxp7s2c" path="res://Assets/Texture/GUI/panel2.tres" id="1_sry1k"]
+[ext_resource type="Texture2D" uid="uid://dkiu3qtyhaima" path="res://Assets/Texture/GUI/panel.tres" id="2_hf08v"]
+[ext_resource type="Texture2D" uid="uid://kms2uygohqg8" path="res://Assets/Texture/GUI/GUI.png" id="3_plytv"]
+[ext_resource type="LabelSettings" uid="uid://cfnkb5x84r55y" path="res://Assets/Theme/BlackLabel.tres" id="4_haesh"]
+[ext_resource type="PackedScene" uid="uid://dmiq1q3ilibuw" path="res://Components/Card/CardItem.tscn" id="5_haesh"]
+[ext_resource type="Script" uid="uid://chmewpio17dky" path="res://Components/List/VirtualList.cs" id="6_db7ab"]
+[ext_resource type="PackedScene" uid="uid://cf60h87480xnv" path="res://Components/RoleSelector/RoleSelector.tscn" id="8_osoxr"]
+[ext_resource type="PackedScene" uid="uid://cnthe7mwqhg7j" path="res://Components/TagSelector/TagSelector.tscn" id="10_mcsba"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_db7ab"]
+font_size = 24
+font_color = Color(0, 0, 0, 1)
+
+[node name="DeckEditView" type="Control" node_paths=PackedStringArray("_itemList", "_healthLab", "_pDefenseLab", "_mDefenseLab", "_pAttackLab", "_mAttackLab", "_healLab", "_deckLab", "_nameLab", "_headIcon", "_closeBtn", "_cardList", "_roleSelector", "_tagSelector")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_lhxxj")
+_itemList = NodePath("HeroControl/DeckList")
+_healthLab = NodePath("HeroControl/LabelControl/HealthLab")
+_pDefenseLab = NodePath("HeroControl/LabelControl/PDefenseLab")
+_mDefenseLab = NodePath("HeroControl/LabelControl/MDefenseLab")
+_pAttackLab = NodePath("HeroControl/LabelControl/PAttackLab")
+_mAttackLab = NodePath("HeroControl/LabelControl/MAttackLab")
+_healLab = NodePath("HeroControl/LabelControl/HealLab")
+_deckLab = NodePath("HeroControl/DescControl/DeckLab")
+_nameLab = NodePath("HeroControl/DescControl/NameLab")
+_headIcon = NodePath("HeroControl/DescControl/TextureRect/CenterContainer/TextureRect")
+_closeBtn = NodePath("HeroControl/CloseBtn")
+_cardList = NodePath("Control")
+_roleSelector = NodePath("RoleSelector")
+_tagSelector = NodePath("TagSelector")
+
+[node name="NinePatchRect" type="NinePatchRect" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 128.0
+offset_top = 72.0
+offset_right = -132.0
+offset_bottom = -48.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_sry1k")
+region_rect = Rect2(0, 0, 48, 32)
+patch_margin_left = 6
+patch_margin_top = 6
+patch_margin_right = 6
+patch_margin_bottom = 5
+
+[node name="HeroControl" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 200.0
+offset_top = 144.0
+offset_right = -1104.0
+offset_bottom = -104.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="NinePatchRect2" type="NinePatchRect" parent="HeroControl"]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.006
+anchor_bottom = 0.998
+offset_right = 0.303955
+offset_bottom = -0.335999
+texture = ExtResource("2_hf08v")
+region_rect = Rect2(0, 0, 30, 30)
+patch_margin_left = 2
+patch_margin_top = 2
+patch_margin_right = 2
+patch_margin_bottom = 2
+axis_stretch_horizontal = 2
+axis_stretch_vertical = 2
+
+[node name="DeckList" type="GridContainer" parent="HeroControl"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.065
+anchor_top = 0.567
+anchor_right = 0.935
+anchor_bottom = 0.827
+offset_left = -0.0400047
+offset_top = 0.255981
+offset_right = 0.039978
+offset_bottom = -4.06403
+grow_horizontal = 2
+grow_vertical = 2
+columns = 5
+
+[node name="CardItem" parent="HeroControl/DeckList" instance=ExtResource("5_haesh")]
+layout_mode = 2
+
+[node name="CardItem2" parent="HeroControl/DeckList" instance=ExtResource("5_haesh")]
+layout_mode = 2
+
+[node name="CardItem3" parent="HeroControl/DeckList" instance=ExtResource("5_haesh")]
+layout_mode = 2
+
+[node name="CardItem4" parent="HeroControl/DeckList" instance=ExtResource("5_haesh")]
+layout_mode = 2
+
+[node name="CardItem5" parent="HeroControl/DeckList" instance=ExtResource("5_haesh")]
+layout_mode = 2
+
+[node name="CardItem6" parent="HeroControl/DeckList" instance=ExtResource("5_haesh")]
+layout_mode = 2
+
+[node name="CardItem7" parent="HeroControl/DeckList" instance=ExtResource("5_haesh")]
+layout_mode = 2
+
+[node name="CardItem8" parent="HeroControl/DeckList" instance=ExtResource("5_haesh")]
+layout_mode = 2
+
+[node name="CardItem9" parent="HeroControl/DeckList" instance=ExtResource("5_haesh")]
+layout_mode = 2
+
+[node name="CardItem10" parent="HeroControl/DeckList" instance=ExtResource("5_haesh")]
+layout_mode = 2
+
+[node name="LabelControl" type="Control" parent="HeroControl"]
+layout_mode = 1
+anchor_right = 1.006
+anchor_bottom = 0.995
+offset_right = 0.303955
+offset_bottom = 0.159973
+
+[node name="NameLab3" type="Label" parent="HeroControl/LabelControl"]
+layout_mode = 0
+offset_left = 64.0
+offset_top = 328.0
+offset_right = 168.0
+offset_bottom = 357.0
+text = "生命上限"
+label_settings = SubResource("LabelSettings_db7ab")
+
+[node name="NameLab4" type="Label" parent="HeroControl/LabelControl"]
+layout_mode = 0
+offset_left = 64.0
+offset_top = 376.0
+offset_right = 160.0
+offset_bottom = 405.0
+text = "物理攻击"
+label_settings = SubResource("LabelSettings_db7ab")
+
+[node name="NameLab5" type="Label" parent="HeroControl/LabelControl"]
+layout_mode = 0
+offset_left = 324.0
+offset_top = 376.0
+offset_right = 420.0
+offset_bottom = 405.0
+text = "魔法攻击"
+label_settings = SubResource("LabelSettings_db7ab")
+
+[node name="NameLab6" type="Label" parent="HeroControl/LabelControl"]
+layout_mode = 0
+offset_left = 64.0
+offset_top = 424.0
+offset_right = 160.0
+offset_bottom = 453.0
+text = "物理防御"
+label_settings = SubResource("LabelSettings_db7ab")
+
+[node name="NameLab7" type="Label" parent="HeroControl/LabelControl"]
+layout_mode = 0
+offset_left = 324.0
+offset_top = 424.0
+offset_right = 420.0
+offset_bottom = 453.0
+text = "魔法防御"
+label_settings = SubResource("LabelSettings_db7ab")
+
+[node name="HealthLab" type="Label" parent="HeroControl/LabelControl"]
+layout_mode = 0
+offset_left = 176.0
+offset_top = 328.0
+offset_right = 272.0
+offset_bottom = 357.0
+text = "999999"
+label_settings = SubResource("LabelSettings_db7ab")
+
+[node name="PAttackLab" type="Label" parent="HeroControl/LabelControl"]
+layout_mode = 0
+offset_left = 176.0
+offset_top = 376.0
+offset_right = 272.0
+offset_bottom = 405.0
+text = "999999"
+label_settings = SubResource("LabelSettings_db7ab")
+
+[node name="MAttackLab" type="Label" parent="HeroControl/LabelControl"]
+layout_mode = 0
+offset_left = 440.0
+offset_top = 376.0
+offset_right = 536.0
+offset_bottom = 405.0
+rotation = -0.00335664
+text = "999999"
+label_settings = SubResource("LabelSettings_db7ab")
+
+[node name="PDefenseLab" type="Label" parent="HeroControl/LabelControl"]
+layout_mode = 0
+offset_left = 176.0
+offset_top = 424.0
+offset_right = 272.0
+offset_bottom = 453.0
+text = "999999"
+label_settings = SubResource("LabelSettings_db7ab")
+
+[node name="MDefenseLab" type="Label" parent="HeroControl/LabelControl"]
+layout_mode = 0
+offset_left = 440.0
+offset_top = 424.0
+offset_right = 536.0
+offset_bottom = 453.0
+text = "999999"
+label_settings = SubResource("LabelSettings_db7ab")
+
+[node name="NameLab8" type="Label" parent="HeroControl/LabelControl"]
+layout_mode = 0
+offset_left = 328.0
+offset_top = 328.0
+offset_right = 424.0
+offset_bottom = 357.0
+rotation = -0.00335664
+text = "回复量"
+label_settings = SubResource("LabelSettings_db7ab")
+
+[node name="HealLab" type="Label" parent="HeroControl/LabelControl"]
+layout_mode = 0
+offset_left = 440.0
+offset_top = 328.0
+offset_right = 536.0
+offset_bottom = 357.0
+rotation = -0.00335664
+text = "999999"
+label_settings = SubResource("LabelSettings_db7ab")
+
+[node name="DescControl" type="Control" parent="HeroControl"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TextureRect" type="Control" parent="HeroControl/DescControl"]
+clip_contents = true
+layout_mode = 3
+anchors_preset = 0
+offset_left = 40.0
+offset_top = 40.0
+offset_right = 232.0
+offset_bottom = 296.0
+
+[node name="CenterContainer" type="CenterContainer" parent="HeroControl/DescControl/TextureRect"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -208.0
+offset_top = -244.0
+offset_right = 208.0
+offset_bottom = 244.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TextureRect" type="TextureRect" parent="HeroControl/DescControl/TextureRect/CenterContainer"]
+layout_mode = 2
+texture = ExtResource("3_plytv")
+stretch_mode = 5
+
+[node name="NameLab" type="Label" parent="HeroControl/DescControl"]
+layout_mode = 0
+offset_left = 260.0
+offset_top = 40.0
+offset_right = 588.0
+offset_bottom = 100.0
+text = "名字"
+label_settings = ExtResource("4_haesh")
+
+[node name="DeckLab" type="Label" parent="HeroControl/DescControl"]
+layout_mode = 0
+offset_left = 260.0
+offset_top = 112.0
+offset_right = 588.0
+offset_bottom = 312.0
+text = "属性·卡组简介 水字数水字数水字数水字数水字数水字数水字数水字水字数水字数水字数水字数水字数"
+label_settings = SubResource("LabelSettings_db7ab")
+autowrap_mode = 3
+text_overrun_behavior = 4
+
+[node name="CloseBtn" type="Button" parent="HeroControl"]
+layout_mode = 0
+offset_left = 256.0
+offset_top = 720.0
+offset_right = 364.0
+offset_bottom = 788.0
+text = "完成"
+
+[node name="Control" type="Control" parent="." node_paths=PackedStringArray("_contentContainer", "_scrollView")]
+layout_mode = 1
+anchor_left = 0.525
+anchor_top = 0.237
+anchor_right = 0.883
+anchor_bottom = 0.902
+offset_left = -6.10352e-05
+offset_top = 0.039978
+offset_right = 8.64001
+offset_bottom = -0.160095
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("6_db7ab")
+_itemScene = ExtResource("5_haesh")
+_contentContainer = NodePath("ScrollContainer/VBoxContainer")
+_scrollView = NodePath("ScrollContainer")
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VFlowContainer" parent="Control/ScrollContainer"]
+layout_mode = 2
+
+[node name="RoleSelector" parent="." instance=ExtResource("8_osoxr")]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.442
+anchor_top = 0.133
+anchor_right = 0.883
+anchor_bottom = 0.222
+offset_left = -0.640076
+offset_top = 0.360001
+offset_right = 0.640015
+offset_bottom = 0.239975
+
+[node name="TagSelector" parent="." instance=ExtResource("10_mcsba")]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.444
+anchor_top = 0.237
+anchor_right = 0.517
+anchor_bottom = 0.893
+offset_left = -4.48004
+offset_top = 0.039978
+offset_right = -8.64001
+offset_bottom = 3.55994
+grow_horizontal = 2
+grow_vertical = 2

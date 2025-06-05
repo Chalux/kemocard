@@ -1,0 +1,59 @@
+[gd_scene load_steps=4 format=3 uid="uid://cnjtkaucp2k02"]
+
+[ext_resource type="Script" uid="uid://d0dcu65f24kta" path="res://Scripts/Module/Loading/LoadingScene.cs" id="1_mtloq"]
+[ext_resource type="Texture2D" uid="uid://ul62quxmx81p" path="res://Assets/Texture/busy_circle_fade.png" id="1_ya8xv"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_mtloq"]
+font_size = 52
+
+[node name="LoadingScene" type="Control" node_paths=PackedStringArray("_loadingImage")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_mtloq")
+_loadingImage = NodePath("TextureRect")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -128.0
+offset_top = -136.0
+offset_right = -64.0
+offset_bottom = -72.0
+grow_horizontal = 0
+grow_vertical = 0
+pivot_offset = Vector2(32, 32)
+texture = ExtResource("1_ya8xv")
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -320.0
+offset_top = -136.0
+offset_right = -128.0
+offset_bottom = -73.0
+grow_horizontal = 0
+grow_vertical = 0
+text = "加载中"
+label_settings = SubResource("LabelSettings_mtloq")
+horizontal_alignment = 2

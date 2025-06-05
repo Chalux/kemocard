@@ -1,0 +1,12 @@
+[gd_scene load_steps=2 format=3 uid="uid://cnthe7mwqhg7j"]
+
+[ext_resource type="Script" uid="uid://byjqgj27ex0hg" path="res://Components/TagSelector/TagSelector.cs" id="1_is5a2"]
+
+[node name="ItemList" type="ItemList"]
+offset_left = 848.0
+offset_top = 256.0
+offset_right = 984.0
+offset_bottom = 968.0
+theme_override_font_sizes/font_size = 30
+select_mode = 2
+script = ExtResource("1_is5a2")

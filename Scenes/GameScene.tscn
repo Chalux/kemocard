@@ -1,0 +1,60 @@
+[gd_scene load_steps=2 format=3 uid="uid://dwh8ux00e6q4b"]
+
+[ext_resource type="Script" uid="uid://wpmke35lxpbi" path="res://Scripts/Module/GameUI/GameScene.cs" id="1_2wl7v"]
+
+[node name="GameScene" type="Control" node_paths=PackedStringArray("_teamEditBtn", "_quitBtn", "_giveUpBtn")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_2wl7v")
+_teamEditBtn = NodePath("TeamEditBtn")
+_quitBtn = NodePath("QuitBtn")
+_giveUpBtn = NodePath("GiveupBtn")
+
+[node name="TeamEditBtn" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -384.0
+offset_top = -120.0
+offset_right = -64.0
+offset_bottom = -52.0
+grow_horizontal = 0
+grow_vertical = 0
+text = "编队"
+
+[node name="GiveupBtn" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -384.0
+offset_top = -224.0
+offset_right = -64.0
+offset_bottom = -156.0
+grow_horizontal = 0
+grow_vertical = 0
+text = "放弃"
+
+[node name="QuitBtn" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -384.0
+offset_top = -328.0
+offset_right = -62.0
+offset_bottom = -260.0
+grow_horizontal = 0
+grow_vertical = 0
+text = "保存并退出"

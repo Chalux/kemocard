@@ -1,0 +1,117 @@
+[gd_scene load_steps=9 format=3 uid="uid://dijaxdgpo5g43"]
+
+[ext_resource type="Texture2D" uid="uid://cv1ita601ug8" path="res://Assets/Texture/Bar/FullBarRed.tres" id="1_ee1xo"]
+[ext_resource type="Script" uid="uid://d32h0vyvwhvyd" path="res://Scripts/Module/GameUI/AlertView.cs" id="1_o8rfi"]
+[ext_resource type="Texture2D" uid="uid://cvewvgfr4f2x4" path="res://Assets/Texture/Bar/FullBarGreen.tres" id="2_o8rfi"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_wqq7o"]
+font_size = 32
+font_color = Color(0, 0, 0, 1)
+outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ee1xo"]
+texture = ExtResource("1_ee1xo")
+texture_margin_left = 3.0
+texture_margin_top = 3.0
+texture_margin_right = 3.0
+texture_margin_bottom = 3.0
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_tyjxj"]
+texture = ExtResource("1_ee1xo")
+texture_margin_left = 3.0
+texture_margin_top = 3.0
+texture_margin_right = 3.0
+texture_margin_bottom = 3.0
+modulate_color = Color(0.733333, 0.733333, 0.733333, 1)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_o8rfi"]
+texture = ExtResource("2_o8rfi")
+texture_margin_left = 3.0
+texture_margin_top = 3.0
+texture_margin_right = 3.0
+texture_margin_bottom = 3.0
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_xsshq"]
+texture = ExtResource("2_o8rfi")
+texture_margin_left = 3.0
+texture_margin_top = 3.0
+texture_margin_right = 3.0
+texture_margin_bottom = 3.0
+modulate_color = Color(0.733333, 0.733333, 0.733333, 1)
+
+[node name="AlertView" type="Control" node_paths=PackedStringArray("_messageLabel", "_agreeBtn", "_cancelBtn", "_bgColorRect")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_o8rfi")
+_messageLabel = NodePath("ColorRect/Label")
+_agreeBtn = NodePath("AgreeBtn")
+_cancelBtn = NodePath("CancelBtn")
+_bgColorRect = NodePath("ColorRect")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+custom_minimum_size = Vector2(1152, 120)
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(1, 1, 1, 0.490196)
+
+[node name="Label" type="Label" parent="ColorRect"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "测试信息巴拉巴拉测试信息巴拉巴拉测试信息巴拉巴拉测试信息巴拉巴拉测试信息巴拉巴拉测试信息巴拉巴拉测试信息巴拉巴拉测试信息巴拉巴拉测试信息巴拉巴拉测试信息巴拉巴拉测试信息巴拉巴拉测试信息巴拉巴拉测试信息巴拉巴拉测试信息巴拉巴拉测试信息巴拉巴拉测试信息巴拉巴拉测试信息巴拉巴拉测试信息巴拉巴拉测试信息巴拉巴拉测试信息巴拉巴拉测试信息巴拉巴拉测试信息巴拉巴拉测试信息巴拉巴拉"
+label_settings = SubResource("LabelSettings_wqq7o")
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="CancelBtn" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -256.0
+offset_top = -136.0
+offset_right = -128.0
+offset_bottom = -89.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_font_sizes/font_size = 32
+theme_override_styles/hover = SubResource("StyleBoxTexture_ee1xo")
+theme_override_styles/normal = SubResource("StyleBoxTexture_tyjxj")
+text = "取消"
+
+[node name="AgreeBtn" type="Button" parent="."]
+custom_minimum_size = Vector2(15, 15)
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = 128.0
+offset_top = -136.0
+offset_right = 256.0
+offset_bottom = -89.0
+grow_horizontal = 2
+grow_vertical = 0
+size_flags_horizontal = 0
+size_flags_vertical = 4
+theme_override_font_sizes/font_size = 32
+theme_override_styles/hover = SubResource("StyleBoxTexture_o8rfi")
+theme_override_styles/normal = SubResource("StyleBoxTexture_xsshq")
+text = "确定"
+expand_icon = true

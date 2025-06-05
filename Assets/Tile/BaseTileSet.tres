@@ -1,0 +1,45 @@
+[gd_resource type="TileSet" load_steps=5 format=3 uid="uid://1qudoqoq4j0h"]
+
+[ext_resource type="Texture2D" uid="uid://chb157l4oeh4m" path="res://Assets/Tile/Tileset1.png" id="1_q05xi"]
+[ext_resource type="Texture2D" uid="uid://drlid05rdc3vv" path="res://Assets/Tile/tf_tileset.png" id="2_dknop"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_gxb1y"]
+texture = ExtResource("1_q05xi")
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+0:0/0/custom_data_1 = 1.0
+0:1/0 = 0
+0:1/0/custom_data_0 = true
+0:1/0/custom_data_1 = 1.0
+0:2/0 = 0
+0:2/0/custom_data_1 = 1.0
+0:3/0 = 0
+0:3/0/custom_data_1 = 1.0
+0:4/0 = 0
+0:4/0/custom_data_0 = true
+0:4/0/custom_data_1 = 1.0
+0:5/0 = 0
+0:5/0/custom_data_1 = 1.0
+0:6/0 = 0
+0:6/0/custom_data_1 = 1.0
+0:7/0 = 0
+0:7/0/custom_data_1 = 1.0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_5pywk"]
+texture = ExtResource("2_dknop")
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+0:1/0 = 0
+0:2/0 = 0
+
+[resource]
+tile_shape = 3
+tile_size = Vector2i(32, 21)
+custom_data_layer_0/name = "isWater"
+custom_data_layer_0/type = 1
+custom_data_layer_1/name = "MovementCost"
+custom_data_layer_1/type = 3
+custom_data_layer_2/name = "CantWalk"
+custom_data_layer_2/type = 1
+sources/1 = SubResource("TileSetAtlasSource_gxb1y")
+sources/2 = SubResource("TileSetAtlasSource_5pywk")

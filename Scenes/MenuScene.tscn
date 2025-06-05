@@ -1,0 +1,64 @@
+[gd_scene load_steps=3 format=3 uid="uid://n7n8p5s3wrrc"]
+
+[ext_resource type="Script" uid="uid://d2dkhkh7x6ndy" path="res://Scripts/Module/GameUI/MenuScene.cs" id="1_36iol"]
+[ext_resource type="Theme" uid="uid://b5yq7jssxf1qx" path="res://Assets/Theme/BaseTheme.tres" id="2_xx56i"]
+
+[node name="MenuScene" type="Control" node_paths=PackedStringArray("_quitButton", "_settingButton", "_startButton")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_36iol")
+_quitButton = NodePath("QuitButton")
+_settingButton = NodePath("SettingButton")
+_startButton = NodePath("StartButton")
+
+[node name="StartButton" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -232.0
+offset_top = -280.0
+offset_right = -24.0
+offset_bottom = -212.0
+grow_horizontal = 0
+grow_vertical = 0
+theme = ExtResource("2_xx56i")
+text = "开始游戏"
+
+[node name="SettingButton" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -232.0
+offset_top = -184.0
+offset_right = -28.0
+offset_bottom = -116.0
+grow_horizontal = 0
+grow_vertical = 0
+theme = ExtResource("2_xx56i")
+text = "设置"
+
+[node name="QuitButton" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -96.0
+offset_top = -60.0
+offset_right = -24.0
+offset_bottom = -28.0
+grow_horizontal = 0
+grow_vertical = 0
+theme = ExtResource("2_xx56i")
+text = "退出游戏"
