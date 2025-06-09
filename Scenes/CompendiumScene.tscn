@@ -1,0 +1,177 @@
+[gd_scene load_steps=10 format=3 uid="uid://km554lk2dym3"]
+
+[ext_resource type="Script" uid="uid://yq5hdixgx26n" path="res://Scenes/CompendiumScene.cs" id="1_7bfm0"]
+[ext_resource type="Texture2D" uid="uid://dy020thxp7s2c" path="res://Assets/Texture/GUI/panel2.tres" id="1_8u4m5"]
+[ext_resource type="PackedScene" uid="uid://cf60h87480xnv" path="res://Components/RoleSelector/RoleSelector.tscn" id="2_gktto"]
+[ext_resource type="PackedScene" uid="uid://drrx0okjtcbil" path="res://Components/AttributeSelector/AttributeSelector.tscn" id="3_xcho8"]
+[ext_resource type="Script" uid="uid://chmewpio17dky" path="res://Components/List/VirtualList.cs" id="4_vghge"]
+[ext_resource type="PackedScene" uid="uid://bbldqvn7fyoi" path="res://Components/Hero/HeroItem.tscn" id="5_l80nb"]
+[ext_resource type="PackedScene" uid="uid://cnthe7mwqhg7j" path="res://Components/TagSelector/TagSelector.tscn" id="6_erd21"]
+[ext_resource type="PackedScene" uid="uid://c01n24gystrqo" path="res://Components/Card/CardBigItem.tscn" id="7_7bfm0"]
+[ext_resource type="Texture2D" uid="uid://dhcnsobb0klc4" path="res://Assets/Texture/cross_large.png" id="9_iy3x2"]
+
+[node name="CompendiumScene" type="Control" node_paths=PackedStringArray("_characterRoleSlc", "_cardRoleSlc", "_characterAttributeSlc", "_cardTagSlc", "_characterList", "_cardList", "_closeBtn")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_7bfm0")
+_characterRoleSlc = NodePath("NinePatchRect/TabContainer/角色/RoleSelector")
+_cardRoleSlc = NodePath("NinePatchRect/TabContainer/卡牌/RoleSelector")
+_characterAttributeSlc = NodePath("NinePatchRect/TabContainer/角色/VBoxContainer")
+_cardTagSlc = NodePath("NinePatchRect/TabContainer/卡牌/ItemList")
+_characterList = NodePath("NinePatchRect/TabContainer/角色/Control")
+_cardList = NodePath("NinePatchRect/TabContainer/卡牌/Control")
+_closeBtn = NodePath("Button")
+
+[node name="NinePatchRect" type="NinePatchRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 64.0
+offset_top = 72.0
+offset_right = -56.0
+offset_bottom = -56.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_8u4m5")
+region_rect = Rect2(0, 0, 48, 32)
+patch_margin_left = 6
+patch_margin_top = 6
+patch_margin_right = 6
+patch_margin_bottom = 5
+
+[node name="TabContainer" type="TabContainer" parent="NinePatchRect"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = -0.036
+anchor_top = -0.076
+anchor_right = 1.031
+anchor_bottom = 1.059
+offset_left = 64.8
+offset_top = 72.352
+offset_right = -55.8
+offset_bottom = -56.168
+grow_horizontal = 2
+grow_vertical = 2
+current_tab = 1
+
+[node name="角色" type="Control" parent="NinePatchRect/TabContainer"]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 0
+
+[node name="RoleSelector" parent="NinePatchRect/TabContainer/角色" instance=ExtResource("2_gktto")]
+layout_mode = 1
+anchors_preset = 10
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 1.0
+anchor_bottom = 0.0
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 0.0
+offset_bottom = 96.0
+grow_vertical = 1
+
+[node name="VBoxContainer" parent="NinePatchRect/TabContainer/角色" instance=ExtResource("3_xcho8")]
+layout_mode = 1
+offset_right = 90.0
+
+[node name="Control" type="Control" parent="NinePatchRect/TabContainer/角色" node_paths=PackedStringArray("_contentContainer", "_scrollView")]
+layout_mode = 1
+anchor_left = 0.058
+anchor_top = 0.122
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -0.400002
+offset_top = 0.249992
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("4_vghge")
+_itemScene = ExtResource("5_l80nb")
+_contentContainer = NodePath("ScrollContainer/HFlowContainer")
+_scrollView = NodePath("ScrollContainer")
+
+[node name="ScrollContainer" type="ScrollContainer" parent="NinePatchRect/TabContainer/角色/Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HFlowContainer" type="HFlowContainer" parent="NinePatchRect/TabContainer/角色/Control/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="卡牌" type="Control" parent="NinePatchRect/TabContainer"]
+layout_mode = 2
+metadata/_tab_index = 1
+
+[node name="RoleSelector" parent="NinePatchRect/TabContainer/卡牌" instance=ExtResource("2_gktto")]
+layout_mode = 1
+anchors_preset = 10
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 1.0
+anchor_bottom = 0.0
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 0.0
+offset_bottom = 96.0
+grow_vertical = 1
+
+[node name="ItemList" parent="NinePatchRect/TabContainer/卡牌" instance=ExtResource("6_erd21")]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 192.0
+offset_bottom = 0.0
+grow_vertical = 2
+
+[node name="Control" type="Control" parent="NinePatchRect/TabContainer/卡牌" node_paths=PackedStringArray("_contentContainer", "_scrollView")]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 216.0
+offset_top = 115.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("4_vghge")
+_itemScene = ExtResource("7_7bfm0")
+_contentContainer = NodePath("ScrollContainer/HFlowContainer")
+_scrollView = NodePath("ScrollContainer")
+
+[node name="ScrollContainer" type="ScrollContainer" parent="NinePatchRect/TabContainer/卡牌/Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HFlowContainer" type="HFlowContainer" parent="NinePatchRect/TabContainer/卡牌/Control/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/h_separation = 20
+
+[node name="Button" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -96.0
+offset_top = 32.0
+offset_right = -24.0
+offset_bottom = 104.0
+grow_horizontal = 0
+icon = ExtResource("9_iy3x2")

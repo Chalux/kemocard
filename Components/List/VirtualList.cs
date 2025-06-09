@@ -17,11 +17,7 @@ public partial class VirtualList : Control
     [Export] private Container _contentContainer;
     [Export] private ScrollContainer _scrollView;
     private int _selectedIndex = -1;
-    private int _visibleCount = 5; // 默认可见数量
     private int _offsetIndex;
-    private const int PoolSize = 10;
-    private Control[] _itemPool = new Control[PoolSize];
-    private int _itemHeight = 64; // 假设每个项高度为64
 
     public int SelectedIndex
     {
@@ -36,37 +32,6 @@ public partial class VirtualList : Control
         }
     }
 
-    public override void _Ready()
-    {
-        Initialize();
-    }
-
-    private void Initialize()
-    {
-        // _scrollView = GetNode<ScrollContainer>("ScrollView");
-        // _contentContainer = _scrollView.GetNode<VBoxContainer>("Content");
-
-        for (int i = 0; i < PoolSize; i++)
-        {
-            var item = _itemScene.Instantiate<Control>();
-            if (item is ISelectableItem selectableItem)
-            {
-                selectableItem.Index = i;
-                selectableItem.List = this;
-                selectableItem.Visible = false;
-                if (selectableItem is Control temp)
-                {
-                    temp.GuiInput += selectableItem.OnGuiInput;
-                }
-            }
-
-            _contentContainer.AddChild(item);
-            _itemPool[i] = item;
-        }
-
-        UpdateVisibleItems();
-    }
-
     private void OnSelectedItem(int previousIndex)
     {
         SelectedHandler?.Invoke(_selectedIndex, previousIndex);
@@ -75,38 +40,31 @@ public partial class VirtualList : Control
     public void SetData(List<object> data)
     {
         Array = data;
+        if (_contentContainer.GetChildCount() <= Array.Count)
+        {
+            for (var i = _contentContainer.GetChildCount(); i < Array.Count; i++)
+            {
+                _contentContainer.AddChild(_itemScene.Instantiate<Control>());
+            }
+        }
+        else
+        {
+            for (var i = _contentContainer.GetChildCount() - 1; i >= Array.Count; i--)
+            {
+                var control = _contentContainer.GetChild(i);
+                _contentContainer.RemoveChild(control);
+                control.QueueFree();
+            }
+        }
+
         UpdateVisibleItems();
     }
 
     private void UpdateVisibleItems()
     {
-        int total = Array?.Count ?? 0;
-        int start = _offsetIndex;
-        int end = Math.Min(start + _visibleCount, total);
-
-        for (int i = 0; i < PoolSize; i++)
+        foreach (var child in _contentContainer.GetChildren())
         {
-            var item = _itemPool[i];
-            if (item is ISelectableItem selectableItem)
-            {
-                int index = start + i;
-                if (index < end)
-                {
-                    item.Visible = true;
-                    selectableItem.Index = index;
-                    if (Array != null) RenderHandler?.Invoke(item, index, Array[index]);
-                }
-                else
-                {
-                    item.Visible = false;
-                }
-            }
+            if (Array != null && child is Control c) RenderHandler?.Invoke(c, c.GetIndex(), Array[c.GetIndex()]);
         }
-    }
-
-    public void OnScrollValueChanged(float value)
-    {
-        _offsetIndex = (int)value;
-        UpdateVisibleItems();
     }
 }

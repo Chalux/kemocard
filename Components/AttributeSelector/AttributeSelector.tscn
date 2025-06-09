@@ -1,0 +1,58 @@
+[gd_scene load_steps=10 format=3 uid="uid://drrx0okjtcbil"]
+
+[ext_resource type="Script" uid="uid://dtps6h4t71cvw" path="res://Components/AttributeSelector/AttributeSelector.cs" id="1_550le"]
+[ext_resource type="Texture2D" uid="uid://cgcyxb2fjyl7q" path="res://Assets/Texture/Icons/spikes-full.png" id="1_kfdc6"]
+[ext_resource type="Texture2D" uid="uid://km835bwaykuo" path="res://Assets/Texture/Icons/water-drop.png" id="2_550le"]
+[ext_resource type="Texture2D" uid="uid://cmsbqfm4577kp" path="res://Assets/Texture/Icons/flame.png" id="3_bwxti"]
+[ext_resource type="Texture2D" uid="uid://cewqua0fgtmkp" path="res://Assets/Texture/Icons/crags.png" id="4_qf6w7"]
+[ext_resource type="Texture2D" uid="uid://bevr4dtdepx77" path="res://Assets/Texture/Icons/wind-hole.png" id="5_bne27"]
+[ext_resource type="Texture2D" uid="uid://dhrt80chh8i43" path="res://Assets/Texture/Icons/electric.png" id="6_g8vfg"]
+[ext_resource type="Texture2D" uid="uid://dxqvsstuka6uv" path="res://Assets/Texture/Icons/explosion-rays.png" id="7_e452k"]
+[ext_resource type="Texture2D" uid="uid://cqi3wy0juwflg" path="res://Assets/Texture/Icons/moebius-star.png" id="8_1v3wb"]
+
+[node name="AttributeSelector" type="VBoxContainer" node_paths=PackedStringArray("_allBtn", "_waterBtn", "_fireBtn", "_windBtn", "_earthBtn", "_electronBtn", "_lightBtn", "_darkBtn")]
+anchors_preset = 9
+anchor_bottom = 1.0
+grow_vertical = 2
+alignment = 1
+script = ExtResource("1_550le")
+_allBtn = NodePath("AllBtn")
+_waterBtn = NodePath("WaterBtn")
+_fireBtn = NodePath("FireBtn")
+_windBtn = NodePath("WindBtn")
+_earthBtn = NodePath("EarthBtn")
+_electronBtn = NodePath("ElectricBtn")
+_lightBtn = NodePath("LightBtn")
+_darkBtn = NodePath("DarkBtn")
+
+[node name="AllBtn" type="Button" parent="."]
+layout_mode = 2
+icon = ExtResource("1_kfdc6")
+
+[node name="WaterBtn" type="Button" parent="."]
+layout_mode = 2
+icon = ExtResource("2_550le")
+
+[node name="FireBtn" type="Button" parent="."]
+layout_mode = 2
+icon = ExtResource("3_bwxti")
+
+[node name="EarthBtn" type="Button" parent="."]
+layout_mode = 2
+icon = ExtResource("4_qf6w7")
+
+[node name="WindBtn" type="Button" parent="."]
+layout_mode = 2
+icon = ExtResource("5_bne27")
+
+[node name="ElectricBtn" type="Button" parent="."]
+layout_mode = 2
+icon = ExtResource("6_g8vfg")
+
+[node name="LightBtn" type="Button" parent="."]
+layout_mode = 2
+icon = ExtResource("7_e452k")
+
+[node name="DarkBtn" type="Button" parent="."]
+layout_mode = 2
+icon = ExtResource("8_1v3wb")

@@ -238,4 +238,50 @@ public partial class BaseCharacter : BasePawn
             AddCard(s);
         }
     }
+
+    public string GetDetailDesc()
+    {
+        string result = "";
+        result += $"{Name}\n{StaticUtil.GetAttributeName(Attribute)}\n{Description}\n{GetAllCardDesc()}";
+        return result;
+    }
+
+    public static string GetDetailDescFromConfig(string id)
+    {
+        string result = "";
+        var config = GameCore.Tables.TbHeroBaseProp.GetOrDefault(id);
+        if (config != null)
+        {
+            result +=
+                $"{config.Name}\n{StaticUtil.GetAttributeName((int)config.Attribute)}\n{config.Description}\n{GetAllCardDescFromConfig}";
+        }
+
+        return result;
+    }
+
+    public string GetAllCardDesc()
+    {
+        string result = "";
+        foreach (var baseCard in Cards)
+        {
+            result += $"{StaticUtil.GetCardDesc(baseCard)}\n";
+        }
+
+        return result;
+    }
+
+    public static string GetAllCardDescFromConfig(string id)
+    {
+        string result = "";
+        var config = GameCore.Tables.TbHeroBaseProp.GetOrDefault(id);
+        if (config != null)
+        {
+            foreach (var baseCard in config.CardList)
+            {
+                result += $"{StaticUtil.GetCardDesc(baseCard)}\n";
+            }
+        }
+
+        return result;
+    }
 }

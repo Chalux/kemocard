@@ -27,6 +27,9 @@ public class BattleController : BaseController
 
     private void OnBattleBegin(object[] obj)
     {
-        
+        var model = GetModel<BattleModel>();
+        if (model == null) return;
+        model.Init();
+        GameCore.ViewMgr.OpenView(ViewType.BattleView, obj);
     }
 }

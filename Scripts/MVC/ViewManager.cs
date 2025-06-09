@@ -144,6 +144,8 @@ public enum ViewType
     BattleView,
     TeamEditView,
     DeckEditView,
+    CompendiumScene,
+    
 }
 
 public struct ViewInfo

@@ -1,0 +1,28 @@
+[gd_scene load_steps=3 format=3 uid="uid://bbldqvn7fyoi"]
+
+[ext_resource type="Script" uid="uid://dn1j30n48ltpq" path="res://Components/Hero/HeroItem.cs" id="1_fqtwy"]
+[ext_resource type="Texture2D" uid="uid://kms2uygohqg8" path="res://Assets/Texture/GUI/GUI.png" id="1_pkjup"]
+
+[node name="HeroItem" type="Control" node_paths=PackedStringArray("_icon")]
+clip_contents = true
+custom_minimum_size = Vector2(256, 384)
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_fqtwy")
+_icon = NodePath("CenterContainer/TextureRect")
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TextureRect" type="TextureRect" parent="CenterContainer"]
+layout_mode = 2
+texture = ExtResource("1_pkjup")

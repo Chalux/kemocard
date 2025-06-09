@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using cfg.card;
 using Godot;
+using kemocard.Scripts.Card;
 using Attribute = cfg.pawn.Attribute;
 
 namespace kemocard.Scripts.Common;
@@ -109,5 +110,17 @@ public static class StaticUtil
             Tag.DARK => "暗属性",
             _ => ""
         };
+    }
+
+    public static string GetCardDesc(BaseCard card)
+    {
+        return GetCardDesc(card.Id);
+    }
+
+    public static string GetCardDesc(string cardId)
+    {
+        var card = GameCore.Tables.TbCard.GetOrDefault(cardId);
+        if (card == null) return "";
+        return $"{card.Name}\t{GetAttributeName((int)card.Attribute)}\tCost{card.Cost}\t{card.Desc}";
     }
 }

@@ -31,6 +31,14 @@ public class GameUIController : BaseController
             Controller = this,
             ViewType = ViewType.AlertView
         });
+        
+        GameCore.ViewMgr.Register(ViewType.CompendiumScene, new ViewInfo
+        {
+            ViewName = "CompendiumScene",
+            ResPath = GameCore.GetScenePath("CompendiumScene"),
+            Controller = this,
+            ViewType = ViewType.CompendiumScene
+        });
 
         InitModuleEvent();
         InitGlobalEvent();

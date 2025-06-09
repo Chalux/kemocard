@@ -12,6 +12,7 @@ public partial class MenuScene : BaseView
     [Export] private Button _quitButton;
     [Export] private Button _settingButton;
     [Export] private Button _startButton;
+    [Export] private Button _compendiumButton;
 
     protected override void OnReady()
     {
@@ -21,6 +22,12 @@ public partial class MenuScene : BaseView
         {
             AlertView.ShowAlert(new AlertViewData { Message = "是否退出游戏？", agreeCallback = AgreeCallback });
         };
+        _compendiumButton.Pressed += CompendiumButtonOnPressed;
+    }
+
+    private void CompendiumButtonOnPressed()
+    {
+        GameCore.ViewMgr.OpenView(ViewType.CompendiumScene);
     }
 
     private void AgreeCallback()

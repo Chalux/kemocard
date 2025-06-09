@@ -32,6 +32,7 @@ public sealed partial class Card : Luban.BeanBase
         Sort = _buf.ReadInt();
         Exclusive = _buf.ReadBool();
         Desc = _buf.ReadString();
+        HideInDex = _buf.ReadBool();
     }
 
     public static Card DeserializeCard(ByteBuf _buf)
@@ -103,6 +104,10 @@ public sealed partial class Card : Luban.BeanBase
     /// 描述
     /// </summary>
     public readonly string Desc;
+    /// <summary>
+    /// 在图鉴中隐藏
+    /// </summary>
+    public readonly bool HideInDex;
    
     public const int __ID__ = -29204900;
     public override int GetTypeId() => __ID__;
@@ -130,6 +135,7 @@ public sealed partial class Card : Luban.BeanBase
         + "sort:" + Sort + ","
         + "exclusive:" + Exclusive + ","
         + "desc:" + Desc + ","
+        + "hideInDex:" + HideInDex + ","
         + "}";
     }
 }

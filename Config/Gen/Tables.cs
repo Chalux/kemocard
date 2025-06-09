@@ -17,7 +17,6 @@ public partial class Tables
     public config.TbPawnBaseProp TbPawnBaseProp {get; }
     public config.TbHeroBaseProp TbHeroBaseProp {get; }
     public config.TbCard TbCard {get; }
-    public demo.Tbitem Tbitem {get; }
 
     public Tables(System.Func<string, ByteBuf> loader)
     {
@@ -25,7 +24,6 @@ public partial class Tables
         TbPawnBaseProp = new config.TbPawnBaseProp(loader("config_tbpawnbaseprop"));
         TbHeroBaseProp = new config.TbHeroBaseProp(loader("config_tbherobaseprop"));
         TbCard = new config.TbCard(loader("config_tbcard"));
-        Tbitem = new demo.Tbitem(loader("demo_tbitem"));
         ResolveRef();
     }
     
@@ -35,7 +33,6 @@ public partial class Tables
         TbPawnBaseProp.ResolveRef(this);
         TbHeroBaseProp.ResolveRef(this);
         TbCard.ResolveRef(this);
-        Tbitem.ResolveRef(this);
     }
 }
 
