@@ -27,6 +27,7 @@ public sealed partial class PawnBaseProp : Luban.BeanBase
         BaseMAttack = _buf.ReadFloat();
         Icon = _buf.ReadString();
         ImagePath = _buf.ReadString();
+        Parent = _buf.ReadString();
         Description = _buf.ReadString();
     }
 
@@ -80,6 +81,10 @@ public sealed partial class PawnBaseProp : Luban.BeanBase
     /// </summary>
     public readonly string ImagePath;
     /// <summary>
+    /// 父亲
+    /// </summary>
+    public readonly string Parent;
+    /// <summary>
     /// 描述
     /// </summary>
     public readonly string Description;
@@ -105,6 +110,7 @@ public sealed partial class PawnBaseProp : Luban.BeanBase
         + "BaseMAttack:" + BaseMAttack + ","
         + "Icon:" + Icon + ","
         + "ImagePath:" + ImagePath + ","
+        + "Parent:" + Parent + ","
         + "Description:" + Description + ","
         + "}";
     }
