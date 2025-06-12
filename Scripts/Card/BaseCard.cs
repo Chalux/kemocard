@@ -1,15 +1,19 @@
 ﻿using System.Collections.Generic;
+using System.Runtime.CompilerServices;
+using System.Runtime.Serialization;
 using cfg.card;
 using Godot;
 using kemocard.Scripts.Common;
 using kemocard.Scripts.Module.Battle;
 using kemocard.Scripts.Pawn;
+using Newtonsoft.Json;
 
 namespace kemocard.Scripts.Card;
 
+[JsonObject(MemberSerialization.OptIn)]
 public partial class BaseCard : GodotObject
 {
-    public string Id { get; protected set; }
+    [JsonProperty] public string Id { get; protected set; }
     public int Health { get; protected set; }
     public int PAttack { get; protected set; }
     public int PDefense { get; protected set; }
@@ -22,10 +26,23 @@ public partial class BaseCard : GodotObject
     public string Description { get; protected set; }
     public int Attribute { get; protected set; }
     public string Icon { get; protected set; }
+    public int Value { get; protected set; }
+    public int Sort { get; protected set; }
 
     public BaseCard(string configId)
     {
-        var conf = GameCore.Tables.TbCard.Get(configId);
+        if (configId != null) InitFromConfig(configId);
+    }
+
+    [OnDeserialized]
+    internal void InitAfterDeserialized(StreamingContext context)
+    {
+        InitFromConfig(Id);
+    }
+
+    public void InitFromConfig(string configId)
+    {
+        var conf = GameCore.Tables.TbCard.GetOrDefault(configId);
         if (conf == null)
         {
             GD.PrintErr("卡牌配置不存在");
@@ -45,6 +62,8 @@ public partial class BaseCard : GodotObject
         Description = conf.Desc;
         Attribute = (int)conf.Attribute;
         Icon = conf.Icon;
+        Value = conf.Value;
+        Sort = conf.Sort;
     }
 
     public virtual void UseCard(BaseCharacter owner, BattleContext context)

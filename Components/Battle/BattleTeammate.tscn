@@ -1,0 +1,89 @@
+[gd_scene load_steps=7 format=3 uid="uid://cxliblnbb8mkv"]
+
+[ext_resource type="Script" uid="uid://hpib2kshni07" path="res://Components/Battle/BattleTeammate.cs" id="1_w1hrs"]
+[ext_resource type="Shader" uid="uid://m3ehfkvneshl" path="res://Assets/Shaders/FadeOut.gdshader" id="1_xvfj4"]
+[ext_resource type="Texture2D" uid="uid://kms2uygohqg8" path="res://Assets/Texture/GUI/GUI.png" id="2_w1hrs"]
+[ext_resource type="PackedScene" uid="uid://o730khbn4fyq" path="res://Components/TextProgressBar/TextProgressBar.tscn" id="3_0uvvf"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_11si8"]
+shader = ExtResource("1_xvfj4")
+
+[sub_resource type="LabelSettings" id="LabelSettings_w1hrs"]
+font_size = 26
+
+[node name="Control" type="Control" node_paths=PackedStringArray("_icon", "_usedCard", "_hpBar", "_costLab")]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 320.0
+offset_bottom = 192.0
+script = ExtResource("1_w1hrs")
+_icon = NodePath("Control/CenterContainer/TextureRect")
+_usedCard = NodePath("CardList")
+_hpBar = NodePath("TextureProgressBar")
+_costLab = NodePath("Label")
+
+[node name="Control" type="Control" parent="."]
+clip_contents = true
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_right = 128.0
+grow_vertical = 2
+
+[node name="CenterContainer" type="CenterContainer" parent="Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TextureRect" type="TextureRect" parent="Control/CenterContainer"]
+material = SubResource("ShaderMaterial_11si8")
+layout_mode = 2
+texture = ExtResource("2_w1hrs")
+
+[node name="TextureProgressBar" parent="." instance=ExtResource("3_0uvvf")]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 0.0
+offset_top = -4.0
+offset_right = 0.0
+offset_bottom = 0.0
+grow_horizontal = 2
+grow_vertical = 0
+stretch_margin_left = 2
+stretch_margin_top = 2
+stretch_margin_right = 2
+stretch_margin_bottom = 2
+script = null
+
+[node name="CardList" type="Control" parent="."]
+anchors_preset = 0
+offset_left = 128.0
+offset_top = 16.0
+offset_right = 400.0
+offset_bottom = 144.0
+
+[node name="ScrollContainer" type="ScrollContainer" parent="CardList"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CardList/ScrollContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 0
+offset_left = 128.0
+offset_top = 128.0
+offset_right = 320.0
+offset_bottom = 160.0
+text = "10/10"
+label_settings = SubResource("LabelSettings_w1hrs")

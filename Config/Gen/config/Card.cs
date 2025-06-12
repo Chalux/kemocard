@@ -32,6 +32,7 @@ public sealed partial class Card : Luban.BeanBase
         Sort = _buf.ReadInt();
         Exclusive = _buf.ReadBool();
         Desc = _buf.ReadString();
+        Value = _buf.ReadInt();
         HideInDex = _buf.ReadBool();
     }
 
@@ -105,6 +106,10 @@ public sealed partial class Card : Luban.BeanBase
     /// </summary>
     public readonly string Desc;
     /// <summary>
+    /// 数值（仅展示）
+    /// </summary>
+    public readonly int Value;
+    /// <summary>
     /// 在图鉴中隐藏
     /// </summary>
     public readonly bool HideInDex;
@@ -135,6 +140,7 @@ public sealed partial class Card : Luban.BeanBase
         + "sort:" + Sort + ","
         + "exclusive:" + Exclusive + ","
         + "desc:" + Desc + ","
+        + "value:" + Value + ","
         + "hideInDex:" + HideInDex + ","
         + "}";
     }

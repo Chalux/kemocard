@@ -13,6 +13,7 @@ public partial class CardBigItem : Control, ISelectableItem
     [Export] private Label _costLab;
     [Export] private Label _descLab;
     [Export] private Label _attributeLab;
+    [Export] private Label _valueLab;
     [Export] private TextureRect _icon;
     public BaseCard Card { get; private set; }
 
@@ -29,6 +30,7 @@ public partial class CardBigItem : Control, ISelectableItem
         SetCost(Card.Cost);
         SetDescByTag(Card.Tags);
         SetAttribute(Card.Attribute);
+        SetValue(Card.Value);
     }
 
     public void SetCost(int cost)
@@ -72,6 +74,11 @@ public partial class CardBigItem : Control, ISelectableItem
         }
     }
 
+    public void SetValue(int value)
+    {
+        _valueLab.Text = value.ToString();
+    }
+
     public void SetAttribute(int attribute)
     {
         _attributeLab.Text = StaticUtil.GetAttributeName(attribute, false);
@@ -82,6 +89,7 @@ public partial class CardBigItem : Control, ISelectableItem
         _attributeLab.Text = "";
         _costLab.Text = "";
         _descLab.Text = "";
+        _valueLab.Text = "";
         _cardControl.Modulate = Colors.White;
         _icon.Texture = null;
         Card = null;

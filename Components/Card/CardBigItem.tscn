@@ -77,6 +77,34 @@ label_settings = SubResource("LabelSettings_mmgnl")
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="TextureRect4" type="NinePatchRect" parent="Control"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -30.0
+grow_horizontal = 2
+grow_vertical = 0
+texture = ExtResource("2_kpm7v")
+region_rect = Rect2(0, 0, 30, 30)
+patch_margin_left = 6
+patch_margin_top = 6
+patch_margin_right = 6
+patch_margin_bottom = 6
+
+[node name="Label" type="Label" parent="Control/TextureRect4"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "9999999"
+label_settings = SubResource("LabelSettings_mmgnl")
+horizontal_alignment = 1
+vertical_alignment = 1
+
 [node name="TextureRect2" type="TextureRect" parent="Control"]
 layout_mode = 1
 anchors_preset = 3

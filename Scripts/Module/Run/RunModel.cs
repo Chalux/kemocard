@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using cfg.card;
 using cfg.character;
@@ -8,6 +9,7 @@ using kemocard.Scripts.Common;
 using kemocard.Scripts.MVC.Controller;
 using kemocard.Scripts.MVC.Model;
 using kemocard.Scripts.Pawn;
+using Newtonsoft.Json;
 
 namespace kemocard.Scripts.Module.Run;
 
@@ -16,11 +18,26 @@ public class RunModel(BaseController inController) : BaseModel(inController)
     public Array<BaseCharacter> CharacterList = [];
     public HashSet<string> AllCards = [];
 
+    public readonly System.Collections.Generic.Dictionary<Role, BaseCharacter> Team = new()
+    {
+        { Role.ATTACKER, null },
+        { Role.GUARD, null },
+        { Role.BLOCKER, null },
+        { Role.SUPPORT, null },
+    };
+
     public override void Init()
     {
         base.Init();
         CharacterList = [];
         AllCards = [];
+    }
+
+    public void SetTeam(Role role, BaseCharacter character)
+    {
+        if (!Team.ContainsKey(role)) return;
+        Team[role] = character;
+        GameCore.EventBus.PostEvent(CommonEvent.TeamListUpdate, null);
     }
 
     public void AddCard(HashSet<string> cardIds)
@@ -110,6 +127,11 @@ public class RunModel(BaseController inController) : BaseModel(inController)
 
     public const string RunSavePath = "user://run.sav";
 
+    public static readonly JsonSerializerSettings SaveJsonSerializerSetting = new()
+    {
+        TypeNameHandling = TypeNameHandling.Arrays,
+    };
+
     public void Load()
     {
         if (!FileAccess.FileExists(RunSavePath))
@@ -120,31 +142,48 @@ public class RunModel(BaseController inController) : BaseModel(inController)
 
         using var file = FileAccess.Open(RunSavePath, FileAccess.ModeFlags.Read);
         GD.Print(file.GetAsText());
-        var strings = Json.ParseString(file.GetLine()).As<Array<string>>() ?? new();
-        foreach (var s in strings)
+        try
         {
-            BaseCharacter c = new BaseCharacter();
-            c.FromDict(s);
-            CharacterList.Add(c);
+            var str = file.GetLine();
+            CharacterList = JsonConvert.DeserializeObject<Array<BaseCharacter>>(str, SaveJsonSerializerSetting);
+            str = file.GetLine();
+            AllCards = JsonConvert.DeserializeObject<HashSet<string>>(str, SaveJsonSerializerSetting);
         }
-
-        AllCards = Json.ParseString(file.GetLine()).As<Array<string>>()?.ToHashSet() ?? new();
+        catch (Exception e)
+        {
+            GD.PrintErr(e);
+            Init();
+        }
+        // var strings = Json.ParseString(file.GetLine()).As<Array<string>>() ?? new();
+        // foreach (var s in strings)
+        // {
+        //     BaseCharacter c = new BaseCharacter();
+        //     c.FromDict(s);
+        //     CharacterList.Add(c);
+        // }
+        //
+        // AllCards = Json.ParseString(file.GetLine()).As<Array<string>>()?.ToHashSet() ?? new();
     }
 
     public void Save()
     {
-        using var file = FileAccess.Open(RunSavePath, FileAccess.ModeFlags.Write);
+        using var file = FileAccess.Open(RunSavePath, FileAccess.ModeFlags.WriteRead);
         var str = "";
-        var strings = new Array<string>();
-        foreach (var character in CharacterList)
-        {
-            strings.Add(character.ToDict());
-        }
-
-        str += Json.Stringify(strings);
-        file.StoreLine(Json.Stringify(strings));
-        str += Json.Stringify(AllCards.ToArray());
-        file.StoreLine(Json.Stringify(AllCards.ToArray()));
-        GD.Print(str);
+        str = JsonConvert.SerializeObject(CharacterList, SaveJsonSerializerSetting);
+        // var strings = new Array<string>();
+        // foreach (var character in CharacterList)
+        // {
+        //     strings.Add(character.ToDict());
+        // }
+        //
+        // str += Json.Stringify(strings);
+        // file.StoreLine(Json.Stringify(strings));
+        // str += Json.Stringify(AllCards.ToArray());
+        // file.StoreLine(Json.Stringify(AllCards.ToArray()));
+        // GD.Print(str);
+        file.StoreLine(str);
+        file.StoreLine(JsonConvert.SerializeObject(AllCards));
+        file.Flush();
+        GD.Print(file.GetAsText());
     }
 }

@@ -19,8 +19,13 @@ public static class CommonEvent
     public const string BattleEvent_StartTurn = "BattleEvent_StartTurn";
     public const string BattleEvent_EndAction = "BattleEvent_EndAction";
     public const string BattleEvent_EndTurn = "BattleEvent_EndTurn";
+    public const string BattleEvent_UseCard = "BattleEvent_UseCard";
+    public const string BattleEvent_CancelUseCard = "BattleEvent_CancelUseCard";
+    public const string BattleEvent_Render = "BattleEvent_Render";
+    public const string BattleEvent_StartBattle_Ready = "BattleEvent_StartBattle_Ready";
 
     public const string PlayerPropUpdate = "PlayerPropUpdate";
     public const string PlayerDeckUpdate = "PlayerDeckUpdate";
     public const string RunCardPoolUpdate = "RunCardPoolUpdate";
+    public const string TeamListUpdate = "TeamListUpdate";
 }

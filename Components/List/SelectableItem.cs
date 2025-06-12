@@ -6,8 +6,6 @@ public interface ISelectableItem
 {
     public int Index { get; set; }
     public VirtualList List { get; set; }
-    public Vector2 Position { get; set; }
-    public bool Visible { get; set; }
 
     public abstract void SetMouseFilter(Control.MouseFilterEnum mouseFilter);
 

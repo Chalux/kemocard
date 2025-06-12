@@ -1,10 +1,16 @@
-﻿using Godot;
+﻿using System.Runtime.Serialization;
+using Godot;
+using kemocard.Scripts.Buff;
 using kemocard.Scripts.Common;
+using kemocard.Scripts.Module.Battle;
+using Newtonsoft.Json;
 
 namespace kemocard.Scripts.Pawn;
 
+[JsonObject(MemberSerialization.OptIn)]
 public partial class BasePawn : GodotObject
 {
+    [JsonProperty] public string Id = "";
     protected float BaseHealth;
     protected float BasePDefense;
     protected float BaseMDefense;
@@ -15,11 +21,17 @@ public partial class BasePawn : GodotObject
     public string Icon = "";
     public string Description = "";
     public string ImagePath = "";
-    protected readonly Godot.Collections.Dictionary<string, Buff.BaseBuff> Buffs = [];
+    [JsonProperty] protected readonly Godot.Collections.Dictionary<string, Buff.BaseBuff> Buffs = [];
 
-    public virtual void InitFromConfig(string configId)
+    [OnDeserialized]
+    internal void InitAfterDeserialized(StreamingContext context)
     {
-        var conf = GameCore.Tables.TbPawnBaseProp.Get(configId);
+        InitFromConfig(Id, true);
+    }
+
+    public virtual void InitFromConfig(string configId, bool fromSave = false)
+    {
+        var conf = GameCore.Tables.TbPawnBaseProp.GetOrDefault(configId);
         if (conf == null) return;
         BaseHealth = conf.BaseHealth;
         BasePDefense = conf.BasePDefense;
@@ -31,6 +43,7 @@ public partial class BasePawn : GodotObject
         Icon = conf.Icon;
         Description = conf.Description;
         ImagePath = conf.ImagePath;
+        Id = conf.Id;
         RefreshProps();
     }
 
@@ -73,6 +86,47 @@ public partial class BasePawn : GodotObject
         MAttack = (int)((BaseMAttack + tempProp.AddMAttack) * (1 + tempProp.ExtraMAttack));
         PDefense = (int)((BasePDefense + tempProp.AddPDefense) * (1 + tempProp.ExtraPDefense));
         MDefense = (int)((BaseMDefense + tempProp.AddMDefense) * (1 + tempProp.ExtraMDefense));
+    }
+
+    public virtual void OnAttacked(Damage damage)
+    {
+        foreach (var keyValuePair in Buffs)
+        {
+            if (keyValuePair.Value.Tags.Contains(BuffTag.Attacked))
+            {
+                keyValuePair.Value.ApplyBuff(BuffTag.Attack);
+            }
+        }
+    }
+
+    public virtual void OnAttack(Damage damage)
+    {
+        foreach (var keyValuePair in Buffs)
+        {
+            if (keyValuePair.Value.Tags.Contains(BuffTag.Attack))
+            {
+                keyValuePair.Value.ApplyBuff(BuffTag.Attack);
+            }
+        }
+    }
+
+    public virtual void RemoveBuff(string buffId, bool removeAll = false, int removeStack = 1)
+    {
+        if (!Buffs.TryGetValue(buffId, out var buff)) return;
+        if (removeAll)
+        {
+            buff.OnRemoved();
+            Buffs.Remove(buffId);
+        }
+        else
+        {
+            buff.StackNum -= removeStack;
+            if (buff.StackNum <= 0)
+            {
+                buff.OnRemoved();
+                Buffs.Remove(buffId);
+            }
+        }
     }
 }
 

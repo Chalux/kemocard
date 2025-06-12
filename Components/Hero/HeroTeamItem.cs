@@ -1,11 +1,13 @@
 using Godot;
+using kemocard.Components.List;
 using kemocard.Scripts.Common;
+using kemocard.Scripts.Module.Run;
 using kemocard.Scripts.MVC;
 using kemocard.Scripts.Pawn;
 
 namespace kemocard.Components.Hero;
 
-public partial class HeroTeamItem : Control
+public partial class HeroTeamItem : Control, ISelectableItem
 {
     [Export] public TextureRect Head;
     [Export] public Label NameLab;
@@ -26,7 +28,12 @@ public partial class HeroTeamItem : Control
 
     public void SetHero(BaseCharacter hero)
     {
-        if (hero == null) return;
+        if (hero == null)
+        {
+            Clear();
+            return;
+        }
+
         _hero = hero;
         GameCore.EventBus.AddEvent(this, CommonEvent.PlayerPropUpdate, RefreshItem);
         RefreshItem(null);
@@ -45,7 +52,8 @@ public partial class HeroTeamItem : Control
             ? ResourceLoader.Load<CompressedTexture2D>(_hero.ImagePath)
             : null;
         if (texture != null) Head.Texture = texture;
-        NameLab.Text = _hero.Name;
+        var mod = GameCore.ControllerMgr.GetControllerModel<RunModel>(ControllerType.Run);
+        NameLab.Text = _hero.Name + (mod != null && mod.Team[_hero.Role] == _hero ? "已出战" : "");
         DeckLab.Text = _hero.GetDeckDesc();
         HealthLab.Text = _hero.MaxHealth.ToString();
         PAttackLab.Text = _hero.PAttack.ToString();
@@ -69,4 +77,25 @@ public partial class HeroTeamItem : Control
             GameCore.ViewMgr.OpenView(ViewType.DeckEditView, _hero.Id);
         }
     }
+
+    public void Clear()
+    {
+        _hero = null;
+        Head.Texture = null;
+        NameLab.Text = "";
+        DeckLab.Text = "";
+        HealthLab.Text = "";
+        PAttackLab.Text = "";
+        MAttackLab.Text = "";
+        PAttackLab.Text = "";
+        PDefenseLab.Text = "";
+        MDefenseLab.Text = "";
+        HealLab.Text = "";
+        SetClick(false);
+        SetMouseFilter(MouseFilterEnum.Ignore);
+        GameCore.EventBus.RemoveEvent(this, CommonEvent.PlayerPropUpdate, RefreshItem);
+    }
+
+    public int Index { get; set; }
+    public VirtualList List { get; set; }
 }

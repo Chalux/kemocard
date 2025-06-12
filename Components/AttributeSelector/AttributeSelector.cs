@@ -20,6 +20,7 @@ public partial class AttributeSelector : VBoxContainer
     public override void _Ready()
     {
         base._Ready();
+        SetAttribute(Attribute.NONE);
         _allBtn.Pressed += () => SetAttribute(Attribute.NONE);
         _waterBtn.Pressed += () => SetAttribute(Attribute.WATER);
         _fireBtn.Pressed += () => SetAttribute(Attribute.FIRE);
@@ -33,6 +34,41 @@ public partial class AttributeSelector : VBoxContainer
     public void SetAttribute(Attribute attribute)
     {
         CurrentAttribute = attribute;
+        ClearColor();
+        switch (attribute)
+        {
+            case Attribute.NONE:
+                _allBtn.Modulate = Colors.Yellow;
+                break;
+            case Attribute.WATER:
+                _waterBtn.Modulate = Colors.Yellow;
+                break;
+            case Attribute.FIRE:
+                _fireBtn.Modulate = Colors.Yellow;
+                break;
+            case Attribute.WIND:
+                _windBtn.Modulate = Colors.Yellow;
+                break;
+            case Attribute.EARTH:
+                _earthBtn.Modulate = Colors.Yellow;
+                break;
+            case Attribute.ELECTRON:
+                _electronBtn.Modulate = Colors.Yellow;
+                break;
+            case Attribute.LIGHT:
+                _lightBtn.Modulate = Colors.Yellow;
+                break;
+            case Attribute.DARK:
+                _darkBtn.Modulate = Colors.Yellow;
+                break;
+        }
+
         OnAttributeSelect?.Invoke();
+    }
+
+    private void ClearColor()
+    {
+        _allBtn.Modulate = _darkBtn.Modulate = _earthBtn.Modulate = _electronBtn.Modulate =
+            _fireBtn.Modulate = _lightBtn.Modulate = _waterBtn.Modulate = _windBtn.Modulate = Colors.White;
     }
 }

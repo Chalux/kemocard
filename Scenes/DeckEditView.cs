@@ -43,9 +43,24 @@ public partial class DeckEditView : BaseView
 
         _closeBtn.Pressed += CloseBtnOnPressed;
 
-        _heroId = (string)args[0];
-        var runController = GameCore.ControllerMgr.GetModule<RunController>(ControllerType.Run);
-        _hero = runController.GetCharacterById(_heroId);
+        switch (args[0])
+        {
+            case string:
+            {
+                _heroId = (string)args[0];
+                var runController = GameCore.ControllerMgr.GetModule<RunController>(ControllerType.Run);
+                _hero = runController.GetCharacterById(_heroId);
+                break;
+            }
+            case BaseCharacter character:
+                _hero = character;
+                _heroId = _hero.Id;
+                break;
+            default:
+                Close();
+                return;
+        }
+
         GameCore.EventBus.AddEvent(CommonEvent.PlayerDeckUpdate, RefreshData);
         _roleSelector.OnRoleSelected = OnRoleSelected;
         _tagSelector.OnTagSelected = OnRoleSelected;

@@ -1,4 +1,5 @@
-﻿using Godot;
+﻿using System.Collections.Generic;
+using Godot;
 using kemocard.Scripts.Common;
 using kemocard.Scripts.Module.Battle;
 using kemocard.Scripts.Pawn;
@@ -15,6 +16,7 @@ public partial class BaseBuff : GodotObject
     public BuffType Type = BuffType.NONE;
     public int StackNum = 0;
     public int StackLimit = 0;
+    public HashSet<BuffTag> Tags = new();
 
     public BaseCharacter Owner;
     public BaseCharacter Causer;
@@ -23,10 +25,14 @@ public partial class BaseBuff : GodotObject
     {
     }
 
-    public virtual void ApplyBuff(BattleContext context)
+    public virtual void ApplyBuff(BuffTag tag = BuffTag.None)
     {
     }
-    
+
+    public virtual void OnRemoved()
+    {
+    }
+
     ~BaseBuff()
     {
         GameCore.EventBus.RemoveObjAllEvents(this);
@@ -42,6 +48,7 @@ public enum BuffType
 
 public enum BuffTag
 {
+    None,
     AddHealth,
     ExtraHealth,
     AddPAttack,
@@ -54,4 +61,10 @@ public enum BuffTag
     ExtraMDefense,
     AddHeal,
     ExtraHeal,
+    AddDraw,
+    Attacked,
+    Attack,
+    TurnEnd,
+    TurnStart,
+    BattleStart,
 }

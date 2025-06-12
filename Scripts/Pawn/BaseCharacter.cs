@@ -1,10 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using cfg.character;
 using Godot;
 using Godot.Collections;
+using kemocard.Scripts.Buff;
 using kemocard.Scripts.Card;
 using kemocard.Scripts.Common;
+using Newtonsoft.Json;
 using Attribute = cfg.pawn.Attribute;
 
 namespace kemocard.Scripts.Pawn;
@@ -13,10 +16,9 @@ public partial class BaseCharacter : BasePawn
 {
     public float BaseHeal = 0;
     public Role Role = Role.NORMAL;
-    protected readonly Array<BaseCard> Cards = [];
-    public string Id { get; protected set; }
+    [JsonProperty] public List<BaseCard> Cards = [];
 
-    public override void InitFromConfig(string configId)
+    public override void InitFromConfig(string configId, bool fromSave = false)
     {
         var conf = GameCore.Tables.TbHeroBaseProp.GetOrDefault(configId);
         if (conf == null) return;
@@ -27,9 +29,12 @@ public partial class BaseCharacter : BasePawn
         Icon = conf.Icon;
         Description = conf.Description;
         ImagePath = conf.ImagePath;
-        foreach (var i in conf.CardList)
+        if (!fromSave)
         {
-            AddCard(i);
+            foreach (var i in conf.CardList)
+            {
+                AddCard(i);
+            }
         }
 
         RefreshCardProps();
@@ -110,7 +115,7 @@ public partial class BaseCharacter : BasePawn
         }
     }
 
-    public Array<BaseCard> GetDeck()
+    public List<BaseCard> GetDeck()
     {
         return Cards;
     }

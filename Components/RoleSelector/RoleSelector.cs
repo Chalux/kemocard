@@ -15,10 +15,12 @@ public partial class RoleSelector : HBoxContainer
     [Export] private Button _blocker;
     [Export] private Button _support;
     [Export] private Button _normal;
+    private bool _disableNormal = false;
 
     public override void _Ready()
     {
         base._Ready();
+        SetRole(Role.MAX);
         _max.Pressed += () => SetRole(Role.MAX);
         _attacker.Pressed += () => SetRole(Role.ATTACKER);
         _guard.Pressed += () => SetRole(Role.GUARD);
@@ -33,8 +35,19 @@ public partial class RoleSelector : HBoxContainer
         base._ExitTree();
     }
 
+    public void DisableNormal(bool newDisable = false)
+    {
+        _disableNormal = newDisable;
+        _normal.Disabled = true;
+    }
+
     public void SetRole(Role role)
     {
+        if (_disableNormal && role == Role.NORMAL)
+        {
+            return;
+        }
+
         ClearColor();
         CurrentRole = role;
         switch (CurrentRole)

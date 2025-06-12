@@ -1,7 +1,9 @@
-[gd_scene load_steps=7 format=3 uid="uid://dkktwd31sfe18"]
+[gd_scene load_steps=9 format=3 uid="uid://dkktwd31sfe18"]
 
 [ext_resource type="Shader" uid="uid://m3ehfkvneshl" path="res://Assets/Shaders/FadeOut.gdshader" id="1_11si8"]
+[ext_resource type="Script" uid="uid://c74uo8xoxi2wo" path="res://Scenes/BattleView.cs" id="1_cgady"]
 [ext_resource type="Texture2D" uid="uid://kms2uygohqg8" path="res://Assets/Texture/GUI/GUI.png" id="2_dy680"]
+[ext_resource type="PackedScene" uid="uid://cxliblnbb8mkv" path="res://Components/Battle/BattleTeammate.tscn" id="2_u5ucn"]
 [ext_resource type="PackedScene" uid="uid://o730khbn4fyq" path="res://Components/TextProgressBar/TextProgressBar.tscn" id="3_dy680"]
 [ext_resource type="Script" uid="uid://chmewpio17dky" path="res://Components/List/VirtualList.cs" id="4_yi3au"]
 [ext_resource type="PackedScene" uid="uid://c01n24gystrqo" path="res://Components/Card/CardBigItem.tscn" id="5_2q5f3"]
@@ -16,6 +18,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_cgady")
 
 [node name="ColorRect" type="ColorRect" parent="."]
 layout_mode = 1
@@ -26,144 +29,19 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.151276, 0.151276, 0.151276, 1)
 
-[node name="Control" type="Control" parent="."]
-anchors_preset = 0
-offset_top = 64.0
-offset_right = 320.0
-offset_bottom = 256.0
+[node name="Teammate1" parent="." instance=ExtResource("2_u5ucn")]
 
-[node name="Control" type="Control" parent="Control"]
-clip_contents = true
-layout_mode = 1
-anchors_preset = 9
-anchor_bottom = 1.0
-offset_right = 128.0
-grow_vertical = 2
+[node name="Teammate2" parent="." instance=ExtResource("2_u5ucn")]
+offset_top = 256.0
+offset_bottom = 448.0
 
-[node name="CenterContainer" type="CenterContainer" parent="Control/Control"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+[node name="Teammate3" parent="." instance=ExtResource("2_u5ucn")]
+offset_left = 8.0
+offset_top = 512.0
+offset_right = 328.0
+offset_bottom = 704.0
 
-[node name="TextureRect" type="TextureRect" parent="Control/Control/CenterContainer"]
-material = SubResource("ShaderMaterial_11si8")
-layout_mode = 2
-texture = ExtResource("2_dy680")
-
-[node name="TextureProgressBar" parent="Control" instance=ExtResource("3_dy680")]
-layout_mode = 1
-anchors_preset = 12
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 0.0
-offset_top = -4.0
-offset_right = 0.0
-offset_bottom = 0.0
-grow_horizontal = 2
-grow_vertical = 0
-stretch_margin_left = 2
-stretch_margin_top = 2
-stretch_margin_right = 2
-stretch_margin_bottom = 2
-script = null
-
-[node name="Control2" type="Control" parent="."]
-layout_mode = 3
-anchors_preset = 0
-offset_top = 320.0
-offset_right = 320.0
-offset_bottom = 512.0
-
-[node name="Control" type="Control" parent="Control2"]
-clip_contents = true
-layout_mode = 1
-anchors_preset = 9
-anchor_bottom = 1.0
-offset_right = 128.0
-grow_vertical = 2
-
-[node name="CenterContainer" type="CenterContainer" parent="Control2/Control"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="TextureRect" type="TextureRect" parent="Control2/Control/CenterContainer"]
-material = SubResource("ShaderMaterial_11si8")
-layout_mode = 2
-texture = ExtResource("2_dy680")
-
-[node name="TextureProgressBar" parent="Control2" instance=ExtResource("3_dy680")]
-layout_mode = 1
-anchors_preset = 12
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 0.0
-offset_top = -4.0
-offset_right = 0.0
-offset_bottom = 0.0
-grow_horizontal = 2
-grow_vertical = 0
-stretch_margin_left = 2
-stretch_margin_top = 2
-stretch_margin_right = 2
-stretch_margin_bottom = 2
-script = null
-
-[node name="Control3" type="Control" parent="."]
-layout_mode = 3
-anchors_preset = 0
-offset_top = 576.0
-offset_right = 320.0
-offset_bottom = 768.0
-
-[node name="Control" type="Control" parent="Control3"]
-clip_contents = true
-layout_mode = 1
-anchors_preset = 9
-anchor_bottom = 1.0
-offset_right = 128.0
-grow_vertical = 2
-
-[node name="CenterContainer" type="CenterContainer" parent="Control3/Control"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="TextureRect" type="TextureRect" parent="Control3/Control/CenterContainer"]
-material = SubResource("ShaderMaterial_11si8")
-layout_mode = 2
-texture = ExtResource("2_dy680")
-
-[node name="TextureProgressBar" parent="Control3" instance=ExtResource("3_dy680")]
-layout_mode = 1
-anchors_preset = 12
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 0.0
-offset_top = -4.0
-offset_right = 0.0
-offset_bottom = 0.0
-grow_horizontal = 2
-grow_vertical = 0
-stretch_margin_left = 2
-stretch_margin_top = 2
-stretch_margin_right = 2
-stretch_margin_bottom = 2
-script = null
-
-[node name="Control4" type="Control" parent="."]
+[node name="CurrentRole" type="Control" parent="."]
 clip_contents = true
 layout_mode = 1
 anchors_preset = 2
@@ -174,7 +52,7 @@ offset_right = 1920.0
 grow_vertical = 0
 mouse_filter = 1
 
-[node name="Control" type="Control" parent="Control4"]
+[node name="Control" type="Control" parent="CurrentRole"]
 clip_contents = true
 layout_mode = 1
 anchor_top = 0.17
@@ -184,7 +62,7 @@ offset_top = 0.079998
 offset_right = 0.639999
 grow_vertical = 2
 
-[node name="CenterContainer" type="CenterContainer" parent="Control4/Control"]
+[node name="CenterContainer" type="CenterContainer" parent="CurrentRole/Control"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -192,12 +70,12 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="TextureRect" type="TextureRect" parent="Control4/Control/CenterContainer"]
+[node name="TextureRect" type="TextureRect" parent="CurrentRole/Control/CenterContainer"]
 material = SubResource("ShaderMaterial_11si8")
 layout_mode = 2
 texture = ExtResource("2_dy680")
 
-[node name="TextureProgressBar" parent="Control4" instance=ExtResource("3_dy680")]
+[node name="TextureProgressBar" parent="CurrentRole" instance=ExtResource("3_dy680")]
 layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
@@ -213,7 +91,7 @@ stretch_margin_right = 2
 stretch_margin_bottom = 2
 script = null
 
-[node name="CardList" type="Control" parent="Control4" node_paths=PackedStringArray("_contentContainer", "_scrollView")]
+[node name="CardList" type="Control" parent="CurrentRole" node_paths=PackedStringArray("_contentContainer", "_scrollView")]
 layout_mode = 1
 anchor_left = 0.2
 anchor_right = 0.867
@@ -225,7 +103,7 @@ _itemScene = ExtResource("5_2q5f3")
 _contentContainer = NodePath("ScrollContainer/HBoxContainer")
 _scrollView = NodePath("ScrollContainer")
 
-[node name="ScrollContainer" type="ScrollContainer" parent="Control4/CardList"]
+[node name="ScrollContainer" type="ScrollContainer" parent="CurrentRole/CardList"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -233,12 +111,12 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Control4/CardList/ScrollContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="CurrentRole/CardList/ScrollContainer"]
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 6
 
-[node name="Button" type="Button" parent="Control4"]
+[node name="Button" type="Button" parent="CurrentRole"]
 layout_mode = 1
 anchors_preset = 6
 anchor_left = 1.0
@@ -254,7 +132,7 @@ grow_vertical = 2
 text = "确定
 "
 
-[node name="Label" type="Label" parent="Control4"]
+[node name="Label" type="Label" parent="CurrentRole"]
 layout_mode = 1
 anchors_preset = 6
 anchor_left = 1.0

@@ -2,6 +2,7 @@
 using System.Linq;
 using cfg.card;
 using cfg.character;
+using cfg.pawn;
 using Godot.Collections;
 using kemocard.Scripts.Common;
 using kemocard.Scripts.MVC;
@@ -52,10 +53,26 @@ public class RunController : BaseController
         AddCharacter(character);
     }
 
-    public Array<BaseCharacter> GetCharacters()
+    public Array<BaseCharacter> GetCharacters(Role filterRole = Role.MAX, int filterAttribute = 0)
     {
         RunModel model = GetModel<RunModel>();
-        return model?.CharacterList ?? [];
+        var list = model?.CharacterList;
+        if (list == null)
+        {
+            return [];
+        }
+
+        Array<BaseCharacter> result = [];
+        foreach (var baseCharacter in list)
+        {
+            if ((filterRole == Role.MAX || baseCharacter.Role == filterRole)
+                && (filterAttribute == 0 || (baseCharacter.Attribute & filterAttribute) > 0))
+            {
+                result.Add(baseCharacter);
+            }
+        }
+
+        return result;
     }
 
     public BaseCharacter GetCharacterById(string id)

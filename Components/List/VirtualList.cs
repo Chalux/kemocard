@@ -44,14 +44,28 @@ public partial class VirtualList : Control
         {
             for (var i = _contentContainer.GetChildCount(); i < Array.Count; i++)
             {
-                _contentContainer.AddChild(_itemScene.Instantiate<Control>());
+                var node = _itemScene.Instantiate<Control>();
+                _contentContainer.AddChild(node);
+                if (node is ISelectableItem selectableItem)
+                {
+                    selectableItem.List = this;
+                    selectableItem.Index = i;
+                    selectableItem.SetMouseFilter(MouseFilterEnum.Pass);
+                    node.GuiInput += selectableItem.OnGuiInput;
+                }
             }
         }
         else
         {
             for (var i = _contentContainer.GetChildCount() - 1; i >= Array.Count; i--)
             {
-                var control = _contentContainer.GetChild(i);
+                var control = _contentContainer.GetChild<Control>(i);
+                if (control is ISelectableItem selectableItem)
+                {
+                    selectableItem.List = null;
+                    control.GuiInput -= selectableItem.OnGuiInput;
+                }
+
                 _contentContainer.RemoveChild(control);
                 control.QueueFree();
             }

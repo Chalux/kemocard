@@ -1,11 +1,13 @@
-[gd_scene load_steps=5 format=3 uid="uid://bqntymuvktdnt"]
+[gd_scene load_steps=7 format=3 uid="uid://bqntymuvktdnt"]
 
 [ext_resource type="Script" uid="uid://f8lrkm477aoo" path="res://Scenes/TeamEditView.cs" id="1_klise"]
 [ext_resource type="Texture2D" uid="uid://dy020thxp7s2c" path="res://Assets/Texture/GUI/panel2.tres" id="1_lxhar"]
 [ext_resource type="PackedScene" uid="uid://bpggq3dr3dycs" path="res://Components/Hero/HeroTeamItem.tscn" id="2_klise"]
+[ext_resource type="PackedScene" uid="uid://cf60h87480xnv" path="res://Components/RoleSelector/RoleSelector.tscn" id="4_wc3q5"]
 [ext_resource type="Texture2D" uid="uid://b7w4kvutlqmrt" path="res://Assets/Texture/cross_small.png" id="4_wj686"]
+[ext_resource type="Script" uid="uid://chmewpio17dky" path="res://Components/List/VirtualList.cs" id="5_rppr6"]
 
-[node name="TeamEditView" type="Control" node_paths=PackedStringArray("_flowContainer", "_btnClose")]
+[node name="TeamEditView" type="Control" node_paths=PackedStringArray("_btnClose", "_teamContainer", "_roleSelector", "_heroList")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -13,9 +15,11 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_klise")
-_flowContainer = NodePath("ScrollContainer/VBoxContainer")
 _heroTeamItem = ExtResource("2_klise")
 _btnClose = NodePath("CloseBtn")
+_teamContainer = NodePath("ScrollContainer/VBoxContainer/Control")
+_roleSelector = NodePath("ScrollContainer/VBoxContainer/RoleSelector")
+_heroList = NodePath("ScrollContainer/VBoxContainer/Control2")
 
 [node name="NinePatchRect" type="NinePatchRect" parent="."]
 layout_mode = 1
@@ -49,10 +53,58 @@ offset_bottom = -8.20007
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="VBoxContainer" type="FlowContainer" parent="ScrollContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="ScrollContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+
+[node name="Label" type="Label" parent="ScrollContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "当前编队"
+horizontal_alignment = 1
+
+[node name="Control" type="GridContainer" parent="ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/h_separation = -5
+theme_override_constants/v_separation = -5
+columns = 2
+
+[node name="Control" parent="ScrollContainer/VBoxContainer/Control" instance=ExtResource("2_klise")]
+layout_mode = 2
+
+[node name="Control2" parent="ScrollContainer/VBoxContainer/Control" instance=ExtResource("2_klise")]
+layout_mode = 2
+
+[node name="Control3" parent="ScrollContainer/VBoxContainer/Control" instance=ExtResource("2_klise")]
+layout_mode = 2
+
+[node name="Control4" parent="ScrollContainer/VBoxContainer/Control" instance=ExtResource("2_klise")]
+layout_mode = 2
+
+[node name="RoleSelector" parent="ScrollContainer/VBoxContainer" instance=ExtResource("4_wc3q5")]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Control2" type="Control" parent="ScrollContainer/VBoxContainer" node_paths=PackedStringArray("_contentContainer", "_scrollView")]
+custom_minimum_size = Vector2(0, 630)
+layout_mode = 2
+script = ExtResource("5_rppr6")
+_itemScene = ExtResource("2_klise")
+_contentContainer = NodePath("ScrollContainer/FlowContainer")
+_scrollView = NodePath("ScrollContainer")
+
+[node name="ScrollContainer" type="ScrollContainer" parent="ScrollContainer/VBoxContainer/Control2"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="FlowContainer" type="GridContainer" parent="ScrollContainer/VBoxContainer/Control2/ScrollContainer"]
+layout_mode = 2
+columns = 2
 
 [node name="CloseBtn" type="Button" parent="."]
 layout_mode = 1

@@ -67,6 +67,11 @@ public class ControllerMgr
         return _modules.TryGetValue(controllerKey, out var controller) ? controller.GetModel<T>() : null;
     }
 
+    public T GetControllerModel<T>(ControllerType controllerType) where T : BaseModel
+    {
+        return GetControllerModel<T>((int)controllerType);
+    }
+
     public void InitModule(int controllerKey)
     {
         _modules.TryGetValue(controllerKey, out var controller);

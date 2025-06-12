@@ -1,4 +1,5 @@
-﻿using kemocard.Scripts.Common;
+﻿using kemocard.Scripts.Card;
+using kemocard.Scripts.Common;
 using kemocard.Scripts.MVC;
 using kemocard.Scripts.MVC.Controller;
 
@@ -6,6 +7,7 @@ namespace kemocard.Scripts.Module.Battle;
 
 public class BattleController : BaseController
 {
+    public BattleSystem BattleSystem = new();
     public BattleController() : base()
     {
         GameCore.ViewMgr.Register(ViewType.BattleView, new ViewInfo()
@@ -16,6 +18,9 @@ public class BattleController : BaseController
             ResPath = GameCore.GetScenePath("BattleView"),
         });
 
+        BattleModel model = new BattleModel(this);
+        SetModel(model);
+
         InitModuleEvent();
     }
 
@@ -23,6 +28,24 @@ public class BattleController : BaseController
     {
         base.InitModuleEvent();
         RegisterEvent(CommonEvent.StartBattle, OnBattleBegin);
+        RegisterEvent(CommonEvent.BattleEvent_UseCard, OnBattleEventUseCard);
+        RegisterEvent(CommonEvent.BattleEvent_CancelUseCard, OnBattleEventCancelUseCard);
+        RegisterEvent(CommonEvent.BattleEvent_StartTurn, OnBattleEventStartTurn);
+    }
+
+    private void OnBattleEventStartTurn(object[] obj)
+    {
+        (Model as BattleModel)?.OnTurnStart();
+    }
+
+    private void OnBattleEventCancelUseCard(object[] obj)
+    {
+        (Model as BattleModel)?.OnCancelBattleUseCard(obj[0] as BaseBattleCard);
+    }
+
+    private void OnBattleEventUseCard(object[] obj)
+    {
+        (Model as BattleModel)?.OnBattleUseCard(obj[0] as BaseBattleCard);
     }
 
     private void OnBattleBegin(object[] obj)
