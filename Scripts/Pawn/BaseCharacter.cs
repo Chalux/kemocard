@@ -1,10 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Serialization;
 using cfg.character;
 using Godot;
 using Godot.Collections;
-using kemocard.Scripts.Buff;
 using kemocard.Scripts.Card;
 using kemocard.Scripts.Common;
 using Newtonsoft.Json;
@@ -12,13 +10,13 @@ using Attribute = cfg.pawn.Attribute;
 
 namespace kemocard.Scripts.Pawn;
 
-public partial class BaseCharacter : BasePawn
+public class BaseCharacter : BasePawn
 {
-    public float BaseHeal = 0;
+    public float BaseHeal;
     public Role Role = Role.NORMAL;
     [JsonProperty] public List<BaseCard> Cards = [];
 
-    public override void InitFromConfig(string configId, bool fromSave = false)
+    public sealed override void InitFromConfig(string configId, bool fromSave = false)
     {
         var conf = GameCore.Tables.TbHeroBaseProp.GetOrDefault(configId);
         if (conf == null) return;

@@ -14,7 +14,7 @@
 font_size = 24
 font_color = Color(0, 0, 0, 1)
 
-[node name="DeckEditView" type="Control" node_paths=PackedStringArray("_itemList", "_healthLab", "_pDefenseLab", "_mDefenseLab", "_pAttackLab", "_mAttackLab", "_healLab", "_deckLab", "_nameLab", "_headIcon", "_closeBtn", "_cardList", "_roleSelector", "_tagSelector")]
+[node name="DeckEditView" type="Control" node_paths=PackedStringArray("_itemList", "_healthLab", "_pDefenseLab", "_mDefenseLab", "_pAttackLab", "_mAttackLab", "_healLab", "_deckLab", "_nameLab", "_headIcon", "_closeBtn", "_joinTeamBtn", "_cardList", "_roleSelector", "_tagSelector")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -33,6 +33,7 @@ _deckLab = NodePath("HeroControl/DescControl/DeckLab")
 _nameLab = NodePath("HeroControl/DescControl/NameLab")
 _headIcon = NodePath("HeroControl/DescControl/TextureRect/CenterContainer/TextureRect")
 _closeBtn = NodePath("HeroControl/CloseBtn")
+_joinTeamBtn = NodePath("HeroControl/JoinTeamBtn")
 _cardList = NodePath("Control")
 _roleSelector = NodePath("RoleSelector")
 _tagSelector = NodePath("TagSelector")
@@ -304,11 +305,19 @@ text_overrun_behavior = 4
 
 [node name="CloseBtn" type="Button" parent="HeroControl"]
 layout_mode = 0
-offset_left = 256.0
+offset_left = 148.0
 offset_top = 720.0
-offset_right = 364.0
+offset_right = 256.0
 offset_bottom = 788.0
 text = "完成"
+
+[node name="JoinTeamBtn" type="Button" parent="HeroControl"]
+layout_mode = 0
+offset_left = 364.0
+offset_top = 720.0
+offset_right = 472.0
+offset_bottom = 788.0
+text = "入队"
 
 [node name="Control" type="Control" parent="." node_paths=PackedStringArray("_contentContainer", "_scrollView")]
 layout_mode = 1

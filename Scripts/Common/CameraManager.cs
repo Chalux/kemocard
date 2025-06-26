@@ -9,10 +9,6 @@ public class CameraManager
     // 上一次的位置
     private Vector2 _prePos;
 
-    public CameraManager()
-    {
-    }
-
     public void SetCamera(KemoCamera inCamera)
     {
         _activatedCamera = inCamera;

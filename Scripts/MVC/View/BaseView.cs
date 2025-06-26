@@ -37,6 +37,7 @@ public partial class BaseView : Control, IBaseView
     public virtual void DoClose(params object[] args)
     {
         SetVisibility(false);
+        GameCore.EventBus.RemoveObjAllEvents(this);
     }
 
     public void DestroyView()

@@ -8,7 +8,7 @@ public class GameController : BaseController
 {
     public GameController()
     {
-        GameCore.ViewMgr.Register(ViewType.GameScene, new ViewInfo()
+        GameCore.ViewMgr.Register(ViewType.GameScene, new ViewInfo
         {
             Controller = this,
             ResPath = GameCore.GetScenePath("GameScene"),

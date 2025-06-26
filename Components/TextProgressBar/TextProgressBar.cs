@@ -9,17 +9,27 @@ public partial class TextProgressBar : TextureProgressBar
     public override void _Ready()
     {
         base._Ready();
-        Changed += OnValueChanged;
+        Changed += SetText;
+        ValueChanged += OnValueChanged;
     }
 
     public override void _ExitTree()
     {
-        Changed -= OnValueChanged;
+        Changed -= SetText;
+        ValueChanged -= OnValueChanged;
         base._ExitTree();
     }
 
-    private void OnValueChanged()
+    private void OnValueChanged(double value)
     {
-        Lab.Text = $"{Value}";
+        SetText();
+    }
+    
+    private void SetText()
+    {
+        if (Lab != null)
+        {
+            Lab.Text = $"{Value}/{MaxValue}";
+        }
     }
 }

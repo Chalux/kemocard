@@ -81,6 +81,26 @@ namespace cfg.card
         /// 魔法妨害
         /// </summary>
         MBLOCK = 16,
+        /// <summary>
+        /// 自身
+        /// </summary>
+        SELF = 17,
+        /// <summary>
+        /// 己方全体
+        /// </summary>
+        AT = 18,
+        /// <summary>
+        /// 己方单体
+        /// </summary>
+        ST = 19,
+        /// <summary>
+        /// 敌方全体
+        /// </summary>
+        AE = 20,
+        /// <summary>
+        /// 敌方单体
+        /// </summary>
+        SE = 21,
     }
 
 } 

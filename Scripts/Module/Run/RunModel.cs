@@ -4,7 +4,6 @@ using System.Linq;
 using cfg.card;
 using cfg.character;
 using Godot;
-using Godot.Collections;
 using kemocard.Scripts.Common;
 using kemocard.Scripts.MVC.Controller;
 using kemocard.Scripts.MVC.Model;
@@ -15,10 +14,10 @@ namespace kemocard.Scripts.Module.Run;
 
 public class RunModel(BaseController inController) : BaseModel(inController)
 {
-    public Array<BaseCharacter> CharacterList = [];
+    public List<BaseCharacter> CharacterList = [];
     public HashSet<string> AllCards = [];
 
-    public readonly System.Collections.Generic.Dictionary<Role, BaseCharacter> Team = new()
+    public System.Collections.Generic.Dictionary<Role, BaseCharacter> Team = new()
     {
         { Role.ATTACKER, null },
         { Role.GUARD, null },
@@ -31,25 +30,30 @@ public class RunModel(BaseController inController) : BaseModel(inController)
         base.Init();
         CharacterList = [];
         AllCards = [];
+        Team[Role.ATTACKER] = null;
+        Team[Role.GUARD] = null;
+        Team[Role.BLOCKER] = null;
+        Team[Role.SUPPORT] = null;
     }
 
     public void SetTeam(Role role, BaseCharacter character)
     {
         if (!Team.ContainsKey(role)) return;
         Team[role] = character;
-        GameCore.EventBus.PostEvent(CommonEvent.TeamListUpdate, null);
+        Save();
+        GameCore.EventBus.PostEvent(CommonEvent.TeamListUpdate);
     }
 
     public void AddCard(HashSet<string> cardIds)
     {
         AllCards.UnionWith(cardIds);
-        GameCore.EventBus.PostEvent(CommonEvent.RunCardPoolUpdate, null);
+        GameCore.EventBus.PostEvent(CommonEvent.RunCardPoolUpdate);
     }
 
     public void RemoveCard(HashSet<string> cardIds)
     {
         AllCards.ExceptWith(cardIds);
-        GameCore.EventBus.PostEvent(CommonEvent.RunCardPoolUpdate, null);
+        GameCore.EventBus.PostEvent(CommonEvent.RunCardPoolUpdate);
     }
 
     public HashSet<string> GetCardsByTag(HashSet<Tag> tags, bool includeEx = false)
@@ -140,19 +144,39 @@ public class RunModel(BaseController inController) : BaseModel(inController)
             return;
         }
 
+        Init();
+
         using var file = FileAccess.Open(RunSavePath, FileAccess.ModeFlags.Read);
         GD.Print(file.GetAsText());
         try
         {
-            var str = file.GetLine();
-            CharacterList = JsonConvert.DeserializeObject<Array<BaseCharacter>>(str, SaveJsonSerializerSetting);
-            str = file.GetLine();
-            AllCards = JsonConvert.DeserializeObject<HashSet<string>>(str, SaveJsonSerializerSetting);
+            int i = 0;
+            while (file.GetPosition() < file.GetLength())
+            {
+                var str = file.GetLine();
+                switch (i)
+                {
+                    case 0:
+                        CharacterList =
+                            JsonConvert.DeserializeObject<List<BaseCharacter>>(str, SaveJsonSerializerSetting);
+                        break;
+                    case 1:
+                        AllCards = JsonConvert.DeserializeObject<HashSet<string>>(str, SaveJsonSerializerSetting);
+                        break;
+                    case 2:
+                        Team =
+                            JsonConvert.DeserializeObject<System.Collections.Generic.Dictionary<Role, BaseCharacter>>(
+                                str,
+                                SaveJsonSerializerSetting);
+                        break;
+                }
+
+                i++;
+            }
         }
         catch (Exception e)
         {
             GD.PrintErr(e);
-            Init();
         }
         // var strings = Json.ParseString(file.GetLine()).As<Array<string>>() ?? new();
         // foreach (var s in strings)
@@ -183,7 +207,11 @@ public class RunModel(BaseController inController) : BaseModel(inController)
         // GD.Print(str);
         file.StoreLine(str);
         file.StoreLine(JsonConvert.SerializeObject(AllCards));
+        file.StoreLine(JsonConvert.SerializeObject(Team));
         file.Flush();
-        GD.Print(file.GetAsText());
+        if (OS.IsDebugBuild())
+        {
+            GD.Print(file.GetAsText());
+        }
     }
 }

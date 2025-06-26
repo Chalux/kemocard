@@ -1,0 +1,39 @@
+[gd_scene load_steps=2 format=3 uid="uid://dxvtfvwd21tpu"]
+
+[ext_resource type="Script" uid="uid://b4vtwlg1ueb56" path="res://Components/Banner/BannerTip.cs" id="1_1kxrx"]
+
+[node name="Control" type="Control" node_paths=PackedStringArray("Lab", "Timer")]
+custom_minimum_size = Vector2(0, 64)
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_1kxrx")
+Lab = NodePath("Label")
+Timer = NodePath("Timer")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.0980392, 0.0980392, 0.0980392, 0.741176)
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "test"
+horizontal_alignment = 1
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 3.0
+one_shot = true
+autostart = true

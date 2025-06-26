@@ -12,7 +12,7 @@ public partial class BaseBattleCard(BaseCard card) : BaseCard(card.Id)
 {
     public BattleCharacter User;
     public BasePawn Target;
-    public int RealTimeValue = 0;
+    public int RealTimeValue;
     public int RealTimeChain = 1;
 
     protected virtual void UseCard()
@@ -30,6 +30,12 @@ public partial class BaseBattleCard(BaseCard card) : BaseCard(card.Id)
     public virtual void UpdateRealTimeValue()
     {
         int result = Value;
+        if (User == null)
+        {
+            RealTimeValue = result;
+            return;
+        }
+
         if (Tags.Contains(Tag.PATTACK))
         {
             result += User.PAttack;

@@ -2,7 +2,6 @@
 using System.Linq;
 using cfg.card;
 using cfg.character;
-using cfg.pawn;
 using Godot.Collections;
 using kemocard.Scripts.Common;
 using kemocard.Scripts.MVC;
@@ -31,7 +30,7 @@ public class RunController : BaseController
         });
         RunModel model = new(this);
         SetModel(model);
-        model.Load();
+        // model.Load();
     }
 
     public void ResetModel()
@@ -53,7 +52,7 @@ public class RunController : BaseController
         AddCharacter(character);
     }
 
-    public Array<BaseCharacter> GetCharacters(Role filterRole = Role.MAX, int filterAttribute = 0)
+    public List<BaseCharacter> GetCharacters(Role filterRole = Role.MAX, int filterAttribute = 0)
     {
         RunModel model = GetModel<RunModel>();
         var list = model?.CharacterList;
@@ -62,7 +61,7 @@ public class RunController : BaseController
             return [];
         }
 
-        Array<BaseCharacter> result = [];
+        List<BaseCharacter> result = [];
         foreach (var baseCharacter in list)
         {
             if ((filterRole == Role.MAX || baseCharacter.Role == filterRole)

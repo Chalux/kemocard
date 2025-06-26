@@ -1,0 +1,26 @@
+[gd_scene load_steps=3 format=3 uid="uid://cpdjhyh1os7nv"]
+
+[ext_resource type="PackedScene" uid="uid://c01n24gystrqo" path="res://Components/Card/CardBigItem.tscn" id="1_6suf4"]
+[ext_resource type="Script" uid="uid://bkfyefc4iei6p" path="res://Components/Card/BattleCardItem.cs" id="2_rcode"]
+
+[node name="CardBigItem" node_paths=PackedStringArray("_statusLabel", "_cardControl", "_valueLab") instance=ExtResource("1_6suf4")]
+script = ExtResource("2_rcode")
+_statusLabel = NodePath("Control/StatusLabel")
+_cardControl = NodePath(".")
+_valueLab = NodePath("Control/TextureRect4/Label")
+
+[node name="Control" parent="." index="2"]
+mouse_filter = 2
+
+[node name="StatusLabel" type="Label" parent="Control" index="4"]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = -30.0
+offset_bottom = 30.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "选择目标中"
+horizontal_alignment = 1

@@ -7,7 +7,7 @@ public interface ISelectableItem
     public int Index { get; set; }
     public VirtualList List { get; set; }
 
-    public abstract void SetMouseFilter(Control.MouseFilterEnum mouseFilter);
+    public void SetMouseFilter(Control.MouseFilterEnum mouseFilter);
 
     public void OnGuiInput(InputEvent input)
     {

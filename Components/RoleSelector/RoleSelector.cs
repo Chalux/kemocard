@@ -15,7 +15,7 @@ public partial class RoleSelector : HBoxContainer
     [Export] private Button _blocker;
     [Export] private Button _support;
     [Export] private Button _normal;
-    private bool _disableNormal = false;
+    private bool _disableNormal;
 
     public override void _Ready()
     {

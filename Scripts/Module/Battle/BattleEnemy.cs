@@ -3,14 +3,16 @@ using kemocard.Scripts.Pawn;
 
 namespace kemocard.Scripts.Module.Battle;
 
-public partial class BattleEnemy : BasePawn
+public sealed class BattleEnemy : BasePawn
 {
-    public int CurrentHealth = 0;
-    public bool IsDead = false;
+    public int CurrentHealth;
+    public bool IsDead;
 
     public BattleEnemy(BasePawn pawn)
     {
+        InitFromConfig(pawn.Id);
         CurrentHealth = MaxHealth;
+        Position = pawn.Position;
     }
 
     public void ExecuteBuffs()
@@ -21,7 +23,7 @@ public partial class BattleEnemy : BasePawn
         }
     }
 
-    public virtual void Action()
+    public void Action()
     {
     }
 }

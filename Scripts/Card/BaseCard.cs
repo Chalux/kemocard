@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 using cfg.card;
 using Godot;
@@ -28,6 +27,7 @@ public partial class BaseCard : GodotObject
     public string Icon { get; protected set; }
     public int Value { get; protected set; }
     public int Sort { get; protected set; }
+    public TargetType TargetType { get; protected set; }
 
     public BaseCard(string configId)
     {
@@ -64,6 +64,7 @@ public partial class BaseCard : GodotObject
         Icon = conf.Icon;
         Value = conf.Value;
         Sort = conf.Sort;
+        TargetType = conf.Targettype;
     }
 
     public virtual void UseCard(BaseCharacter owner, BattleContext context)

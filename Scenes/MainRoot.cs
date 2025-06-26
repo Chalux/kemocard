@@ -14,6 +14,7 @@ public partial class MainRoot : Control
     [Export] public CanvasItem WorldCanvas;
     [Export] public PanelContainer HintPanel;
     [Export] public RichTextLabel HintLabel;
+    [Export] public VBoxContainer Banner;
 
     public override void _EnterTree()
     {

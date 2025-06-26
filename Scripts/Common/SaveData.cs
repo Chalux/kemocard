@@ -1,12 +1,13 @@
 ﻿using Godot;
+using Godot.Collections;
 
 namespace kemocard.Scripts.Common;
 
 public partial class SaveData : GodotObject
 {
-    public Godot.Collections.Dictionary<string, bool> GlobalBoolSave { get; set; } = new();
-    public Godot.Collections.Dictionary<string, double> GlobalNumberSave { get; set; } = new();
-    public Godot.Collections.Dictionary<string, string> GlobalStringSave { get; set; } = new();
+    public Dictionary<string, bool> GlobalBoolSave { get; set; } = new();
+    public Dictionary<string, double> GlobalNumberSave { get; set; } = new();
+    public Dictionary<string, string> GlobalStringSave { get; set; } = new();
 }
 
 public static class SaveMgr

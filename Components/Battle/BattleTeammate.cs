@@ -1,4 +1,5 @@
 using System.Linq;
+using cfg.card;
 using Godot;
 using kemocard.Components.Card;
 using kemocard.Components.List;
@@ -14,13 +15,20 @@ public partial class BattleTeammate : Control
     [Export] private VirtualList _usedCard;
     [Export] private TextureProgressBar _hpBar;
     [Export] private Label _costLab;
-    private BattleCharacter _battleHero = null;
+    [Export] private Button _selectTeammateBtn;
+    public BattleCharacter BattleHero { get; private set; }
 
     public override void _Ready()
     {
         base._Ready();
         VisibilityChanged += OnVisibilityChanged;
         _usedCard.RenderHandler = RenderHandler;
+        _selectTeammateBtn.Pressed += SelectTeammateBtnOnPressed;
+    }
+
+    private void SelectTeammateBtnOnPressed()
+    {
+        GameCore.EventBus.PostEvent(CommonEvent.BattleEvent_TeammateItemClicked, this);
     }
 
     private void RenderHandler(Control arg1, int arg2, object arg3)
@@ -35,6 +43,9 @@ public partial class BattleTeammate : Control
     {
         VisibilityChanged -= OnVisibilityChanged;
         GameCore.EventBus.RemoveEvent(this, CommonEvent.PlayerPropUpdate, RefreshItem);
+        GameCore.EventBus.RemoveEvent(this, CommonEvent.BattleEvent_Render, RefreshItem);
+        GameCore.EventBus.RemoveEvent(this, CommonEvent.BattleEvent_SelectCardChanged, OnSelectCardChanged);
+        _selectTeammateBtn.Pressed -= SelectTeammateBtnOnPressed;
         base._ExitTree();
     }
 
@@ -43,35 +54,46 @@ public partial class BattleTeammate : Control
         if (Visible)
         {
             GameCore.EventBus.AddEvent(this, CommonEvent.BattleEvent_Render, RefreshItem);
+            GameCore.EventBus.AddEvent(this, CommonEvent.BattleEvent_SelectCardChanged, OnSelectCardChanged);
         }
         else
         {
             GameCore.EventBus.RemoveEvent(this, CommonEvent.BattleEvent_Render, RefreshItem);
+            GameCore.EventBus.RemoveEvent(this, CommonEvent.BattleEvent_SelectCardChanged, OnSelectCardChanged);
         }
     }
 
     public void SetBattleHero(BattleCharacter battleHero)
     {
-        if (_battleHero == battleHero) return;
-        _battleHero = battleHero;
+        if (BattleHero != null && BattleHero == battleHero) return;
+        BattleHero = battleHero;
         RefreshItem();
     }
 
     public void RefreshItem(object o = null)
     {
-        if (_battleHero == null) return;
+        if (BattleHero == null || string.IsNullOrWhiteSpace(BattleHero.Id))
+        {
+            Visible = false;
+            return;
+        }
 
-        _icon.Texture = FileAccess.FileExists(_battleHero.Icon)
-            ? ResourceLoader.Load<CompressedTexture2D>(_battleHero.Icon)
+        _icon.Texture = FileAccess.FileExists(BattleHero.Icon)
+            ? ResourceLoader.Load<CompressedTexture2D>(BattleHero.Icon)
             : null;
-        SetCost(_battleHero.CanUseCost, _battleHero.Cost);
-        _usedCard.SetData(_battleHero.TempUsedCard.ToList<object>());
-        _hpBar.MaxValue = _battleHero.MaxHealth;
-        _hpBar.Value = _battleHero.CurrentHealth;
+        SetCost(BattleHero.CanUseCost, BattleHero.Cost);
+        _usedCard.SetData(BattleHero.TempUsedCard.ToList<object>());
+        _hpBar.MaxValue = BattleHero.MaxHealth;
+        _hpBar.Value = BattleHero.CurrentHealth;
     }
 
     public void SetCost(int canUseCost, int cost)
     {
         _costLab.Text = $"{canUseCost}/{cost}";
+    }
+
+    private void OnSelectCardChanged(object o)
+    {
+        _selectTeammateBtn.Visible = o is BattleCardItem { Card.TargetType: TargetType.ST };
     }
 }

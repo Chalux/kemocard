@@ -1,9 +1,11 @@
-[gd_scene load_steps=7 format=3 uid="uid://cxliblnbb8mkv"]
+[gd_scene load_steps=9 format=3 uid="uid://cxliblnbb8mkv"]
 
 [ext_resource type="Script" uid="uid://hpib2kshni07" path="res://Components/Battle/BattleTeammate.cs" id="1_w1hrs"]
 [ext_resource type="Shader" uid="uid://m3ehfkvneshl" path="res://Assets/Shaders/FadeOut.gdshader" id="1_xvfj4"]
 [ext_resource type="Texture2D" uid="uid://kms2uygohqg8" path="res://Assets/Texture/GUI/GUI.png" id="2_w1hrs"]
 [ext_resource type="PackedScene" uid="uid://o730khbn4fyq" path="res://Components/TextProgressBar/TextProgressBar.tscn" id="3_0uvvf"]
+[ext_resource type="Script" uid="uid://chmewpio17dky" path="res://Components/List/VirtualList.cs" id="5_d77po"]
+[ext_resource type="PackedScene" uid="uid://c01n24gystrqo" path="res://Components/Card/CardBigItem.tscn" id="6_q25e5"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_11si8"]
 shader = ExtResource("1_xvfj4")
@@ -11,7 +13,7 @@ shader = ExtResource("1_xvfj4")
 [sub_resource type="LabelSettings" id="LabelSettings_w1hrs"]
 font_size = 26
 
-[node name="Control" type="Control" node_paths=PackedStringArray("_icon", "_usedCard", "_hpBar", "_costLab")]
+[node name="Control" type="Control" node_paths=PackedStringArray("_icon", "_usedCard", "_hpBar", "_costLab", "_selectTeammateBtn")]
 layout_mode = 3
 anchors_preset = 0
 offset_right = 320.0
@@ -21,6 +23,7 @@ _icon = NodePath("Control/CenterContainer/TextureRect")
 _usedCard = NodePath("CardList")
 _hpBar = NodePath("TextureProgressBar")
 _costLab = NodePath("Label")
+_selectTeammateBtn = NodePath("SlcBtn")
 
 [node name="Control" type="Control" parent="."]
 clip_contents = true
@@ -61,12 +64,16 @@ stretch_margin_right = 2
 stretch_margin_bottom = 2
 script = null
 
-[node name="CardList" type="Control" parent="."]
+[node name="CardList" type="Control" parent="." node_paths=PackedStringArray("_contentContainer", "_scrollView")]
 anchors_preset = 0
 offset_left = 128.0
 offset_top = 16.0
 offset_right = 400.0
 offset_bottom = 144.0
+script = ExtResource("5_d77po")
+_itemScene = ExtResource("6_q25e5")
+_contentContainer = NodePath("ScrollContainer/HBoxContainer")
+_scrollView = NodePath("ScrollContainer")
 
 [node name="ScrollContainer" type="ScrollContainer" parent="CardList"]
 layout_mode = 1
@@ -87,3 +94,19 @@ offset_right = 320.0
 offset_bottom = 160.0
 text = "10/10"
 label_settings = SubResource("LabelSettings_w1hrs")
+
+[node name="SlcBtn" type="Button" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -54.0
+offset_top = -34.0
+offset_right = 54.0
+offset_bottom = 34.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "选择"

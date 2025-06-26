@@ -19,7 +19,7 @@ public partial class HeroTeamItem : Control, ISelectableItem
     [Export] public Label MDefenseLab;
     [Export] public Label HealLab;
     private BaseCharacter _hero;
-    private bool _click = false;
+    private bool _click;
 
     public HeroTeamItem()
     {
@@ -53,7 +53,7 @@ public partial class HeroTeamItem : Control, ISelectableItem
             : null;
         if (texture != null) Head.Texture = texture;
         var mod = GameCore.ControllerMgr.GetControllerModel<RunModel>(ControllerType.Run);
-        NameLab.Text = _hero.Name + (mod != null && mod.Team[_hero.Role] == _hero ? "已出战" : "");
+        NameLab.Text = _hero.Name + (mod != null && mod.Team[_hero.Role] == _hero ? "(已上阵)" : "");
         DeckLab.Text = _hero.GetDeckDesc();
         HealthLab.Text = _hero.MaxHealth.ToString();
         PAttackLab.Text = _hero.PAttack.ToString();

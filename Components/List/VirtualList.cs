@@ -81,4 +81,10 @@ public partial class VirtualList : Control
             if (Array != null && child is Control c) RenderHandler?.Invoke(c, c.GetIndex(), Array[c.GetIndex()]);
         }
     }
+
+    public T GetCell<T>(int index) where T : Node
+    {
+        if (_contentContainer.GetChildCount() <= index) return null;
+        return _contentContainer.GetChild(index) as T;
+    }
 }

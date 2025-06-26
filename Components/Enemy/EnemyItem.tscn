@@ -1,0 +1,47 @@
+[gd_scene load_steps=3 format=3 uid="uid://bebakydsbny8j"]
+
+[ext_resource type="Script" uid="uid://ds4i8ahi2msbf" path="res://Components/Enemy/EnemyItem.cs" id="1_bt3qq"]
+[ext_resource type="PackedScene" uid="uid://o730khbn4fyq" path="res://Components/TextProgressBar/TextProgressBar.tscn" id="1_gqsho"]
+
+[node name="Root" type="Control" node_paths=PackedStringArray("_hpBar", "_selectEnemyBtn")]
+custom_minimum_size = Vector2(192, 256)
+layout_mode = 3
+anchors_preset = 0
+offset_right = 192.0
+offset_bottom = 256.0
+script = ExtResource("1_bt3qq")
+_hpBar = NodePath("HpBar")
+_selectEnemyBtn = NodePath("SlcBtn")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.0519709, 0.051971, 0.0519709, 0.407843)
+
+[node name="HpBar" parent="." instance=ExtResource("1_gqsho")]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 0.0
+offset_bottom = 0.0
+grow_horizontal = 2
+stretch_margin_left = 2
+stretch_margin_top = 2
+stretch_margin_right = 2
+stretch_margin_bottom = 2
+
+[node name="SlcBtn" type="Button" parent="."]
+visible = false
+layout_mode = 0
+offset_left = 40.0
+offset_top = 96.0
+offset_right = 148.0
+offset_bottom = 164.0
+text = "选择"

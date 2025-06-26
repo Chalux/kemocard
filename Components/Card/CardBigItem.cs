@@ -84,7 +84,7 @@ public partial class CardBigItem : Control, ISelectableItem
         _attributeLab.Text = StaticUtil.GetAttributeName(attribute, false);
     }
 
-    public void Clear()
+    public virtual void Clear()
     {
         _attributeLab.Text = "";
         _costLab.Text = "";
@@ -98,7 +98,7 @@ public partial class CardBigItem : Control, ISelectableItem
     public int Index { get; set; }
     public VirtualList List { get; set; }
 
-    public override void _EnterTree()
+    public override void _EnterTree() 
     {
         base._EnterTree();
         MouseEntered += OnMouseEntered;

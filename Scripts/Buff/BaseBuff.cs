@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using Godot;
 using kemocard.Scripts.Common;
-using kemocard.Scripts.Module.Battle;
 using kemocard.Scripts.Pawn;
 
 namespace kemocard.Scripts.Buff;

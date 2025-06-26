@@ -7,31 +7,40 @@ using kemocard.Scripts.Pawn;
 
 namespace kemocard.Scripts.Module.Battle;
 
-public partial class BattleCharacter : BaseCharacter
+public class BattleCharacter : BaseCharacter
 {
-    public int CurrentHealth = 0;
+    public int CurrentHealth;
 
-    public List<BaseBattleCard> Deck = new();
-    public List<BaseBattleCard> Hand = new();
-    public List<string> Discard = new();
+    public List<BaseBattleCard> Deck = [];
+    public List<BaseBattleCard> Hand = [];
+    public List<string> Discard = [];
 
-    public List<BaseBattleCard> TempUsedCard = new();
+    public List<BaseBattleCard> TempUsedCard = [];
 
     public const int MaxHandSize = 5;
 
-    public bool IsDead = false;
-    public bool IsResetDeck = false;
+    public bool IsDead;
+    public bool IsResetDeck;
 
-    public int Cost = 0;
-    public int CanUseCost = 0;
-    public int CurrLockedCost = 0;
+    public int Cost;
+    public int CanUseCost;
+    public int CurrLockedCost;
 
-    public bool IsConfirm = false;
+    public bool IsConfirm;
 
-    public List<BaseBattleCard> UsedCardThisTurn = new();
-    public List<BaseBattleCard> UsedCardThisBattle = new();
+    public List<BaseBattleCard> UsedCardThisTurn = [];
+    public List<BaseBattleCard> UsedCardThisBattle = [];
 
-    public BattleCharacter(BaseCharacter hero)
+    public BattleCharacter(BaseCharacter character)
+    {
+        if (character == null) return;
+        Id = character.Id;
+        InitFromConfig(Id);
+        Role = character.Role;
+        Cards = character.Cards;
+    }
+
+    public void Init()
     {
         CurrentHealth = MaxHealth;
         foreach (var baseCard in Cards)
@@ -77,6 +86,7 @@ public partial class BattleCharacter : BaseCharacter
 
     public void UseCard(string id, BasePawn target)
     {
+        if (string.IsNullOrWhiteSpace(id) || target == null) return;
         var card = Hand.Find(card => card.Id == id);
         if (card == null) return;
         card.Target = target;
@@ -89,6 +99,7 @@ public partial class BattleCharacter : BaseCharacter
 
     public void CancelUseCard(string id)
     {
+        if (string.IsNullOrWhiteSpace(id)) return;
         var card = Hand.Find(card => card.Id == id);
         if (card == null) return;
         card.Target = null;

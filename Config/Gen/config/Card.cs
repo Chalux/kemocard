@@ -28,6 +28,7 @@ public sealed partial class Card : Luban.BeanBase
         Mattack = _buf.ReadInt();
         Heal = _buf.ReadInt();
         {int n0 = System.Math.Min(_buf.ReadSize(), _buf.Size);Tag = new System.Collections.Generic.HashSet<card.Tag>(/*n0 * 3 / 2*/);for(var i0 = 0 ; i0 < n0 ; i0++) { card.Tag _e0;  _e0 = (card.Tag)_buf.ReadInt(); Tag.Add(_e0);}}
+        Targettype = (card.TargetType)_buf.ReadInt();
         Icon = _buf.ReadString();
         Sort = _buf.ReadInt();
         Exclusive = _buf.ReadBool();
@@ -90,6 +91,10 @@ public sealed partial class Card : Luban.BeanBase
     /// </summary>
     public readonly System.Collections.Generic.HashSet<card.Tag> Tag;
     /// <summary>
+    /// 目标类型
+    /// </summary>
+    public readonly card.TargetType Targettype;
+    /// <summary>
     /// 图标
     /// </summary>
     public readonly string Icon;
@@ -136,6 +141,7 @@ public sealed partial class Card : Luban.BeanBase
         + "mattack:" + Mattack + ","
         + "heal:" + Heal + ","
         + "tag:" + Luban.StringUtil.CollectionToString(Tag) + ","
+        + "targettype:" + Targettype + ","
         + "icon:" + Icon + ","
         + "sort:" + Sort + ","
         + "exclusive:" + Exclusive + ","

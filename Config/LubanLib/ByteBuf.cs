@@ -128,10 +128,8 @@ namespace Luban
                 Buffer.BlockCopy(Bytes, ReaderIndex, arr, 0, n);
                 return arr;
             }
-            else
-            {
-                return Array.Empty<byte>();
-            }
+
+            return Array.Empty<byte>();
         }
 
         public int Remaining { get { return WriterIndex - ReaderIndex; } }
@@ -260,7 +258,8 @@ namespace Luban
                     Bytes[WriterIndex++] = (byte)x;
                     return;
                 }
-                else if (x < 0x4000)
+
+                if (x < 0x4000)
                 {
                     EnsureWrite(2);
                     Bytes[WriterIndex + 1] = (byte)x;
@@ -285,24 +284,24 @@ namespace Luban
                 ReaderIndex++;
                 return (short)h;
             }
-            else if (h < 0xc0)
+
+            if (h < 0xc0)
             {
                 EnsureRead(2);
                 int x = ((h & 0x3f) << 8) | Bytes[ReaderIndex + 1];
                 ReaderIndex += 2;
                 return (short)x;
             }
-            else if ((h == 0xff))
+
+            if ((h == 0xff))
             {
                 EnsureRead(3);
                 int x = (Bytes[ReaderIndex + 1] << 8) | Bytes[ReaderIndex + 2];
                 ReaderIndex += 3;
                 return (short)x;
             }
-            else
-            {
-                throw new SerializationException();
-            }
+
+            throw new SerializationException();
         }
 
         public short ReadFshort()
@@ -412,21 +411,24 @@ namespace Luban
                 ReaderIndex++;
                 return h;
             }
-            else if (h < 0xc0)
+
+            if (h < 0xc0)
             {
                 EnsureRead(2);
                 uint x = ((h & 0x3f) << 8) | Bytes[ReaderIndex + 1];
                 ReaderIndex += 2;
                 return x;
             }
-            else if (h < 0xe0)
+
+            if (h < 0xe0)
             {
                 EnsureRead(3);
                 uint x = ((h & 0x1f) << 16) | ((uint)Bytes[ReaderIndex + 1] << 8) | Bytes[ReaderIndex + 2];
                 ReaderIndex += 3;
                 return x;
             }
-            else if (h < 0xf0)
+
+            if (h < 0xf0)
             {
 
                 EnsureRead(4);
@@ -503,7 +505,8 @@ namespace Luban
                 ReaderIndex++;
                 return (h >> 1);
             }
-            else if ((h & 0b11) == 0b01)
+
+            if ((h & 0b11) == 0b01)
             {
                 EnsureRead(2);
                 fixed (byte* rb = &Bytes[ReaderIndex])
@@ -512,7 +515,8 @@ namespace Luban
                     return (*(uint*)rb) >> 2;
                 }
             }
-            else if ((h & 0b111) == 0b011)
+
+            if ((h & 0b111) == 0b011)
             {
                 EnsureRead(3);
                 fixed (byte* rb = &Bytes[ReaderIndex])
@@ -521,7 +525,8 @@ namespace Luban
                     return (*(uint*)rb) >> 3;
                 }
             }
-            else if ((h & 0b1111) == 0b0111)
+
+            if ((h & 0b1111) == 0b0111)
             {
                 EnsureRead(4);
                 fixed (byte* rb = &Bytes[ReaderIndex])
@@ -530,14 +535,12 @@ namespace Luban
                     return (*(uint*)rb) >> 4;
                 }
             }
-            else
+
+            EnsureRead(5);
+            fixed (byte* rb = &Bytes[ReaderIndex])
             {
-                EnsureRead(5);
-                fixed (byte* rb = &Bytes[ReaderIndex])
-                {
-                    ReaderIndex += 5;
-                    return (*(uint*)rb) >> 5;
-                }
+                ReaderIndex += 5;
+                return (*(uint*)rb) >> 5;
             }
         }
 
@@ -727,28 +730,32 @@ namespace Luban
                 ReaderIndex++;
                 return h;
             }
-            else if (h < 0xc0)
+
+            if (h < 0xc0)
             {
                 EnsureRead(2);
                 uint x = ((h & 0x3f) << 8) | Bytes[ReaderIndex + 1];
                 ReaderIndex += 2;
                 return x;
             }
-            else if (h < 0xe0)
+
+            if (h < 0xe0)
             {
                 EnsureRead(3);
                 uint x = ((h & 0x1f) << 16) | ((uint)Bytes[ReaderIndex + 1] << 8) | Bytes[ReaderIndex + 2];
                 ReaderIndex += 3;
                 return x;
             }
-            else if (h < 0xf0)
+
+            if (h < 0xf0)
             {
                 EnsureRead(4);
                 uint x = ((h & 0x0f) << 24) | ((uint)Bytes[ReaderIndex + 1] << 16) | ((uint)Bytes[ReaderIndex + 2] << 8) | Bytes[ReaderIndex + 3];
                 ReaderIndex += 4;
                 return x;
             }
-            else if (h < 0xf8)
+
+            if (h < 0xf8)
             {
                 EnsureRead(5);
                 uint xl = ((uint)Bytes[ReaderIndex + 1] << 24) | ((uint)(Bytes[ReaderIndex + 2] << 16)) | ((uint)Bytes[ReaderIndex + 3] << 8) | (Bytes[ReaderIndex + 4]);
@@ -756,7 +763,8 @@ namespace Luban
                 ReaderIndex += 5;
                 return ((ulong)xh << 32) | xl;
             }
-            else if (h < 0xfc)
+
+            if (h < 0xfc)
             {
                 EnsureRead(6);
                 uint xl = ((uint)Bytes[ReaderIndex + 2] << 24) | ((uint)(Bytes[ReaderIndex + 3] << 16)) | ((uint)Bytes[ReaderIndex + 4] << 8) | (Bytes[ReaderIndex + 5]);
@@ -764,7 +772,8 @@ namespace Luban
                 ReaderIndex += 6;
                 return ((ulong)xh << 32) | xl;
             }
-            else if (h < 0xfe)
+
+            if (h < 0xfe)
             {
                 EnsureRead(7);
                 uint xl = ((uint)Bytes[ReaderIndex + 3] << 24) | ((uint)(Bytes[ReaderIndex + 4] << 16)) | ((uint)Bytes[ReaderIndex + 5] << 8) | (Bytes[ReaderIndex + 6]);
@@ -772,7 +781,8 @@ namespace Luban
                 ReaderIndex += 7;
                 return ((ulong)xh << 32) | xl;
             }
-            else if (h < 0xff)
+
+            if (h < 0xff)
             {
                 EnsureRead(8);
                 uint xl = ((uint)Bytes[ReaderIndex + 4] << 24) | ((uint)(Bytes[ReaderIndex + 5] << 16)) | ((uint)Bytes[ReaderIndex + 6] << 8) | (Bytes[ReaderIndex + 7]);
@@ -831,7 +841,7 @@ namespace Luban
 #else
             int xl = (Bytes[ReaderIndex + 3] << 24) | ((Bytes[ReaderIndex + 2] << 16)) | (Bytes[ReaderIndex + 1] << 8) | (Bytes[ReaderIndex]);
             int xh = (Bytes[ReaderIndex + 7] << 24) | (Bytes[ReaderIndex + 6] << 16) | (Bytes[ReaderIndex + 5] << 8) | Bytes[ReaderIndex + 4];
-            x = ((long)xh << 32) | (long)xl;
+            x = ((long)xh << 32) | (uint)xl;
 #endif
             ReaderIndex += 8;
             return x;
@@ -1059,10 +1069,8 @@ namespace Luban
                 ReaderIndex += n;
                 return s;
             }
-            else
-            {
-                return string.Empty;
-            }
+
+            return string.Empty;
         }
 
         public void WriteBytes(byte[] x)
@@ -1088,10 +1096,8 @@ namespace Luban
                 ReaderIndex += n;
                 return x;
             }
-            else
-            {
-                return Array.Empty<byte>();
-            }
+
+            return Array.Empty<byte>();
         }
 
         // 以下是一些特殊类型
@@ -1255,11 +1261,9 @@ namespace Luban
                 x = Bytes[ReaderIndex++];
                 return true;
             }
-            else
-            {
-                x = 0;
-                return false;
-            }
+
+            x = 0;
+            return false;
         }
 
         public EDeserializeError TryDeserializeInplaceByteBuf(int maxSize, ByteBuf inplaceTempBody)
@@ -1433,7 +1437,7 @@ namespace Luban
             else if (h < 0xe0)
             {
                 EnsureRead(2);
-                segmentSize = ((h & 0x1f) << 16) | ((int)Bytes[ReaderIndex] << 8) | Bytes[ReaderIndex + 1];
+                segmentSize = ((h & 0x1f) << 16) | (Bytes[ReaderIndex] << 8) | Bytes[ReaderIndex + 1];
                 int endPos = ReaderIndex + segmentSize;
                 Bytes[ReaderIndex] = Bytes[endPos];
                 Bytes[ReaderIndex + 1] = Bytes[endPos + 1];
@@ -1442,7 +1446,7 @@ namespace Luban
             else if (h < 0xf0)
             {
                 EnsureRead(3);
-                segmentSize = ((h & 0x0f) << 24) | ((int)Bytes[ReaderIndex] << 16) | ((int)Bytes[ReaderIndex + 1] << 8) | Bytes[ReaderIndex + 2];
+                segmentSize = ((h & 0x0f) << 24) | (Bytes[ReaderIndex] << 16) | (Bytes[ReaderIndex + 1] << 8) | Bytes[ReaderIndex + 2];
                 int endPos = ReaderIndex + segmentSize;
                 Bytes[ReaderIndex] = Bytes[endPos];
                 Bytes[ReaderIndex + 1] = Bytes[endPos + 1];

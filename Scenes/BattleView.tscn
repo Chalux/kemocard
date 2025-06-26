@@ -6,12 +6,12 @@
 [ext_resource type="PackedScene" uid="uid://cxliblnbb8mkv" path="res://Components/Battle/BattleTeammate.tscn" id="2_u5ucn"]
 [ext_resource type="PackedScene" uid="uid://o730khbn4fyq" path="res://Components/TextProgressBar/TextProgressBar.tscn" id="3_dy680"]
 [ext_resource type="Script" uid="uid://chmewpio17dky" path="res://Components/List/VirtualList.cs" id="4_yi3au"]
-[ext_resource type="PackedScene" uid="uid://c01n24gystrqo" path="res://Components/Card/CardBigItem.tscn" id="5_2q5f3"]
+[ext_resource type="PackedScene" uid="uid://cpdjhyh1os7nv" path="res://Components/Card/BattleCardItem.tscn" id="6_u5ucn"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_11si8"]
 shader = ExtResource("1_11si8")
 
-[node name="BattleView" type="Control"]
+[node name="BattleView" type="Control" node_paths=PackedStringArray("_teammate1", "_teammate2", "_teammate3", "_currIcon", "_currHpBar", "_confirmBtn", "_currCostLab", "_cardList", "_debugControl", "_debugEndBattle", "_enemyControl", "_selectAllTeamBtn", "_selectAllEnemyBtn", "_selectSelfBtn")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -19,6 +19,20 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_cgady")
+_teammate1 = NodePath("Teammate1")
+_teammate2 = NodePath("Teammate2")
+_teammate3 = NodePath("Teammate3")
+_currIcon = NodePath("CurrentRole/Control/CenterContainer/TextureRect")
+_currHpBar = NodePath("CurrentRole/TextureProgressBar")
+_confirmBtn = NodePath("CurrentRole/Button")
+_currCostLab = NodePath("CurrentRole/Label")
+_cardList = NodePath("CurrentRole/CardList")
+_debugControl = NodePath("Control")
+_debugEndBattle = NodePath("Control/Button")
+_enemyControl = NodePath("EnemyControl")
+_selectAllTeamBtn = NodePath("SlcAllTeam")
+_selectAllEnemyBtn = NodePath("EnemyControl/SlcAllEnemy")
+_selectSelfBtn = NodePath("CurrentRole/SlcBtn")
 
 [node name="ColorRect" type="ColorRect" parent="."]
 layout_mode = 1
@@ -75,22 +89,6 @@ material = SubResource("ShaderMaterial_11si8")
 layout_mode = 2
 texture = ExtResource("2_dy680")
 
-[node name="TextureProgressBar" parent="CurrentRole" instance=ExtResource("3_dy680")]
-layout_mode = 1
-anchors_preset = 2
-anchor_top = 1.0
-anchor_bottom = 1.0
-offset_left = 0.0
-offset_top = -32.0
-offset_right = 320.0
-offset_bottom = 0.0
-grow_vertical = 0
-stretch_margin_left = 2
-stretch_margin_top = 2
-stretch_margin_right = 2
-stretch_margin_bottom = 2
-script = null
-
 [node name="CardList" type="Control" parent="CurrentRole" node_paths=PackedStringArray("_contentContainer", "_scrollView")]
 layout_mode = 1
 anchor_left = 0.2
@@ -99,7 +97,7 @@ anchor_bottom = 0.851
 offset_right = -0.640137
 offset_bottom = 0.0239868
 script = ExtResource("4_yi3au")
-_itemScene = ExtResource("5_2q5f3")
+_itemScene = ExtResource("6_u5ucn")
 _contentContainer = NodePath("ScrollContainer/HBoxContainer")
 _scrollView = NodePath("ScrollContainer")
 
@@ -115,6 +113,19 @@ grow_vertical = 2
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 6
+theme_override_constants/separation = 50
+
+[node name="TextureProgressBar" parent="CurrentRole" instance=ExtResource("3_dy680")]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.894
+anchor_right = 0.171
+anchor_bottom = 1.0
+offset_left = 0.0
+offset_top = -0.144012
+offset_right = -0.320007
+offset_bottom = 0.0
+grow_vertical = 0
 
 [node name="Button" type="Button" parent="CurrentRole"]
 layout_mode = 1
@@ -148,11 +159,84 @@ grow_vertical = 2
 text = "10/10"
 horizontal_alignment = 1
 
-[node name="MonsterControl" type="Control" parent="."]
+[node name="SlcBtn" type="Button" parent="CurrentRole"]
+visible = false
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 72.0
+offset_top = -28.0
+offset_right = 180.0
+offset_bottom = 40.0
+grow_vertical = 2
+text = "选择"
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -512.0
+offset_bottom = 256.0
+grow_horizontal = 0
+mouse_filter = 2
+
+[node name="Button" type="Button" parent="Control"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -264.0
+offset_top = 64.0
+offset_right = -56.0
+offset_bottom = 132.0
+grow_horizontal = 0
+text = "退出战斗"
+
+[node name="EnemyControl" type="Control" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-mouse_filter = 1
+mouse_filter = 2
+
+[node name="SlcAllEnemy" type="Button" parent="EnemyControl"]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -184.0
+offset_top = -60.0
+offset_right = 184.0
+offset_bottom = 60.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "选择全部"
+
+[node name="SlcAllTeam" type="Button" parent="."]
+visible = false
+self_modulate = Color(1, 1, 1, 0.552941)
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_right = 256.0
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="SlcAllTeam"]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = -30.0
+offset_bottom = 30.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "选择全部"
+horizontal_alignment = 1

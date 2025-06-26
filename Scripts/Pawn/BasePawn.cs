@@ -1,14 +1,15 @@
 ﻿using System.Runtime.Serialization;
-using Godot;
+using Godot.Collections;
 using kemocard.Scripts.Buff;
 using kemocard.Scripts.Common;
 using kemocard.Scripts.Module.Battle;
 using Newtonsoft.Json;
+using Vector2 = Godot.Vector2;
 
 namespace kemocard.Scripts.Pawn;
 
 [JsonObject(MemberSerialization.OptIn)]
-public partial class BasePawn : GodotObject
+public class BasePawn
 {
     [JsonProperty] public string Id = "";
     protected float BaseHealth;
@@ -21,7 +22,9 @@ public partial class BasePawn : GodotObject
     public string Icon = "";
     public string Description = "";
     public string ImagePath = "";
-    [JsonProperty] protected readonly Godot.Collections.Dictionary<string, Buff.BaseBuff> Buffs = [];
+    [JsonProperty] protected readonly Dictionary<string, BaseBuff> Buffs = [];
+    // 只是给怪物用的
+    public Vector2 Position;
 
     [OnDeserialized]
     internal void InitAfterDeserialized(StreamingContext context)
@@ -47,7 +50,7 @@ public partial class BasePawn : GodotObject
         RefreshProps();
     }
 
-    public void AddBuff(Buff.BaseBuff newBaseBuff)
+    public void AddBuff(BaseBuff newBaseBuff)
     {
         if (newBaseBuff == null) return;
         if (Buffs.TryGetValue(newBaseBuff.Id, out var buff))

@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://wpmke35lxpbi" path="res://Scripts/Module/GameUI/GameScene.cs" id="1_2wl7v"]
 
-[node name="GameScene" type="Control" node_paths=PackedStringArray("_teamEditBtn", "_quitBtn", "_giveUpBtn")]
+[node name="GameScene" type="Control" node_paths=PackedStringArray("_teamEditBtn", "_quitBtn", "_giveUpBtn", "_debugControl", "_debugFightBtn", "_debugFightEdit")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -13,6 +13,9 @@ script = ExtResource("1_2wl7v")
 _teamEditBtn = NodePath("TeamEditBtn")
 _quitBtn = NodePath("QuitBtn")
 _giveUpBtn = NodePath("GiveupBtn")
+_debugControl = NodePath("DebugControl")
+_debugFightBtn = NodePath("DebugControl/Button")
+_debugFightEdit = NodePath("DebugControl/TextEdit")
 
 [node name="TeamEditBtn" type="Button" parent="."]
 layout_mode = 1
@@ -58,3 +61,26 @@ offset_bottom = -260.0
 grow_horizontal = 0
 grow_vertical = 0
 text = "保存并退出"
+
+[node name="DebugControl" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -440.0
+offset_right = 512.0
+grow_vertical = 0
+
+[node name="Button" type="Button" parent="DebugControl"]
+layout_mode = 0
+offset_right = 256.0
+offset_bottom = 68.0
+text = "测试战斗"
+
+[node name="TextEdit" type="TextEdit" parent="DebugControl"]
+layout_mode = 0
+offset_left = 280.0
+offset_top = -8.0
+offset_right = 592.0
+offset_bottom = 80.0
+placeholder_text = "英文逗号分隔"

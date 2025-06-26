@@ -1,6 +1,4 @@
-﻿using Godot;
-
-namespace kemocard.Scripts.Module.Battle;
+﻿namespace kemocard.Scripts.Module.Battle;
 
 public interface IBattlePawnBase
 {

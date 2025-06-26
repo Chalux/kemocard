@@ -9,7 +9,7 @@
 font = ExtResource("3_gjq3s")
 font_size = 26
 
-[node name="CardBigItem" type="Control" node_paths=PackedStringArray("_cardControl", "_costLab", "_descLab", "_attributeLab", "_icon")]
+[node name="CardBigItem" type="Control" node_paths=PackedStringArray("_cardControl", "_costLab", "_descLab", "_attributeLab", "_valueLab", "_icon")]
 clip_contents = true
 custom_minimum_size = Vector2(128, 192)
 layout_mode = 3
@@ -23,6 +23,7 @@ _cardControl = NodePath("Control")
 _costLab = NodePath("Control/TextureRect/Label")
 _descLab = NodePath("Control/TextureRect2/Label")
 _attributeLab = NodePath("Control/TextureRect3/Label")
+_valueLab = NodePath("Control/TextureRect4/Label")
 _icon = NodePath("CenterContainer/TextureRect")
 
 [node name="NinePatchRect" type="NinePatchRect" parent="."]

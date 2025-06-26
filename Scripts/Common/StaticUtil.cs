@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using cfg.card;
 using Godot;
 using kemocard.Scripts.Card;
@@ -81,6 +82,19 @@ public static class StaticUtil
     public static void HideHint()
     {
         GameCore.Root.HintPanel.SetVisible(false);
+    }
+
+    private const string BannerTipPath = "res://Components/Banner/BannerTip.tscn";
+
+    public static void ShowBannerHint(string msg)
+    {
+        var banner = GameCore.Root.Banner;
+        var scene = ResourceLoader.Load<PackedScene>(BannerTipPath);
+        if (scene == null || banner == null) return;
+        var tip = scene.Instantiate<BannerTip>();
+        tip.Lab.Text = msg;
+        tip.Timer.Timeout += tip.QueueFree;
+        banner.AddChild(tip);
     }
 
     public static string GetTagName(List<Tag> tags)
@@ -240,5 +254,31 @@ public static class StaticUtil
         #endregion
 
         damage.Value = (int)(damage.Value * attributeRate);
+    }
+
+    public static void CopyAllInheritedProperties<TParent, TChild>(TParent source, TChild target)
+        where TChild : class
+    {
+        Type currentType = typeof(TParent);
+
+        while (currentType != null && currentType != typeof(object))
+        {
+            PropertyInfo[] properties = currentType.GetProperties(BindingFlags.Public | BindingFlags.Instance);
+
+            foreach (PropertyInfo prop in properties)
+            {
+                PropertyInfo targetProp =
+                    typeof(TChild).GetProperty(prop.Name, BindingFlags.Public | BindingFlags.Instance);
+
+                if (targetProp != null && targetProp.CanWrite && prop.CanRead &&
+                    targetProp.PropertyType == prop.PropertyType)
+                {
+                    object value = prop.GetValue(source);
+                    targetProp.SetValue(target, value);
+                }
+            }
+
+            currentType = currentType.BaseType;
+        }
     }
 }

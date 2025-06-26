@@ -7,7 +7,7 @@ namespace kemocard.Scripts.Module.Loading;
 
 public partial class LoadingScene : BaseView
 {
-    private double _countTime = 0;
+    private double _countTime;
     [Export] private TextureRect _loadingImage;
 
     public override void DoShow(params object[] args)

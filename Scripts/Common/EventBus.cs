@@ -12,41 +12,44 @@ public class EventBus
     {
     }
 
-    private Dictionary<string, Action<object>> eventDict = new();
+    private readonly Dictionary<string, Action<object>> _eventDict = new();
 
     /**
      * 临时事件，触发后移除
      */
-    private Dictionary<string, Action<object>> tempEventDict = new();
+    private readonly Dictionary<string, Action<object>> _tempEventDict = new();
 
     /**
      * 对象事件
      */
-    private Dictionary<object, Dictionary<string, Action<object>>> objDict = new();
+    private readonly Dictionary<object, Dictionary<string, Action<object>>> _objDict = new();
 
     public void AddEvent(string eventName, Action<object> action)
     {
-        if (eventDict.TryAdd(eventName, action))
+        if (_eventDict.TryAdd(eventName, action))
         {
-            eventDict[eventName] += action;
+            _eventDict[eventName] += action;
         }
     }
 
     public void RemoveEvent(string eventName, Action<object> action)
     {
-        if (!eventDict.ContainsKey(eventName)) return;
-        eventDict[eventName] -= action;
-        if (eventDict[eventName] == null)
+        if (!_eventDict.ContainsKey(eventName)) return;
+        _eventDict[eventName] -= action;
+        if (_eventDict[eventName] == null)
         {
-            tempEventDict.Remove(eventName);
+            _tempEventDict.Remove(eventName);
         }
     }
 
-    public void PostEvent(string eventName, object arg)
+    public void PostEvent(string eventName, object arg = null)
     {
-        if (eventDict.TryGetValue(eventName, out var value))
+        if (_eventDict.TryGetValue(eventName, out var value))
             value?.Invoke(arg);
-        foreach (var keyValuePair in objDict)
+        // 创建 objDict 的副本用于遍历
+        var objDictCopy = new Dictionary<object, Dictionary<string, Action<object>>>(_objDict);
+
+        foreach (var keyValuePair in objDictCopy)
         {
             if (keyValuePair.Value.TryGetValue(eventName, out Action<object> eventValue))
             {
@@ -57,7 +60,7 @@ public class EventBus
 
     public void AddEvent(object obj, string eventName, Action<object> action)
     {
-        if (objDict.TryGetValue(obj, out var listener))
+        if (_objDict.TryGetValue(obj, out var listener))
         {
             if (!listener.TryAdd(eventName, action))
             {
@@ -67,33 +70,33 @@ public class EventBus
         else
         {
             var tempDict = new Dictionary<string, Action<object>> { { eventName, action } };
-            objDict.Add(obj, tempDict);
+            _objDict.Add(obj, tempDict);
         }
     }
 
     public void RemoveEvent(object obj, string eventName, Action<object> action)
     {
-        if (!objDict.TryGetValue(obj, out var listener)) return;
+        if (!_objDict.TryGetValue(obj, out var listener)) return;
         if (!listener.ContainsKey(eventName)) return;
         listener[eventName] -= action;
         if (listener[eventName] != null) return;
         listener.Remove(eventName);
-        if (objDict[obj].Count == 0)
+        if (_objDict[obj].Count == 0)
         {
-            objDict.Remove(obj);
+            _objDict.Remove(obj);
         }
     }
 
     public void RemoveObjAllEvents(object obj)
     {
-        if (!objDict.TryGetValue(obj, out var listener)) return;
+        if (!_objDict.TryGetValue(obj, out var listener)) return;
         listener.Clear();
-        objDict.Remove(obj);
+        _objDict.Remove(obj);
     }
 
-    public void PostEvent(object obj, string eventName, object arg)
+    public void PostEvent(object obj, string eventName, object arg = null)
     {
-        if (objDict.TryGetValue(obj, out var listener))
+        if (_objDict.TryGetValue(obj, out var listener))
         {
             listener[eventName]?.Invoke(arg);
         }
@@ -101,17 +104,17 @@ public class EventBus
 
     public void AddTempEvent(string eventName, Action<object> action)
     {
-        tempEventDict.TryAdd(eventName, action);
+        _tempEventDict.TryAdd(eventName, action);
     }
 
     public void RemoveTempEvent(string eventName, Action<object> action)
     {
-        tempEventDict.Remove(eventName);
+        _tempEventDict.Remove(eventName);
     }
 
     public void PostTempEvent(string eventName, object arg)
     {
-        tempEventDict[eventName]?.Invoke(arg);
-        tempEventDict.Remove(eventName);
+        _tempEventDict[eventName]?.Invoke(arg);
+        _tempEventDict.Remove(eventName);
     }
 }

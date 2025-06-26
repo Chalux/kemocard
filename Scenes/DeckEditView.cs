@@ -4,6 +4,8 @@ using cfg.character;
 using Godot;
 using kemocard.Components.Card;
 using kemocard.Components.List;
+using kemocard.Components.RoleSelector;
+using kemocard.Components.TagSelector;
 using kemocard.Scripts.Card;
 using kemocard.Scripts.Common;
 using kemocard.Scripts.Module.Run;
@@ -28,9 +30,11 @@ public partial class DeckEditView : BaseView
     [Export] private Label _nameLab;
     [Export] private TextureRect _headIcon;
     [Export] private Button _closeBtn;
+    [Export] private Button _joinTeamBtn;
     [Export] private VirtualList _cardList;
-    [Export] private Components.RoleSelector.RoleSelector _roleSelector;
-    [Export] private Components.TagSelector.TagSelector _tagSelector;
+    [Export] private RoleSelector _roleSelector;
+    [Export] private TagSelector _tagSelector;
+    private bool _hasChanged;
 
     public override void DoShow(params object[] args)
     {
@@ -42,6 +46,7 @@ public partial class DeckEditView : BaseView
         }
 
         _closeBtn.Pressed += CloseBtnOnPressed;
+        _joinTeamBtn.Pressed += JoinTeamBtnOnPressed;
 
         switch (args[0])
         {
@@ -67,10 +72,22 @@ public partial class DeckEditView : BaseView
         RefreshContainer();
     }
 
+    private void JoinTeamBtnOnPressed()
+    {
+        var mod = GameCore.ControllerMgr.GetControllerModel<RunModel>(ControllerType.Run);
+        if (mod == null || _hero == null) return;
+        mod.SetTeam(_hero.Role, mod.Team.GetValueOrDefault(_hero.Role) == _hero ? null : _hero);
+        RefreshContainer();
+    }
+
     private void CloseBtnOnPressed()
     {
-        var runController = GameCore.ControllerMgr.GetModule<RunController>(ControllerType.Run);
-        runController.Save();
+        if (_hasChanged)
+        {
+            var runController = GameCore.ControllerMgr.GetModule<RunController>(ControllerType.Run);
+            runController.Save();
+        }
+
         GameCore.ViewMgr.CloseView(ViewId);
     }
 
@@ -80,6 +97,7 @@ public partial class DeckEditView : BaseView
         _heroId = "";
         _cardList.RenderHandler = null;
         _closeBtn.Pressed -= CloseBtnOnPressed;
+        _joinTeamBtn.Pressed -= JoinTeamBtnOnPressed;
         GameCore.EventBus.RemoveEvent(CommonEvent.PlayerDeckUpdate, RefreshData);
         _roleSelector.OnRoleSelected = null;
         _tagSelector.OnTagSelected = null;
@@ -111,11 +129,14 @@ public partial class DeckEditView : BaseView
         {
             _hero.AddCard(configId);
         }
+
+        _hasChanged = true;
     }
 
     private void RefreshData(object data = null)
     {
         if (_hero == null) return;
+        var mod = GameCore.ControllerMgr.GetControllerModel<RunModel>(ControllerType.Run);
         _healthLab.Text = _hero.MaxHealth.ToString();
         _pDefenseLab.Text = _hero.PDefense.ToString();
         _mDefenseLab.Text = _hero.MDefense.ToString();
@@ -123,7 +144,9 @@ public partial class DeckEditView : BaseView
         _mAttackLab.Text = _hero.MAttack.ToString();
         _healLab.Text = _hero.Heal.ToString();
         _deckLab.Text = _hero.GetDeckString();
-        _nameLab.Text = _hero.Name;
+        bool isInTeam = mod != null && mod.Team.ContainsValue(_hero);
+        _nameLab.Text = _hero.Name + (isInTeam ? " (已上阵)" : "");
+        _joinTeamBtn.Text = isInTeam ? "下阵" : "上阵";
         if (FileAccess.FileExists(_hero.Icon)) _headIcon.Texture = ResourceLoader.Load<CompressedTexture2D>(_hero.Icon);
         var deck = _hero.GetDeck();
         var nodes = _itemList.GetChildren();
