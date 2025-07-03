@@ -15,6 +15,8 @@ public partial class BaseBuff : GodotObject
     public BuffType Type = BuffType.NONE;
     public int StackNum = 0;
     public int StackLimit = 0;
+    public bool isUnique = true;
+    public string HashCode = "";
     public readonly HashSet<BuffTag> Tags = [];
 
     public BasePawn Owner;

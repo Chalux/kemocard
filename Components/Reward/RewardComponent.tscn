@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://dge1yxkmpodb0" path="res://Components/Reward/RewardComponent.cs" id="1_jwfnl"]
 
-[node name="RewardComponent" type="Control"]
+[node name="RewardComponent" type="Control" node_paths=PackedStringArray("_descLab", "_skipBtn", "_getBtn")]
 custom_minimum_size = Vector2(0, 64)
 layout_mode = 3
 anchors_preset = 15
@@ -10,7 +10,11 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+size_flags_vertical = 0
 script = ExtResource("1_jwfnl")
+_descLab = NodePath("Desc")
+_skipBtn = NodePath("HBoxContainer/SkipBtn")
+_getBtn = NodePath("HBoxContainer/GetBtn")
 
 [node name="ColorRect" type="ColorRect" parent="."]
 layout_mode = 1
@@ -19,6 +23,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 color = Color(0, 0, 0, 0.419608)
 
 [node name="Desc" type="Label" parent="."]
@@ -27,6 +32,7 @@ offset_right = 40.0
 offset_bottom = 64.0
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
+custom_minimum_size = Vector2(0, 64)
 layout_mode = 1
 anchors_preset = 11
 anchor_left = 1.0

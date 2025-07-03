@@ -57,6 +57,20 @@ public class BasePawn
         if (newBaseBuff == null) return;
         if (Buffs.TryGetValue(newBaseBuff.Id, out var buff))
         {
+            if (buff.isUnique && newBaseBuff.isUnique)
+            {
+                if (buff.HashCode == newBaseBuff.HashCode)
+                {
+                    newBaseBuff.HashCode = StaticUtil.GetRandomHashCode();
+                }
+
+                newBaseBuff.Owner = this;
+                // 如果有独特的重复buff，则用它的hashcode作为字典的键
+                Buffs.Add(newBaseBuff.HashCode, buff);
+
+                return;
+            }
+
             if (buff.StackLimit > 0 && buff.StackNum + 1 > buff.StackLimit)
             {
                 return;
@@ -141,7 +155,7 @@ public class BasePawn
             }
         }
     }
-    
+
     public virtual void ExecuteBuffs(ref object data, BuffTag tag = BuffTag.None)
     {
         foreach (var keyValuePair in Buffs)

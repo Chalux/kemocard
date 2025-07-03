@@ -127,6 +127,14 @@ public partial class DeckEditView : BaseView
         }
         else
         {
+            var conf = GameCore.Tables.TbCard.GetOrDefault(configId);
+            if (conf == null) return;
+            if (conf.Role != Role.NORMAL && conf.Role != _hero.Role)
+            {
+                StaticUtil.ShowBannerHint("与当前角色职能不同，无法加入卡组");
+                return;
+            }
+
             _hero.AddCard(configId);
         }
 

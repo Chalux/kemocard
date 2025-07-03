@@ -4,7 +4,7 @@
 [ext_resource type="Script" uid="uid://chmewpio17dky" path="res://Components/List/VirtualList.cs" id="2_4bvgx"]
 [ext_resource type="PackedScene" uid="uid://d3sv5cuy1t4r6" path="res://Components/Reward/RewardComponent.tscn" id="3_3mbwn"]
 
-[node name="GameScene" type="Control" node_paths=PackedStringArray("_teamEditBtn", "_quitBtn", "_giveUpBtn", "_debugControl", "_debugFightBtn", "_debugFightEdit")]
+[node name="GameScene" type="Control" node_paths=PackedStringArray("_teamEditBtn", "_quitBtn", "_giveUpBtn", "_debugControl", "_debugFightBtn", "_debugFightEdit", "_unhandledRewardList")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -18,6 +18,7 @@ _giveUpBtn = NodePath("GiveupBtn")
 _debugControl = NodePath("DebugControl")
 _debugFightBtn = NodePath("DebugControl/Button")
 _debugFightEdit = NodePath("DebugControl/TextEdit")
+_unhandledRewardList = NodePath("Control")
 
 [node name="TeamEditBtn" type="Button" parent="."]
 layout_mode = 1
@@ -106,3 +107,5 @@ grow_vertical = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Control/ScrollContainer"]
 layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 2

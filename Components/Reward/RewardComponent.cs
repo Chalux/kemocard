@@ -20,6 +20,7 @@ public partial class RewardComponent : Control, ISelectableItem
     public override void _Ready()
     {
         base._Ready();
+        _skipBtn.Visible = false;
         _skipBtn.Pressed += SkipBtnOnPressed;
         _getBtn.Pressed += GetBtnOnPressed;
         MouseEntered += OnMouseEntered;
@@ -48,6 +49,7 @@ public partial class RewardComponent : Control, ISelectableItem
                     break;
                 case RewardType.CARD:
                     _descLab.Text = "卡牌";
+                    _skipBtn.Visible = true;
                     break;
             }
         }
@@ -70,7 +72,7 @@ public partial class RewardComponent : Control, ISelectableItem
         {
             case RewardType.CARD:
                 var str = "获得卡牌：\n";
-                _conf.Cards.Select(StaticUtil.GetCardDesc).Where(t => !string.IsNullOrWhiteSpace(t))
+                str += _conf.Cards.Select(StaticUtil.GetCardDesc).Where(t => !string.IsNullOrWhiteSpace(t))
                     .Aggregate("", (current, t) => current + (t + "\n"));
 
                 StaticUtil.ShowHint(str);

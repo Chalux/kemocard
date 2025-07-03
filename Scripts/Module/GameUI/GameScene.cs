@@ -36,6 +36,8 @@ public partial class GameScene : BaseView
         _unhandledRewardList.RenderHandler = RenderHandler;
 
         GameCore.EventBus.AddEvent(this, CommonEvent.UnhandledRewardChanged, OnUnhandledRewardChanged);
+        var mod = GameCore.ControllerMgr.GetControllerModel<RunModel>(ControllerType.Run);
+        if (mod != null) _unhandledRewardList.SetData(mod.UnhandledRewards.ToList<object>());
     }
 
     public override void DoClose(params object[] args)

@@ -46,6 +46,7 @@ anchors_preset = 10
 anchor_right = 1.0
 offset_bottom = 64.0
 grow_horizontal = 2
+mouse_filter = 2
 
 [node name="PanelContainer" type="PanelContainer" parent="."]
 z_index = 1

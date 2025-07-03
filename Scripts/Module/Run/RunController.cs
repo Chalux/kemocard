@@ -125,7 +125,7 @@ public class RunController : BaseController
     {
         if (args[0] is not string rewardId) return;
         var model = GetModel<RunModel>();
-        bool isSkip = (bool)args[1];
+        bool isSkip = args.Length > 1 && (bool)args[1];
         model?.GetReward(rewardId, isSkip);
     }
 

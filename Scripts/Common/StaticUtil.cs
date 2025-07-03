@@ -3,10 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using cfg.card;
+using cfg.character;
 using Godot;
 using kemocard.Scripts.Buff;
 using kemocard.Scripts.Card;
 using kemocard.Scripts.Module.Battle;
+using kemocard.Scripts.Module.Run;
+using kemocard.Scripts.MVC;
 using kemocard.Scripts.Pawn;
 using Attribute = cfg.pawn.Attribute;
 
@@ -138,7 +141,11 @@ public static class StaticUtil
     {
         var card = GameCore.Tables.TbCard.GetOrDefault(cardId);
         if (card == null) return "";
-        return $"{card.Name}\t{GetAttributeName((int)card.Attribute)}\tCost{card.Cost}\t{card.Desc}";
+        var mod = GameCore.ControllerMgr.GetControllerModel<RunModel>(ControllerType.Run);
+        if (mod == null) return $"{card.Name}\t{GetAttributeName((int)card.Attribute)}\tCost{card.Cost}\t{card.Desc}";
+        var set = mod.GetCardsByRole(Role.MAX);
+        var hasString = set.Contains(cardId) ? "(已拥有)" : "";
+        return $"{card.Name} {hasString}\t{GetAttributeName((int)card.Attribute)}\tCost{card.Cost}\t{card.Desc}";
     }
 
     public static void Shuffle<T>(List<T> list)
@@ -308,5 +315,10 @@ public static class StaticUtil
         }
 
         return buff;
+    }
+
+    public static string GetRandomHashCode()
+    {
+        return Guid.NewGuid().ToString();
     }
 }
