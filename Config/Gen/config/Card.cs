@@ -111,7 +111,7 @@ public sealed partial class Card : Luban.BeanBase
     /// </summary>
     public readonly string Desc;
     /// <summary>
-    /// 数值（仅展示）
+    /// 数值
     /// </summary>
     public readonly int Value;
     /// <summary>

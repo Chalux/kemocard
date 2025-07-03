@@ -17,13 +17,10 @@ public class LoadingController : BaseController
             ViewName = "LoadingScene",
             ViewType = ViewType.LoadingScene,
         });
-
-        InitModuleEvent();
     }
 
     public override void InitModuleEvent()
     {
-        base.InitModuleEvent();
         RegisterEvent(CommonEvent.ShowLoadingScene, LoadingSceneCallback);
     }
 

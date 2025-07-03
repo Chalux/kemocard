@@ -15,16 +15,16 @@ public partial class BaseBuff : GodotObject
     public BuffType Type = BuffType.NONE;
     public int StackNum = 0;
     public int StackLimit = 0;
-    public HashSet<BuffTag> Tags = new();
+    public readonly HashSet<BuffTag> Tags = [];
 
-    public BaseCharacter Owner;
-    public BaseCharacter Causer;
+    public BasePawn Owner;
+    public BasePawn Causer;
 
-    public virtual void RefreshProps(ref readonly TempPropStruct inStruct)
+    public virtual void RefreshProps(ref TempPropStruct inStruct)
     {
     }
 
-    public virtual void ApplyBuff(BuffTag tag = BuffTag.None)
+    public virtual void ApplyBuff(ref object data, BuffTag tag = BuffTag.None)
     {
     }
 
@@ -58,12 +58,23 @@ public enum BuffTag
     ExtraPDefense,
     AddMDefense,
     ExtraMDefense,
+
+    /** 增加回复量 */
     AddHeal,
     ExtraHeal,
     AddDraw,
+    /** 伤害结算前 */
+    BeforeAttacked,
+    /** 伤害结算后 */
     Attacked,
     Attack,
     TurnEnd,
     TurnStart,
     BattleStart,
+
+    /** 释放回复效果 */
+    Heal,
+
+    /** 被治疗 */
+    Healed,
 }

@@ -15,6 +15,9 @@ public static class CommonEvent
     public const string StartBattle = "StartBattle";
     public const string OpenLevel = "OpenLevel";
     public const string StartBattle_BY_PRESET = "StartBattle_BY_PRESET";
+    public const string GetReward = "GetReward";
+    public const string AddUnhandledReward = "AddUnhandledReward";
+    public const string UnhandledRewardChanged = "UnhandledRewardChanged";
 
     public const string BattleEvent_StartBattle = "BattleEvent_StartBattle";
     public const string BattleEvent_StartTurn = "BattleEvent_StartTurn";

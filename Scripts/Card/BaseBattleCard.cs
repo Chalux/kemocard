@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using cfg.card;
+using Godot;
+using kemocard.Scripts.Card.Scripts;
 using kemocard.Scripts.Common;
 using kemocard.Scripts.Module.Battle;
 using kemocard.Scripts.MVC;
@@ -8,15 +10,29 @@ using kemocard.Scripts.Pawn;
 
 namespace kemocard.Scripts.Card;
 
-public partial class BaseBattleCard(BaseCard card) : BaseCard(card.Id)
+public partial class BaseBattleCard : BaseCard
 {
     public BattleCharacter User;
-    public BasePawn Target;
+    public List<BasePawn> Target;
     public int RealTimeValue;
     public int RealTimeChain = 1;
+    public BaseCardScript Script;
 
-    protected virtual void UseCard()
+    public BaseBattleCard(BaseCard card) : base(card.Id)
     {
+        var path = StaticUtil.GetCardScriptPath(card.Id);
+        if (!FileAccess.FileExists(path)) return;
+        var res = ResourceLoader.Load<CSharpScript>(path);
+        Script = res?.New().As<BaseCardScript>();
+    }
+
+    public BaseBattleCard() : base(null)
+    {
+    }
+
+    protected void UseCard()
+    {
+        Script?.UseCard(this);
     }
 
     // 暴露给外部使用
@@ -29,12 +45,13 @@ public partial class BaseBattleCard(BaseCard card) : BaseCard(card.Id)
 
     public virtual void UpdateRealTimeValue()
     {
-        int result = Value;
         if (User == null)
         {
-            RealTimeValue = result;
+            RealTimeValue = Value;
             return;
         }
+
+        float result = Value;
 
         if (Tags.Contains(Tag.PATTACK))
         {
@@ -48,6 +65,8 @@ public partial class BaseBattleCard(BaseCard card) : BaseCard(card.Id)
         {
             result += User.Heal;
         }
+
+        Script.UpdateRealTimeValue(this, ref result);
 
         var model = GameCore.ControllerMgr.GetControllerModel<BattleModel>((int)ControllerType.Battle);
         if (model is { IsInBattle: true })

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using cfg.card;
 using cfg.character;
+using cfg.reward;
 using Godot;
 using kemocard.Scripts.Common;
 using kemocard.Scripts.MVC.Controller;
@@ -15,9 +16,11 @@ namespace kemocard.Scripts.Module.Run;
 public class RunModel(BaseController inController) : BaseModel(inController)
 {
     public List<BaseCharacter> CharacterList = [];
-    public HashSet<string> AllCards = [];
+    private HashSet<string> _allCards = [];
+    public int Money = 0;
+    public HashSet<string> UnhandledRewards { get; private set; } = [];
 
-    public System.Collections.Generic.Dictionary<Role, BaseCharacter> Team = new()
+    public Dictionary<Role, BaseCharacter> Team = new()
     {
         { Role.ATTACKER, null },
         { Role.GUARD, null },
@@ -29,7 +32,7 @@ public class RunModel(BaseController inController) : BaseModel(inController)
     {
         base.Init();
         CharacterList = [];
-        AllCards = [];
+        _allCards = [];
         Team[Role.ATTACKER] = null;
         Team[Role.GUARD] = null;
         Team[Role.BLOCKER] = null;
@@ -46,13 +49,13 @@ public class RunModel(BaseController inController) : BaseModel(inController)
 
     public void AddCard(HashSet<string> cardIds)
     {
-        AllCards.UnionWith(cardIds);
+        _allCards.UnionWith(cardIds);
         GameCore.EventBus.PostEvent(CommonEvent.RunCardPoolUpdate);
     }
 
     public void RemoveCard(HashSet<string> cardIds)
     {
-        AllCards.ExceptWith(cardIds);
+        _allCards.ExceptWith(cardIds);
         GameCore.EventBus.PostEvent(CommonEvent.RunCardPoolUpdate);
     }
 
@@ -61,10 +64,10 @@ public class RunModel(BaseController inController) : BaseModel(inController)
         HashSet<string> result = [];
         if (tags == null || tags.Count == 0)
         {
-            return AllCards.ToHashSet();
+            return _allCards.ToHashSet();
         }
 
-        foreach (var cardId in from cardId in AllCards
+        foreach (var cardId in from cardId in _allCards
                  let config = GameCore.Tables.TbCard.Get(cardId)
                  where config != null && (!includeEx || config.Exclusive) && config.Tag.IsSupersetOf(tags)
                  select cardId)
@@ -80,10 +83,10 @@ public class RunModel(BaseController inController) : BaseModel(inController)
         HashSet<string> result = [];
         if (roles == null || roles.Count == 0 || roles.Contains(Role.MAX))
         {
-            return AllCards.ToHashSet();
+            return _allCards.ToHashSet();
         }
 
-        foreach (var cardId in from cardId in AllCards
+        foreach (var cardId in from cardId in _allCards
                  let config = GameCore.Tables.TbCard.Get(cardId)
                  where config != null && (!includeEx || config.Exclusive) && roles.Contains(config.Role)
                  select cardId)
@@ -99,10 +102,10 @@ public class RunModel(BaseController inController) : BaseModel(inController)
         HashSet<string> result = [];
         if (role == Role.MAX)
         {
-            return AllCards.ToHashSet();
+            return _allCards.ToHashSet();
         }
 
-        foreach (var cardId in from cardId in AllCards
+        foreach (var cardId in from cardId in _allCards
                  let config = GameCore.Tables.TbCard.Get(cardId)
                  where config != null && (!includeEx || config.Exclusive) && config.Role == role
                  select cardId)
@@ -116,7 +119,7 @@ public class RunModel(BaseController inController) : BaseModel(inController)
     public HashSet<string> FilterCardPool(HashSet<Tag> tags, Role role, bool includeEx = false)
     {
         HashSet<string> result = [];
-        foreach (var card in from card in AllCards
+        foreach (var card in from card in _allCards
                  let config = GameCore.Tables.TbCard.Get(card)
                  where config != null && (!includeEx || config.Exclusive) &&
                        (role == Role.MAX || config.Role == role) &&
@@ -150,7 +153,7 @@ public class RunModel(BaseController inController) : BaseModel(inController)
         GD.Print(file.GetAsText());
         try
         {
-            int i = 0;
+            var i = 0;
             while (file.GetPosition() < file.GetLength())
             {
                 var str = file.GetLine();
@@ -161,13 +164,20 @@ public class RunModel(BaseController inController) : BaseModel(inController)
                             JsonConvert.DeserializeObject<List<BaseCharacter>>(str, SaveJsonSerializerSetting);
                         break;
                     case 1:
-                        AllCards = JsonConvert.DeserializeObject<HashSet<string>>(str, SaveJsonSerializerSetting);
+                        _allCards = JsonConvert.DeserializeObject<HashSet<string>>(str, SaveJsonSerializerSetting);
                         break;
                     case 2:
                         Team =
-                            JsonConvert.DeserializeObject<System.Collections.Generic.Dictionary<Role, BaseCharacter>>(
+                            JsonConvert.DeserializeObject<Dictionary<Role, BaseCharacter>>(
                                 str,
                                 SaveJsonSerializerSetting);
+                        break;
+                    case 3:
+                        UnhandledRewards =
+                            JsonConvert.DeserializeObject<HashSet<string>>(str, SaveJsonSerializerSetting);
+                        break;
+                    case 4:
+                        Money = JsonConvert.DeserializeObject<int>(str, SaveJsonSerializerSetting);
                         break;
                 }
 
@@ -206,12 +216,53 @@ public class RunModel(BaseController inController) : BaseModel(inController)
         // file.StoreLine(Json.Stringify(AllCards.ToArray()));
         // GD.Print(str);
         file.StoreLine(str);
-        file.StoreLine(JsonConvert.SerializeObject(AllCards));
+        file.StoreLine(JsonConvert.SerializeObject(_allCards));
         file.StoreLine(JsonConvert.SerializeObject(Team));
+        file.StoreLine(JsonConvert.SerializeObject(UnhandledRewards));
+        file.StoreLine(JsonConvert.SerializeObject(Money));
         file.Flush();
         if (OS.IsDebugBuild())
         {
             GD.Print(file.GetAsText());
         }
+    }
+
+    public void GetReward(string rewardId, bool isSkip = false)
+    {
+        if (UnhandledRewards.Contains(rewardId))
+        {
+            Random r = new Random();
+            var conf = GameCore.Tables.TbReward.GetOrDefault(rewardId);
+            if (conf != null)
+            {
+                switch (conf.Type)
+                {
+                    case RewardType.MONEY:
+                        Money += r.Next(conf.MoneyMin, conf.MoneyMax);
+                        break;
+                    case RewardType.CARD:
+                        if (isSkip)
+                        {
+                        }
+                        else
+                        {
+                            AddCard(conf.Cards);
+                        }
+
+                        break;
+                }
+            }
+
+            UnhandledRewards.Remove(rewardId);
+            Save();
+            GameCore.EventBus.PostEvent(CommonEvent.UnhandledRewardChanged);
+        }
+    }
+
+    public void AddUnhandledReward(HashSet<string> rewardIds)
+    {
+        UnhandledRewards.UnionWith(rewardIds);
+        Save();
+        GameCore.EventBus.PostEvent(CommonEvent.UnhandledRewardChanged);
     }
 }

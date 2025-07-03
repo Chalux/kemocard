@@ -39,6 +39,9 @@ public partial class MainRoot : Control
 
         //从模块工厂注册模块
         ModuleFactory.RegisterModule();
+        
+        //工厂准备好后初始化模块
+        ModuleFactory.InitModule();
 
         SaveMgr.LoadGame();
 

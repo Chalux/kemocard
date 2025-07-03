@@ -1,6 +1,8 @@
-[gd_scene load_steps=2 format=3 uid="uid://dwh8ux00e6q4b"]
+[gd_scene load_steps=4 format=3 uid="uid://dwh8ux00e6q4b"]
 
 [ext_resource type="Script" uid="uid://wpmke35lxpbi" path="res://Scripts/Module/GameUI/GameScene.cs" id="1_2wl7v"]
+[ext_resource type="Script" uid="uid://chmewpio17dky" path="res://Components/List/VirtualList.cs" id="2_4bvgx"]
+[ext_resource type="PackedScene" uid="uid://d3sv5cuy1t4r6" path="res://Components/Reward/RewardComponent.tscn" id="3_3mbwn"]
 
 [node name="GameScene" type="Control" node_paths=PackedStringArray("_teamEditBtn", "_quitBtn", "_giveUpBtn", "_debugControl", "_debugFightBtn", "_debugFightEdit")]
 layout_mode = 3
@@ -84,3 +86,23 @@ offset_top = -8.0
 offset_right = 592.0
 offset_bottom = 80.0
 placeholder_text = "英文逗号分隔"
+
+[node name="Control" type="Control" parent="." node_paths=PackedStringArray("_contentContainer", "_scrollView")]
+anchors_preset = 0
+offset_right = 512.0
+offset_bottom = 264.0
+script = ExtResource("2_4bvgx")
+_itemScene = ExtResource("3_3mbwn")
+_contentContainer = NodePath("ScrollContainer/VBoxContainer")
+_scrollView = NodePath("ScrollContainer")
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/ScrollContainer"]
+layout_mode = 2

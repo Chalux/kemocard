@@ -39,9 +39,6 @@ public class GameUIController : BaseController
             Controller = this,
             ViewType = ViewType.CompendiumScene
         });
-
-        InitModuleEvent();
-        InitGlobalEvent();
     }
 
     public override void InitModuleEvent()

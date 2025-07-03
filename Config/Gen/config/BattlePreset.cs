@@ -20,6 +20,8 @@ public sealed partial class BattlePreset : Luban.BeanBase
         {int n0 = System.Math.Min(_buf.ReadSize(), _buf.Size);Monsterlist = new System.Collections.Generic.List<string>(n0);for(var i0 = 0 ; i0 < n0 ; i0++) { string _e0;  _e0 = _buf.ReadString(); Monsterlist.Add(_e0);}}
         {int n0 = System.Math.Min(_buf.ReadSize(), _buf.Size);MonsterPos = new System.Collections.Generic.List<vector2>(n0);for(var i0 = 0 ; i0 < n0 ; i0++) { vector2 _e0;  _e0 = global::cfg.vector2.Deserializevector2(_buf); MonsterPos.Add(_e0);}}
         Region = _buf.ReadInt();
+        AppearMap = _buf.ReadString();
+        {int n0 = System.Math.Min(_buf.ReadSize(), _buf.Size);Rewards = new System.Collections.Generic.HashSet<string>(/*n0 * 3 / 2*/);for(var i0 = 0 ; i0 < n0 ; i0++) { string _e0;  _e0 = _buf.ReadString(); Rewards.Add(_e0);}}
     }
 
     public static BattlePreset DeserializeBattlePreset(ByteBuf _buf)
@@ -43,6 +45,14 @@ public sealed partial class BattlePreset : Luban.BeanBase
     /// 区域
     /// </summary>
     public readonly int Region;
+    /// <summary>
+    /// 出现在什么地图
+    /// </summary>
+    public readonly string AppearMap;
+    /// <summary>
+    /// 奖励
+    /// </summary>
+    public readonly System.Collections.Generic.HashSet<string> Rewards;
    
     public const int __ID__ = 1804766467;
     public override int GetTypeId() => __ID__;
@@ -58,6 +68,8 @@ public sealed partial class BattlePreset : Luban.BeanBase
         + "monsterlist:" + Luban.StringUtil.CollectionToString(Monsterlist) + ","
         + "monsterPos:" + Luban.StringUtil.CollectionToString(MonsterPos) + ","
         + "region:" + Region + ","
+        + "AppearMap:" + AppearMap + ","
+        + "Rewards:" + Luban.StringUtil.CollectionToString(Rewards) + ","
         + "}";
     }
 }

@@ -18,6 +18,7 @@ public partial class Tables
     public config.TbHeroBaseProp TbHeroBaseProp {get; }
     public config.TbCard TbCard {get; }
     public config.TbBattlePreset TbBattlePreset {get; }
+    public config.TbReward TbReward {get; }
 
     public Tables(System.Func<string, ByteBuf> loader)
     {
@@ -26,6 +27,7 @@ public partial class Tables
         TbHeroBaseProp = new config.TbHeroBaseProp(loader("config_tbherobaseprop"));
         TbCard = new config.TbCard(loader("config_tbcard"));
         TbBattlePreset = new config.TbBattlePreset(loader("config_tbbattlepreset"));
+        TbReward = new config.TbReward(loader("config_tbreward"));
         ResolveRef();
     }
     
@@ -36,6 +38,7 @@ public partial class Tables
         TbHeroBaseProp.ResolveRef(this);
         TbCard.ResolveRef(this);
         TbBattlePreset.ResolveRef(this);
+        TbReward.ResolveRef(this);
     }
 }
 

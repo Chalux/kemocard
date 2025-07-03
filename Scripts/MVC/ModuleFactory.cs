@@ -22,7 +22,10 @@ public static class ModuleFactory
     {
         //手动在工厂中初始化模块，主要是为了有模块的初始化顺序
         GameCore.ControllerMgr.InitModule(ControllerType.GameUIController);
+        GameCore.ControllerMgr.InitModule(ControllerType.Game);
         GameCore.ControllerMgr.InitModule(ControllerType.Loading);
+        GameCore.ControllerMgr.InitModule(ControllerType.Run);
+        GameCore.ControllerMgr.InitModule(ControllerType.Battle);
     }
 }
 

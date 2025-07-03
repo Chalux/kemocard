@@ -11,6 +11,7 @@ using kemocard.Scripts.Common;
 using kemocard.Scripts.Module.Battle;
 using kemocard.Scripts.MVC;
 using kemocard.Scripts.MVC.View;
+using kemocard.Scripts.Pawn;
 
 namespace kemocard.Scenes;
 
@@ -48,6 +49,8 @@ public partial class BattleView : BaseView
         GameCore.EventBus.AddEvent(this, CommonEvent.BattleEvent_SelectCardChanged, OnSelectCardChanged);
         _confirmBtn.Pressed += ConfirmBtnOnPressed;
         _selectSelfBtn.Pressed += SelectSelfBtnOnPressed;
+        _selectAllTeamBtn.Pressed += SelectAllTeamBtnOnPressed;
+        _selectAllEnemyBtn.Pressed += SelectAllEnemyBtnOnPressed;
         _debugControl.Visible = OS.IsDebugBuild();
         if (_debugControl.Visible)
         {
@@ -250,7 +253,7 @@ public partial class BattleView : BaseView
             // {
             //     currCard.Target = enemyItem.EnemyData;
             // }
-            _currTeammate.UseCard(_currCardItem.Card.Id, enemyItem.EnemyData);
+            _currTeammate.UseCard(_currCardItem.Card.Id, [enemyItem.EnemyData]);
             _currCardItem.SetStatus(BattleCardStatus.Confirmed);
             _currCardItem = null;
             GameCore.EventBus.PostEvent(CommonEvent.BattleEvent_SelectCardChanged, _currCardItem);
@@ -261,7 +264,7 @@ public partial class BattleView : BaseView
     {
         if (_currCardItem is { Card.TargetType: TargetType.ST } && o is BattleTeammate teammateItem)
         {
-            _currTeammate.UseCard(_currCardItem.Card.Id, teammateItem.BattleHero);
+            _currTeammate.UseCard(_currCardItem.Card.Id, [teammateItem.BattleHero]);
             _currCardItem.SetStatus(BattleCardStatus.Confirmed);
             _currCardItem = null;
             GameCore.EventBus.PostEvent(CommonEvent.BattleEvent_SelectCardChanged, _currCardItem);
@@ -270,13 +273,29 @@ public partial class BattleView : BaseView
 
     private void SelectSelfBtnOnPressed()
     {
-        if (_currCardItem is { Card.TargetType: TargetType.SELF })
-        {
-            _currTeammate.UseCard(_currCardItem.Card.Id, _currTeammate);
-            _currCardItem.SetStatus(BattleCardStatus.Confirmed);
-            _currCardItem = null;
-            GameCore.EventBus.PostEvent(CommonEvent.BattleEvent_SelectCardChanged, _currCardItem);
-        }
+        if (_currCardItem is not { Card.TargetType: TargetType.SELF }) return;
+        _currTeammate.UseCard(_currCardItem.Card.Id, [_currTeammate]);
+        _currCardItem.SetStatus(BattleCardStatus.Confirmed);
+        _currCardItem = null;
+        GameCore.EventBus.PostEvent(CommonEvent.BattleEvent_SelectCardChanged, _currCardItem);
+    }
+
+    private void SelectAllTeamBtnOnPressed()
+    {
+        if (_currCardItem is not { Card.TargetType: TargetType.AT }) return;
+        _currTeammate.UseCard(_currCardItem.Card.Id, _mod.Teammates.ToList<BasePawn>());
+        _currCardItem.SetStatus(BattleCardStatus.Confirmed);
+        _currCardItem = null;
+        GameCore.EventBus.PostEvent(CommonEvent.BattleEvent_SelectCardChanged, _currCardItem);
+    }
+
+    private void SelectAllEnemyBtnOnPressed()
+    {
+        if (_currCardItem is not { Card.TargetType: TargetType.AE }) return;
+        _currTeammate.UseCard(_currCardItem.Card.Id, _mod.Enemies.ToList<BasePawn>());
+        _currCardItem.SetStatus(BattleCardStatus.Confirmed);
+        _currCardItem = null;
+        GameCore.EventBus.PostEvent(CommonEvent.BattleEvent_SelectCardChanged, _currCardItem);
     }
 
     private void OnSelectCardChanged(object o)

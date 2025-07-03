@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using kemocard.Scripts.Buff;
 using kemocard.Scripts.Card;
 using kemocard.Scripts.Common;
 using kemocard.Scripts.MVC;
@@ -84,7 +85,7 @@ public class BattleCharacter : BaseCharacter
         }
     }
 
-    public void UseCard(string id, BasePawn target)
+    public void UseCard(string id, List<BasePawn> target)
     {
         if (string.IsNullOrWhiteSpace(id) || target == null) return;
         var card = Hand.Find(card => card.Id == id);
@@ -108,14 +109,6 @@ public class BattleCharacter : BaseCharacter
         TempUsedCard.Remove(card);
         UpdateCanUseCost();
         GameCore.ControllerMgr.SendUpdate(ControllerType.Battle, CommonEvent.BattleEvent_CancelUseCard, card);
-    }
-
-    public void ExecuteBuffs()
-    {
-        foreach (var keyValuePair in Buffs)
-        {
-            keyValuePair.Value?.ApplyBuff();
-        }
     }
 
     private void UpdateCanUseCost()

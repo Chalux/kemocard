@@ -15,9 +15,6 @@ public class GameController : BaseController
             ViewName = "GameScene",
             ViewType = ViewType.GameScene,
         });
-
-        InitModuleEvent();
-        InitGlobalEvent();
     }
 
     public override void Init()

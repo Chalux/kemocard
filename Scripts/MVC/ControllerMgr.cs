@@ -76,6 +76,8 @@ public class ControllerMgr
     {
         _modules.TryGetValue(controllerKey, out var controller);
         controller?.Init();
+        controller?.InitGlobalEvent();
+        controller?.InitModuleEvent();
     }
 
     public void InitModule(ControllerType controllerType)

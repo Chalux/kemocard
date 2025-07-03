@@ -112,7 +112,7 @@ public partial class CardBigItem : Control, ISelectableItem
 
     private void OnMouseEntered()
     {
-        if (Card != null) StaticUtil.ShowHint(Card.Description);
+        if (Card != null) StaticUtil.ShowHint($"{Card.Name}\n{Card.Description}");
         else StaticUtil.HideHint();
     }
 

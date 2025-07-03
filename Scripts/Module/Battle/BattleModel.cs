@@ -1,10 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using cfg.card;
 using cfg.character;
 using Godot;
+using kemocard.Scripts.Buff;
 using kemocard.Scripts.Card;
 using kemocard.Scripts.Common;
+using kemocard.Scripts.Module.Run;
+using kemocard.Scripts.MVC;
 using kemocard.Scripts.MVC.Controller;
 using kemocard.Scripts.MVC.Model;
 using kemocard.Scripts.Pawn;
@@ -15,30 +19,42 @@ public class BattleModel(BaseController inController) : BaseModel(inController)
 {
     public bool IsInBattle { get; private set; }
     public bool IsBattleReady { get; private set; }
+    private string _presetId;
     public List<BattleCharacter> Teammates = [];
     public List<BattleEnemy> Enemies = [];
     public BattlePhase BattlePhase { get; private set; } = BattlePhase.None;
     public readonly PriorityQueue<EnemyAction, int> EnemyActionQueue = new();
     public int TurnCount { get; private set; }
 
+    public readonly BasePawn System = new()
+    {
+        Name = "未知",
+        Attribute = 0,
+        Description = "未知"
+    };
+
     public override void Init()
     {
         base.Init();
         IsInBattle = false;
         IsBattleReady = false;
+        _presetId = "";
         Teammates = [];
         Enemies = [];
         BattlePhase = BattlePhase.None;
         EnemyActionQueue.Clear();
     }
 
-    public void OnBattleStart(List<BaseCharacter> team, List<BasePawn> enemies)
+    public void OnBattleStart(List<BaseCharacter> team, List<BasePawn> enemies, string presetId)
     {
         Init();
+        _presetId = presetId;
         GD.Print("开始战斗");
         IsInBattle = true;
         BattlePhase = BattlePhase.BattleStart;
-        foreach (var battleCharacter in from baseCharacter in team where baseCharacter != null select new BattleCharacter(baseCharacter))
+        foreach (var battleCharacter in from baseCharacter in team
+                 where baseCharacter != null
+                 select new BattleCharacter(baseCharacter))
         {
             battleCharacter.Init();
             battleCharacter.Cost = 2;
@@ -56,14 +72,15 @@ public class BattleModel(BaseController inController) : BaseModel(inController)
         IsBattleReady = true;
         GameCore.EventBus.PostEvent(CommonEvent.BattleEvent_StartBattle_Ready);
 
+        object data = null;
         foreach (var battleCharacter in Teammates)
         {
-            battleCharacter.ExecuteBuffs();
+            battleCharacter.ExecuteBuffs(ref data, BuffTag.BattleStart);
         }
 
         foreach (var basePawn in Enemies)
         {
-            basePawn.ExecuteBuffs();
+            basePawn.ExecuteBuffs(ref data, BuffTag.BattleStart);
         }
 
         GD.Print("战斗初始化完成，开始第一回合");
@@ -96,15 +113,16 @@ public class BattleModel(BaseController inController) : BaseModel(inController)
         }
 
         GD.Print("抽卡结束，开始执行 buff");
+        object data = null;
         foreach (var battleCharacter in Teammates)
         {
-            battleCharacter.ExecuteBuffs();
+            battleCharacter.ExecuteBuffs(ref data, BuffTag.TurnStart);
             battleCharacter.UsedCardThisTurn.Clear();
         }
 
         foreach (var enemy in Enemies)
         {
-            enemy.ExecuteBuffs();
+            enemy.ExecuteBuffs(ref data, BuffTag.TurnStart);
         }
 
         GD.Print("执行buff完毕，开始使用卡牌");
@@ -116,11 +134,9 @@ public class BattleModel(BaseController inController) : BaseModel(inController)
     {
         GD.Print("回合结束，开始使用卡牌");
         BattlePhase = BattlePhase.UseCard;
-        List<BaseBattleCard> useCardList = new();
-        foreach (var battleCharacter in Teammates)
-        {
-            useCardList = useCardList.Concat(battleCharacter.TempUsedCard).ToList();
-        }
+        List<BaseBattleCard> useCardList = [];
+        useCardList = Teammates.Aggregate(useCardList,
+            (current, battleCharacter) => current.Concat(battleCharacter.TempUsedCard).ToList());
 
         if (useCardList.Count > 0)
         {
@@ -129,25 +145,39 @@ public class BattleModel(BaseController inController) : BaseModel(inController)
             useCardList.RemoveAt(0);
             while (thisCard != null)
             {
+                GD.Print($"使用卡牌{thisCard.Name}");
                 thisCard.UseCardExpose();
                 thisCard = useCardList.Count > 0 ? useCardList[0] : null;
                 if (thisCard != null)
                 {
                     useCardList.RemoveAt(0);
                 }
+
+                if (!IsInBattle)
+                {
+                    break;
+                }
             }
         }
 
-        GD.Print("卡牌使用完毕，执行回合结束的buff");
-        BattlePhase = BattlePhase.TurnEnd;
         foreach (var battleCharacter in Teammates)
         {
-            battleCharacter.ExecuteBuffs();
+            battleCharacter.TempUsedCard.Clear();
+        }
+
+        if (!IsInBattle) return;
+
+        GD.Print("卡牌使用完毕，执行回合结束的buff");
+        BattlePhase = BattlePhase.TurnEnd;
+        object data = null;
+        foreach (var battleCharacter in Teammates)
+        {
+            battleCharacter.ExecuteBuffs(ref data, BuffTag.TurnEnd);
         }
 
         foreach (var battleEnemy in Enemies)
         {
-            battleEnemy.ExecuteBuffs();
+            battleEnemy.ExecuteBuffs(ref data, BuffTag.TurnEnd);
         }
 
         GD.Print("执行buff完毕，开始执行敌人行为");
@@ -163,66 +193,156 @@ public class BattleModel(BaseController inController) : BaseModel(inController)
             var item = EnemyActionQueue.Dequeue();
             item.Action?.Invoke(item);
         }
-        
+
         GD.Print("执行敌人行为完毕，开始下一回合");
         OnTurnStart();
     }
 
     public void OnBattleEnd(bool isWin = false)
     {
+        if (isWin && !string.IsNullOrWhiteSpace(_presetId))
+        {
+            var conf = GameCore.Tables.TbBattlePreset.GetOrDefault(_presetId);
+            if (conf != null)
+            {
+                var mod = GameCore.ControllerMgr.GetControllerModel<RunModel>(ControllerType.Run);
+                mod?.AddUnhandledReward(conf.Rewards);
+            }
+        }
+        else
+        {
+            // todo 失败处理
+        }
         Init();
-        GameCore.EventBus.PostEvent(CommonEvent.BattleEvent_EndBattle);
+        GameCore.EventBus.PostEvent(CommonEvent.BattleEvent_EndBattle, isWin);
     }
 
     public void DoDamage(Damage damage)
     {
         if (!IsInBattle) return;
         List<BasePawn> pawns = [..Teammates, ..Enemies];
-        var target = pawns.Find(pawn => pawn == damage.Target);
-        var user = pawns.Find(pawn => pawn == damage.User);
-        if (user == null || target == null) return;
-        if (user is BattleCharacter && target is BattleEnemy { CurrentHealth: 0 })
+        var targets = damage.Target;
+        var user = damage.User == System ? System : pawns.Find(pawn => pawn == damage.User);
+        if (user == null || targets == null || targets.Count <= 0) return;
+        switch (user)
         {
-            target = Enemies.Find(enemy => enemy.CurrentHealth > 0);
-            if (target == null)
-            {
-                OnBattleEnd(true);
+            case BattleCharacter { CurrentHealth: 0 } or BattleEnemy { CurrentHealth: 0 }:
                 return;
+            case BattleCharacter when targets.Count == 1 && targets[0] is BattleEnemy:
+            {
+                var target = Enemies.Find(enemy => enemy.CurrentHealth > 0);
+                if (target == null)
+                {
+                    OnBattleEnd(true);
+                    return;
+                }
+
+                targets = [target];
+                break;
             }
-        }
-        else if (user is BattleEnemy && target is BattleCharacter { CurrentHealth: 0 })
-        {
-            target = Teammates.Find(c => c.CurrentHealth > 0);
-            if (target == null)
+            case BattleEnemy when targets.Count == 1 && targets[0] is BattleCharacter:
             {
-                OnBattleEnd();
-                return;
+                var target = Teammates.Find(c => c.CurrentHealth > 0);
+                if (target == null)
+                {
+                    OnBattleEnd();
+                    return;
+                }
+
+                targets = [target];
+                break;
             }
         }
 
-        user.OnAttack(damage);
-        StaticUtil.CalculateAttributeRate(damage);
-        target.OnAttacked(damage);
+        user.OnAttack(ref damage);
 
-        if (target is BattleCharacter character)
+        var needCheckBattleEnd = false;
+        foreach (var target in targets)
         {
-            character.CurrentHealth -= damage.Value;
-            if (character.CurrentHealth <= 0)
+            var tempValue = StaticUtil.CalculateAttributeRate(damage.Value, damage.Attribute, target);
+            var tempDamage = damage with { Value = tempValue };
+            object data = tempDamage;
+            target.ExecuteBuffs(ref data, BuffTag.BeforeAttacked);
+            tempDamage.Value = Math.Max(0, tempValue);
+            for (var i = 0; i < damage.Times; i++)
             {
-                character.IsDead = true;
-                character.CurrentHealth = 0;
-                CheckBattleEnd();
+                if (target is BattleCharacter character)
+                {
+                    character.CurrentHealth -= tempDamage.Value;
+                    if (character.CurrentHealth <= 0)
+                    {
+                        character.IsDead = true;
+                        character.CurrentHealth = 0;
+                        needCheckBattleEnd = true;
+                    }
+                }
+                else if (target is BattleEnemy enemy)
+                {
+                    enemy.CurrentHealth -= tempDamage.Value;
+                    if (enemy.CurrentHealth <= 0)
+                    {
+                        enemy.IsDead = true;
+                        enemy.CurrentHealth = 0;
+                        needCheckBattleEnd = true;
+                    }
+                }
+            }
+
+            target.OnAttacked(ref tempDamage);
+        }
+
+        GameCore.EventBus.PostEvent(CommonEvent.BattleEvent_Render);
+
+        if (needCheckBattleEnd)
+        {
+            CheckBattleEnd();
+        }
+    }
+
+    public void DoHeal(HealStruct heal)
+    {
+        if (!IsInBattle) return;
+        var targets = heal.Target;
+        var user = heal.User == System ? System : targets.Find(pawn => pawn == heal.User);
+        if (user == null || targets is not { Count: > 0 }) return;
+        user.OnHeal(ref heal);
+        var needCheckBattleEnd = false;
+        foreach (var target in targets)
+        {
+            switch (target)
+            {
+                case BattleCharacter character:
+                    if (!character.IsDead)
+                    {
+                        character.CurrentHealth += heal.Value;
+                        character.OnHealed(heal);
+                        if (character.CurrentHealth <= 0)
+                        {
+                            needCheckBattleEnd = true;
+                        }
+                    }
+
+                    break;
+                case BattleEnemy enemy:
+                    if (!enemy.IsDead)
+                    {
+                        enemy.CurrentHealth += heal.Value;
+                        enemy.OnHealed(heal);
+                        if (enemy.CurrentHealth <= 0)
+                        {
+                            needCheckBattleEnd = true;
+                        }
+                    }
+
+                    break;
             }
         }
-        else if (target is BattleEnemy enemy)
+
+        GameCore.EventBus.PostEvent(CommonEvent.BattleEvent_Render);
+
+        if (needCheckBattleEnd)
         {
-            enemy.CurrentHealth -= damage.Value;
-            if (enemy.CurrentHealth <= 0)
-            {
-                enemy.IsDead = true;
-                enemy.CurrentHealth = 0;
-                CheckBattleEnd();
-            }
+            CheckBattleEnd();
         }
     }
 
@@ -239,13 +359,23 @@ public class BattleModel(BaseController inController) : BaseModel(inController)
     }
 }
 
-public record struct Damage
+public record Damage
 {
     public int Value;
     public Role Role;
     public int Attribute;
     public HashSet<Tag> Tags;
-    public BasePawn Target;
+    public List<BasePawn> Target;
+    public BasePawn User;
+    public int Times;
+}
+
+public record HealStruct
+{
+    public int Value;
+    public Role Role;
+    public int Attribute;
+    public List<BasePawn> Target;
     public BasePawn User;
 }
 

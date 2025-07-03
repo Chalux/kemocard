@@ -22,7 +22,9 @@ public class BasePawn
     public string Icon = "";
     public string Description = "";
     public string ImagePath = "";
+
     [JsonProperty] protected readonly Dictionary<string, BaseBuff> Buffs = [];
+
     // 只是给怪物用的
     public Vector2 Position;
 
@@ -64,6 +66,7 @@ public class BasePawn
         }
         else
         {
+            newBaseBuff.Owner = this;
             Buffs.Add(newBaseBuff.Id, newBaseBuff);
         }
 
@@ -91,25 +94,59 @@ public class BasePawn
         MDefense = (int)((BaseMDefense + tempProp.AddMDefense) * (1 + tempProp.ExtraMDefense));
     }
 
-    public virtual void OnAttacked(Damage damage)
+    public virtual void OnAttacked(ref Damage damage)
     {
+        object data = damage;
         foreach (var keyValuePair in Buffs)
         {
             if (keyValuePair.Value.Tags.Contains(BuffTag.Attacked))
             {
-                keyValuePair.Value.ApplyBuff(BuffTag.Attack);
+                keyValuePair.Value.ApplyBuff(ref data, BuffTag.Attacked);
             }
         }
     }
 
-    public virtual void OnAttack(Damage damage)
+    public virtual void OnAttack(ref Damage damage)
     {
+        object data = damage;
         foreach (var keyValuePair in Buffs)
         {
             if (keyValuePair.Value.Tags.Contains(BuffTag.Attack))
             {
-                keyValuePair.Value.ApplyBuff(BuffTag.Attack);
+                keyValuePair.Value.ApplyBuff(ref data, BuffTag.Attack);
             }
+        }
+    }
+
+    public virtual void OnHeal(ref HealStruct heal)
+    {
+        object data = heal;
+        foreach (var buff in Buffs)
+        {
+            if (buff.Value.Tags.Contains(BuffTag.Heal))
+            {
+                buff.Value.ApplyBuff(ref data, BuffTag.Heal);
+            }
+        }
+    }
+
+    public virtual void OnHealed(HealStruct heal)
+    {
+        object data = heal;
+        foreach (var buff in Buffs)
+        {
+            if (buff.Value.Tags.Contains(BuffTag.Heal))
+            {
+                buff.Value.ApplyBuff(ref data, BuffTag.Healed);
+            }
+        }
+    }
+    
+    public virtual void ExecuteBuffs(ref object data, BuffTag tag = BuffTag.None)
+    {
+        foreach (var keyValuePair in Buffs)
+        {
+            keyValuePair.Value?.ApplyBuff(ref data, tag);
         }
     }
 

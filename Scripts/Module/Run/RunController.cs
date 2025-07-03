@@ -33,6 +33,12 @@ public class RunController : BaseController
         // model.Load();
     }
 
+    public override void InitModuleEvent()
+    {
+        RegisterEvent(CommonEvent.GetReward, GetReward);
+        RegisterEvent(CommonEvent.AddUnhandledReward, AddUnhandledReward);
+    }
+
     public void ResetModel()
     {
         RunModel model = GetModel<RunModel>();
@@ -113,5 +119,20 @@ public class RunController : BaseController
     public void Load()
     {
         GetModel<RunModel>()?.Load();
+    }
+
+    private void GetReward(object[] args)
+    {
+        if (args[0] is not string rewardId) return;
+        var model = GetModel<RunModel>();
+        bool isSkip = (bool)args[1];
+        model?.GetReward(rewardId, isSkip);
+    }
+
+    private void AddUnhandledReward(object[] args)
+    {
+        if (args[0] is not HashSet<string> rewardIds) return;
+        var model = GetModel<RunModel>();
+        model?.AddUnhandledReward(rewardIds);
     }
 }

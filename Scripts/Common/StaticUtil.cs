@@ -4,8 +4,10 @@ using System.Linq;
 using System.Reflection;
 using cfg.card;
 using Godot;
+using kemocard.Scripts.Buff;
 using kemocard.Scripts.Card;
 using kemocard.Scripts.Module.Battle;
+using kemocard.Scripts.Pawn;
 using Attribute = cfg.pawn.Attribute;
 
 namespace kemocard.Scripts.Common;
@@ -187,14 +189,13 @@ public static class StaticUtil
     /**
      * 计算属性倍率
      */
-    public static void CalculateAttributeRate(Damage damage)
+    public static int CalculateAttributeRate(int value, int attr, BasePawn target)
     {
         float attributeRate = 1f;
 
         #region 查找属性关系，只保留最高的倍率
 
-        var attr = damage.Attribute;
-        var targetAttribute = damage.Target.Attribute;
+        var targetAttribute = target.Attribute;
         if ((attr & (int)Attribute.WATER) > 0)
         {
             attributeRate =
@@ -253,7 +254,7 @@ public static class StaticUtil
 
         #endregion
 
-        damage.Value = (int)(damage.Value * attributeRate);
+        return (int)(value * attributeRate);
     }
 
     public static void CopyAllInheritedProperties<TParent, TChild>(TParent source, TChild target)
@@ -280,5 +281,32 @@ public static class StaticUtil
 
             currentType = currentType.BaseType;
         }
+    }
+
+    public static string GetCardScriptPath(string id)
+    {
+        return $"res://Scripts/Card/Scripts/C{id}.cs";
+    }
+
+    public static string GetBuffScriptPath(string id)
+    {
+        return $"res://Scripts/Buff/B{id}.cs";
+    }
+
+    public static BaseBuff NewBuffOrNullById(string id, BasePawn causer)
+    {
+        BaseBuff buff = null;
+        var path = GetBuffScriptPath(id);
+        if (FileAccess.FileExists(path))
+        {
+            var res = ResourceLoader.Load<CSharpScript>(path);
+            buff = res?.New().As<BaseBuff>();
+            if (buff != null)
+            {
+                buff.Causer = causer;
+            }
+        }
+
+        return buff;
     }
 }

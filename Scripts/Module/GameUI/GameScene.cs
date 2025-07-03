@@ -1,5 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Godot;
+using kemocard.Components.List;
+using kemocard.Components.Reward;
 using kemocard.Scripts.Common;
 using kemocard.Scripts.Module.Run;
 using kemocard.Scripts.MVC;
@@ -16,6 +19,7 @@ public partial class GameScene : BaseView
     [Export] private Control _debugControl;
     [Export] private Button _debugFightBtn;
     [Export] private TextEdit _debugFightEdit;
+    [Export] private VirtualList _unhandledRewardList;
 
     public override void DoShow(params object[] args)
     {
@@ -28,6 +32,10 @@ public partial class GameScene : BaseView
         {
             _debugFightBtn.Pressed += DebugFightBtnOnPressed;
         }
+
+        _unhandledRewardList.RenderHandler = RenderHandler;
+
+        GameCore.EventBus.AddEvent(this, CommonEvent.UnhandledRewardChanged, OnUnhandledRewardChanged);
     }
 
     public override void DoClose(params object[] args)
@@ -36,6 +44,7 @@ public partial class GameScene : BaseView
         _quitBtn.Pressed -= QuitBtnOnPressed;
         _giveUpBtn.Pressed -= GiveUpBtnOnPressed;
         _debugFightBtn.Pressed -= DebugFightBtnOnPressed;
+        _unhandledRewardList.RenderHandler = null;
         base.DoClose();
     }
 
@@ -73,5 +82,26 @@ public partial class GameScene : BaseView
 
         if (ids.Length > 0)
             GameCore.ControllerMgr.SendUpdate(ControllerType.Battle, CommonEvent.StartBattle_BY_PRESET, ids[0]);
+    }
+
+    private void OnUnhandledRewardChanged(object arg)
+    {
+        var mod = GameCore.ControllerMgr.GetControllerModel<RunModel>(ControllerType.Run);
+        if (mod == null)
+        {
+            _unhandledRewardList.SetData([]);
+        }
+        else
+        {
+            _unhandledRewardList.SetData(mod.UnhandledRewards.ToList<object>());
+        }
+    }
+
+    private void RenderHandler(Control arg1, int arg2, object arg3)
+    {
+        if (arg1 is RewardComponent rc)
+        {
+            rc.Init(arg3 as string);
+        }
     }
 }

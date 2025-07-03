@@ -34,6 +34,10 @@ public partial class BaseCard : GodotObject
         if (configId != null) InitFromConfig(configId);
     }
 
+    public BaseCard()
+    {
+    }
+
     [OnDeserialized]
     internal void InitAfterDeserialized(StreamingContext context)
     {

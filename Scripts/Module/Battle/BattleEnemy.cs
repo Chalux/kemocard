@@ -5,7 +5,14 @@ namespace kemocard.Scripts.Module.Battle;
 
 public sealed class BattleEnemy : BasePawn
 {
-    public int CurrentHealth;
+    private int _currentHealth;
+
+    public int CurrentHealth
+    {
+        get => _currentHealth;
+        set => _currentHealth = Math.Max(0, value);
+    }
+
     public bool IsDead;
 
     public BattleEnemy(BasePawn pawn)
@@ -13,14 +20,6 @@ public sealed class BattleEnemy : BasePawn
         InitFromConfig(pawn.Id);
         CurrentHealth = MaxHealth;
         Position = pawn.Position;
-    }
-
-    public void ExecuteBuffs()
-    {
-        foreach (var keyValuePair in Buffs)
-        {
-            keyValuePair.Value?.ApplyBuff();
-        }
     }
 
     public void Action()

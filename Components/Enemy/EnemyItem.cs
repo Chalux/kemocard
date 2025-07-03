@@ -16,12 +16,14 @@ public partial class EnemyItem : Control
     {
         base._Ready();
         GameCore.EventBus.AddEvent(this, CommonEvent.BattleEvent_SelectCardChanged, OnSelectCardChanged);
+        GameCore.EventBus.AddEvent(this, CommonEvent.BattleEvent_Render, UpdateItem);
         _selectEnemyBtn.Pressed += SelectEnemyBtnOnPressed;
     }
 
     public override void _ExitTree()
     {
         GameCore.EventBus.RemoveEvent(this, CommonEvent.BattleEvent_SelectCardChanged, OnSelectCardChanged);
+        GameCore.EventBus.RemoveEvent(this, CommonEvent.BattleEvent_Render, UpdateItem);
         _selectEnemyBtn.Pressed -= SelectEnemyBtnOnPressed;
         base._ExitTree();
     }
@@ -38,7 +40,7 @@ public partial class EnemyItem : Control
         UpdateItem();
     }
 
-    public void UpdateItem()
+    public void UpdateItem(object data = null)
     {
         if (EnemyData == null) return;
         _hpBar.MaxValue = EnemyData.MaxHealth;

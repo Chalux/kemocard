@@ -24,15 +24,12 @@ public class BattleController : BaseController
             ResPath = GameCore.GetScenePath("BattleView"),
         });
 
-        BattleModel model = new BattleModel(this);
+        var model = new BattleModel(this);
         SetModel(model);
-
-        InitModuleEvent();
     }
 
-    public sealed override void InitModuleEvent()
+    public override void InitModuleEvent()
     {
-        base.InitModuleEvent();
         RegisterEvent(CommonEvent.StartBattle, OnBattleBegin);
         RegisterEvent(CommonEvent.BattleEvent_UseCard, OnBattleEventUseCard);
         RegisterEvent(CommonEvent.BattleEvent_CancelUseCard, OnBattleEventCancelUseCard);
@@ -85,8 +82,9 @@ public class BattleController : BaseController
         }
 
         GameCore.ViewMgr.OpenView(ViewType.BattleView, obj);
+        var presetId = obj[2] as string;
         model.Init();
-        model.OnBattleStart(team, obj[1] as List<BasePawn>);
+        model.OnBattleStart(team, obj[1] as List<BasePawn>, presetId);
     }
 
     private void OnStartBattleByPreset(object[] obj)
@@ -123,7 +121,7 @@ public class BattleController : BaseController
             enemies.Add(enemy);
         }
 
-        OnBattleBegin([null, enemies]);
+        OnBattleBegin([null, enemies, presetId]);
     }
 
     private void OnTurnEnd(object[] obj)
