@@ -1,0 +1,34 @@
+[gd_scene load_steps=5 format=3 uid="uid://bbla3hak7lj4r"]
+
+[ext_resource type="PackedScene" uid="uid://bbldqvn7fyoi" path="res://Components/Hero/HeroItem.tscn" id="1_16l3t"]
+[ext_resource type="Script" uid="uid://8i0v864naa8f" path="res://Components/Reward/RewardHeroItem.cs" id="1_i7edq"]
+[ext_resource type="Shader" uid="uid://dxk5lp7q2fvoc" path="res://Assets/Shaders/ClipEdge.gdshader" id="2_gubw8"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_i7edq"]
+shader = ExtResource("2_gubw8")
+
+[node name="RewardHeroItem" type="Control" node_paths=PackedStringArray("HeroItem", "Edge")]
+custom_minimum_size = Vector2(256, 384)
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_i7edq")
+HeroItem = NodePath("HeroItem")
+Edge = NodePath("ColorRect")
+
+[node name="HeroItem" parent="." instance=ExtResource("1_16l3t")]
+layout_mode = 1
+mouse_filter = 1
+
+[node name="ColorRect" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_i7edq")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2

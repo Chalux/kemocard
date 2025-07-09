@@ -16,7 +16,7 @@ namespace cfg.character
         /// <summary>
         /// 加防/嘲讽/抽卡
         /// </summary>
-        GUARD = 0,
+        GUARD = 5,
         /// <summary>
         /// DEBUFF/魔攻
         /// </summary>
@@ -36,7 +36,7 @@ namespace cfg.character
         /// <summary>
         /// 全部
         /// </summary>
-        MAX = 5,
+        MAX = 0,
     }
 
 } 

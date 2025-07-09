@@ -15,7 +15,7 @@ public partial class BaseBuff : GodotObject
     public BuffType Type = BuffType.NONE;
     public int StackNum = 0;
     public int StackLimit = 0;
-    public bool isUnique = true;
+    public bool IsUnique = true;
     public string HashCode = "";
     public readonly HashSet<BuffTag> Tags = [];
 
@@ -50,7 +50,9 @@ public enum BuffType
 public enum BuffTag
 {
     None,
+    /** 增加最大HP 加区 */
     AddHealth,
+    /** 增加最大HP 乘区 */
     ExtraHealth,
     AddPAttack,
     ExtraPAttack,
@@ -63,6 +65,7 @@ public enum BuffTag
 
     /** 增加回复量 */
     AddHeal,
+    /** 增加回复量 乘区 */
     ExtraHeal,
     AddDraw,
     /** 伤害结算前 */

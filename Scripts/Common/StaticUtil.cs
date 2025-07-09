@@ -160,7 +160,7 @@ public static class StaticUtil
         }
     }
 
-    public static Dictionary<Attribute, Dictionary<Attribute, float>> AttributeRateDict = new()
+    public static readonly Dictionary<Attribute, Dictionary<Attribute, float>> AttributeRateDict = new()
     {
         [Attribute.WATER] = new()
         {
@@ -302,6 +302,7 @@ public static class StaticUtil
 
     public static BaseBuff NewBuffOrNullById(string id, BasePawn causer)
     {
+        if (string.IsNullOrWhiteSpace(id)) return null;
         BaseBuff buff = null;
         var path = GetBuffScriptPath(id);
         if (FileAccess.FileExists(path))
@@ -320,5 +321,24 @@ public static class StaticUtil
     public static string GetRandomHashCode()
     {
         return Guid.NewGuid().ToString();
+    }
+
+    public static int GetDefenseByDamage(Damage damage, IBattlePawn pawn)
+    {
+        if (damage.Tags.Contains(Tag.PATTACK)) return pawn.PDefense;
+        if (damage.Tags.Contains(Tag.MATTACK)) return pawn.MDefense;
+        return 0;
+    }
+
+    public static void ApplyDamage(IBattlePawn pawn, Damage damage)
+    {
+        int defense = damage.Tags.Contains(Tag.NGUARD)
+            ? 0
+            : GetDefenseByDamage(damage, pawn) + damage.Modifiers.GetValueOrDefault(DamageModifier.TempDefense);
+        var value = damage.Value * damage.Modifiers.GetValueOrDefault(DamageModifier.DamageScale, 1) -
+                    defense;
+        value = Math.Max(0, value);
+        pawn.CurrentHealth -= value;
+        if (pawn is BasePawn basePawn) damage.OnHit?.Invoke(damage, basePawn);
     }
 }

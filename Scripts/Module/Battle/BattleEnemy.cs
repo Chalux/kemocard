@@ -3,9 +3,15 @@ using kemocard.Scripts.Pawn;
 
 namespace kemocard.Scripts.Module.Battle;
 
-public sealed class BattleEnemy : BasePawn
+public sealed class BattleEnemy : BasePawn, IBattlePawn
 {
     private int _currentHealth;
+
+    int IBattlePawn.MaxHealth
+    {
+        get => MaxHealth;
+        set => MaxHealth = value;
+    }
 
     public int CurrentHealth
     {
@@ -13,7 +19,19 @@ public sealed class BattleEnemy : BasePawn
         set => _currentHealth = Math.Max(0, value);
     }
 
-    public bool IsDead;
+    public bool IsDead { get; set; }
+
+    int IBattlePawn.PDefense
+    {
+        get => PDefense;
+        set => PDefense = value;
+    }
+
+    int IBattlePawn.MDefense
+    {
+        get => MDefense;
+        set => MDefense = value;
+    }
 
     public BattleEnemy(BasePawn pawn)
     {

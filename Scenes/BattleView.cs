@@ -171,7 +171,7 @@ public partial class BattleView : BaseView
             _currCostLab.Text = $"{_currTeammate.CanUseCost}/{_currTeammate.Cost}";
             _currHpBar.MaxValue = _currTeammate.MaxHealth;
             _currHpBar.Value = _currTeammate.CurrentHealth;
-            _cardList.SetData(_currTeammate.Hand.ToList<object>());
+            _cardList.SetData(_currTeammate.Hand.Values.ToList<object>());
             _confirmBtn.Text = _currTeammate.IsConfirm ? "已确定" : "确定";
         }
         else

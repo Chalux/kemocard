@@ -9,6 +9,15 @@ public partial class HeroItem : Control, ISelectableItem
 {
     private BaseCharacter _hero;
     [Export] private TextureRect _icon;
+    public BaseCharacter Hero
+    {
+        get => _hero;
+        set
+        {
+            _hero = value;
+            RefreshItem();
+        }
+    }
 
     public override void _Ready()
     {

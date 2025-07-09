@@ -52,18 +52,19 @@ public partial class BaseBattleCard : BaseCard
         }
 
         float result = Value;
+        float costRate = CostRate.GetValueOrDefault(Cost, 1f);
 
         if (Tags.Contains(Tag.PATTACK))
         {
-            result += User.PAttack;
+            result += User.PAttack * costRate;
         }
         else if (Tags.Contains(Tag.MATTACK))
         {
-            result += User.MAttack;
+            result += User.MAttack * costRate;
         }
         else if (Tags.Contains(Tag.HEAL))
         {
-            result += User.Heal;
+            result += User.Heal * costRate;
         }
 
         Script.UpdateRealTimeValue(this, ref result);
@@ -82,14 +83,23 @@ public partial class BaseBattleCard : BaseCard
             RealTimeChain = teamList.Count;
         }
 
-        var chainRate = RealTimeChain switch
-        {
-            2 => 1.2f,
-            3 => 1.5f,
-            4 => 1.9f,
-            _ => 1
-        };
-
-        RealTimeValue = (int)(result * chainRate);
+        RealTimeValue = (int)(result * ChainRate.GetValueOrDefault(RealTimeChain, 1f));
     }
+
+    public static Dictionary<int, float> ChainRate = new()
+    {
+        [2] = 1.2f,
+        [3] = 1.5f,
+        [4] = 1.9f,
+    };
+
+    public static Dictionary<int, float> CostRate = new()
+    {
+        [0] = 0.15f,
+        [1] = 0.4f,
+        [2] = 0.7f,
+        [3] = 1f,
+        [4] = 1.7f,
+        [5] = 2.5f,
+    };
 }

@@ -39,6 +39,7 @@ public partial class VirtualList : Control
 
     public void SetData(List<object> data)
     {
+        data ??= [];
         Array = data;
         if (_contentContainer.GetChildCount() <= Array.Count)
         {

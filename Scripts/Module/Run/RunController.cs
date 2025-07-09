@@ -28,6 +28,13 @@ public class RunController : BaseController
             ViewName = "DeckEditView",
             ViewType = ViewType.DeckEditView,
         });
+        GameCore.ViewMgr.Register(ViewType.GetRewardView, new ViewInfo()
+        {
+            Controller = this,
+            ResPath = GameCore.GetScenePath("GetRewardView"),
+            ViewName = "GetRewardView",
+            ViewType = ViewType.GetRewardView,
+        });
         RunModel model = new(this);
         SetModel(model);
         // model.Load();
@@ -45,17 +52,10 @@ public class RunController : BaseController
         model?.Init();
     }
 
-    public void AddCharacter(BaseCharacter character)
-    {
-        RunModel model = GetModel<RunModel>();
-        model?.CharacterList.Add(character);
-    }
-
     public void AddCharacter(string configId)
     {
-        BaseCharacter character = new();
-        character.InitFromConfig(configId);
-        AddCharacter(character);
+        RunModel model = GetModel<RunModel>();
+        model?.AddCharacter(configId);
     }
 
     public List<BaseCharacter> GetCharacters(Role filterRole = Role.MAX, int filterAttribute = 0)
@@ -123,10 +123,11 @@ public class RunController : BaseController
 
     private void GetReward(object[] args)
     {
-        if (args[0] is not string rewardId) return;
+        if (args[0] is not string rewardStruct) return;
         var model = GetModel<RunModel>();
-        bool isSkip = args.Length > 1 && (bool)args[1];
-        model?.GetReward(rewardId, isSkip);
+        bool isSkip = args.Length > 2 && (bool)args[2];
+        var ids = args[1] as List<string>;
+        model?.GetReward(rewardStruct, ids?.ToHashSet(), isSkip);
     }
 
     private void AddUnhandledReward(object[] args)
@@ -134,5 +135,10 @@ public class RunController : BaseController
         if (args[0] is not HashSet<string> rewardIds) return;
         var model = GetModel<RunModel>();
         model?.AddUnhandledReward(rewardIds);
+    }
+
+    public void AddUnhandledReward(HashSet<string> rewardIds)
+    {
+        (Model as RunModel)?.AddUnhandledReward(rewardIds);
     }
 }

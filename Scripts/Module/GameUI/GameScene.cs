@@ -37,7 +37,7 @@ public partial class GameScene : BaseView
 
         GameCore.EventBus.AddEvent(this, CommonEvent.UnhandledRewardChanged, OnUnhandledRewardChanged);
         var mod = GameCore.ControllerMgr.GetControllerModel<RunModel>(ControllerType.Run);
-        if (mod != null) _unhandledRewardList.SetData(mod.UnhandledRewards.ToList<object>());
+        if (mod != null) _unhandledRewardList.SetData(mod.UnhandledRewards.Values.ToList<object>());
     }
 
     public override void DoClose(params object[] args)
@@ -95,7 +95,7 @@ public partial class GameScene : BaseView
         }
         else
         {
-            _unhandledRewardList.SetData(mod.UnhandledRewards.ToList<object>());
+            _unhandledRewardList.SetData(mod.UnhandledRewards.Values.ToList<object>());
         }
     }
 
@@ -103,7 +103,7 @@ public partial class GameScene : BaseView
     {
         if (arg1 is RewardComponent rc)
         {
-            rc.Init(arg3 as string);
+            rc.Init(arg3 as UnhandledRewardStruct);
         }
     }
 }

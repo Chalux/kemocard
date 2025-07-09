@@ -101,6 +101,22 @@ namespace cfg.card
         /// 敌方单体
         /// </summary>
         SE = 21,
+        /// <summary>
+        /// 回复量提升
+        /// </summary>
+        HEALUP = 22,
+        /// <summary>
+        /// 嘲讽
+        /// </summary>
+        TAUNT = 23,
+        /// <summary>
+        /// 最大生命值提升
+        /// </summary>
+        MAXHEALTH = 24,
+        /// <summary>
+        /// 无视防御
+        /// </summary>
+        NGUARD = 25,
     }
 
 } 

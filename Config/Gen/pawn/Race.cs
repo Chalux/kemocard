@@ -14,9 +14,9 @@ namespace cfg.pawn
     public enum Race
     {
         /// <summary>
-        /// 兽族
+        /// 猫科
         /// </summary>
-        BEAST = 1,
+        FELIDAE = 1,
         /// <summary>
         /// 兔、鼠
         /// </summary>
@@ -65,6 +65,14 @@ namespace cfg.pawn
         /// 不死族
         /// </summary>
         UNDEAD = 13,
+        /// <summary>
+        /// 犬科
+        /// </summary>
+        CANIDAE = 14,
+        /// <summary>
+        /// 无种族
+        /// </summary>
+        NONE = 0,
     }
 
 } 

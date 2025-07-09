@@ -25,6 +25,10 @@ namespace cfg.reward
         /// 卡牌
         /// </summary>
         CARD = 2,
+        /// <summary>
+        /// 角色
+        /// </summary>
+        CHARACTER = 3,
     }
 
 } 

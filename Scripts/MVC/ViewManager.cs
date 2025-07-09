@@ -145,7 +145,7 @@ public enum ViewType
     TeamEditView,
     DeckEditView,
     CompendiumScene,
-    
+    GetRewardView,
 }
 
 public struct ViewInfo

@@ -16,10 +16,10 @@ public class BaseCharacter : BasePawn
     public Role Role = Role.NORMAL;
     [JsonProperty] public List<BaseCard> Cards = [];
 
-    public sealed override void InitFromConfig(string configId, bool fromSave = false)
+    public sealed override bool InitFromConfig(string configId, bool fromSave = false)
     {
         var conf = GameCore.Tables.TbHeroBaseProp.GetOrDefault(configId);
-        if (conf == null) return;
+        if (conf == null) return false;
         Id = configId;
         Attribute = (int)conf.Attribute;
         Role = conf.Role;
@@ -27,6 +27,7 @@ public class BaseCharacter : BasePawn
         Icon = conf.Icon;
         Description = conf.Description;
         ImagePath = conf.ImagePath;
+        Race = conf.Race;
         if (!fromSave)
         {
             foreach (var i in conf.CardList)
@@ -37,6 +38,7 @@ public class BaseCharacter : BasePawn
 
         RefreshCardProps();
         RefreshProps();
+        return true;
     }
 
     public int Heal;

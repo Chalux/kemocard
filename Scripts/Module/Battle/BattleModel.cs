@@ -213,6 +213,7 @@ public class BattleModel(BaseController inController) : BaseModel(inController)
         {
             // todo 失败处理
         }
+
         Init();
         GameCore.EventBus.PostEvent(CommonEvent.BattleEvent_EndBattle, isWin);
     }
@@ -264,11 +265,11 @@ public class BattleModel(BaseController inController) : BaseModel(inController)
             object data = tempDamage;
             target.ExecuteBuffs(ref data, BuffTag.BeforeAttacked);
             tempDamage.Value = Math.Max(0, tempValue);
-            for (var i = 0; i < damage.Times; i++)
+            for (var i = 0; i < tempDamage.Times; i++)
             {
                 if (target is BattleCharacter character)
                 {
-                    character.CurrentHealth -= tempDamage.Value;
+                    StaticUtil.ApplyDamage(character, tempDamage);
                     if (character.CurrentHealth <= 0)
                     {
                         character.IsDead = true;
@@ -278,7 +279,7 @@ public class BattleModel(BaseController inController) : BaseModel(inController)
                 }
                 else if (target is BattleEnemy enemy)
                 {
-                    enemy.CurrentHealth -= tempDamage.Value;
+                    StaticUtil.ApplyDamage(enemy, tempDamage);
                     if (enemy.CurrentHealth <= 0)
                     {
                         enemy.IsDead = true;
@@ -361,22 +362,35 @@ public class BattleModel(BaseController inController) : BaseModel(inController)
 
 public record Damage
 {
-    public int Value;
-    public Role Role;
-    public int Attribute;
-    public HashSet<Tag> Tags;
-    public List<BasePawn> Target;
+    public int Value = 0;
+    public Role Role = Role.NORMAL;
+    public int Attribute = 0;
+    public HashSet<Tag> Tags = [];
+    public List<BasePawn> Target = [];
     public BasePawn User;
-    public int Times;
+    public int Times = 1;
+    public Dictionary<DamageModifier, int> Modifiers = new();
+    public Action<Damage, BasePawn> OnHit;
+    public int ChainNum = 1;
 }
 
 public record HealStruct
 {
-    public int Value;
-    public Role Role;
-    public int Attribute;
-    public List<BasePawn> Target;
+    public int Value = 0;
+    public Role Role = Role.NORMAL;
+    public int Attribute = 0;
+    public List<BasePawn> Target = [];
     public BasePawn User;
+    public int ChainNum = 1;
+}
+
+public enum DamageModifier
+{
+    /** 伤害缩放 */
+    DamageScale,
+
+    /** 临时防御 */
+    TempDefense,
 }
 
 public enum BattlePhase

@@ -1,4 +1,5 @@
 ﻿using System.Runtime.Serialization;
+using cfg.pawn;
 using Godot.Collections;
 using kemocard.Scripts.Buff;
 using kemocard.Scripts.Common;
@@ -22,6 +23,7 @@ public class BasePawn
     public string Icon = "";
     public string Description = "";
     public string ImagePath = "";
+    public Race Race = Race.UNKNOWN;
 
     [JsonProperty] protected readonly Dictionary<string, BaseBuff> Buffs = [];
 
@@ -34,10 +36,10 @@ public class BasePawn
         InitFromConfig(Id, true);
     }
 
-    public virtual void InitFromConfig(string configId, bool fromSave = false)
+    public virtual bool InitFromConfig(string configId, bool fromSave = false)
     {
         var conf = GameCore.Tables.TbPawnBaseProp.GetOrDefault(configId);
-        if (conf == null) return;
+        if (conf == null) return false;
         BaseHealth = conf.BaseHealth;
         BasePDefense = conf.BasePDefense;
         BaseMDefense = conf.BaseMDefense;
@@ -49,7 +51,9 @@ public class BasePawn
         Description = conf.Description;
         ImagePath = conf.ImagePath;
         Id = conf.Id;
+        Race = conf.Race;
         RefreshProps();
+        return true;
     }
 
     public void AddBuff(BaseBuff newBaseBuff)
@@ -57,7 +61,7 @@ public class BasePawn
         if (newBaseBuff == null) return;
         if (Buffs.TryGetValue(newBaseBuff.Id, out var buff))
         {
-            if (buff.isUnique && newBaseBuff.isUnique)
+            if (buff.IsUnique && newBaseBuff.IsUnique)
             {
                 if (buff.HashCode == newBaseBuff.HashCode)
                 {

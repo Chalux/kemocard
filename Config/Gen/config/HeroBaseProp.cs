@@ -20,6 +20,7 @@ public sealed partial class HeroBaseProp : Luban.BeanBase
         Name = _buf.ReadString();
         Attribute = (pawn.Attribute)_buf.ReadInt();
         Role = (character.Role)_buf.ReadInt();
+        Race = (pawn.Race)_buf.ReadInt();
         Icon = _buf.ReadString();
         ImagePath = _buf.ReadString();
         {int n0 = System.Math.Min(_buf.ReadSize(), _buf.Size);CardList = new System.Collections.Generic.HashSet<string>(/*n0 * 3 / 2*/);for(var i0 = 0 ; i0 < n0 ; i0++) { string _e0;  _e0 = _buf.ReadString(); CardList.Add(_e0);}}
@@ -47,6 +48,10 @@ public sealed partial class HeroBaseProp : Luban.BeanBase
     /// 职能
     /// </summary>
     public readonly character.Role Role;
+    /// <summary>
+    /// 种族
+    /// </summary>
+    public readonly pawn.Race Race;
     /// <summary>
     /// 图标路径
     /// </summary>
@@ -78,6 +83,7 @@ public sealed partial class HeroBaseProp : Luban.BeanBase
         + "name:" + Name + ","
         + "attribute:" + Attribute + ","
         + "role:" + Role + ","
+        + "race:" + Race + ","
         + "Icon:" + Icon + ","
         + "ImagePath:" + ImagePath + ","
         + "cardList:" + Luban.StringUtil.CollectionToString(CardList) + ","

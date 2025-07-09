@@ -56,7 +56,8 @@ public partial class MenuScene : BaseView
         }
         else
         {
-            controller.AddCharacter("1");
+            // controller.AddCharacter("1");
+            controller.AddUnhandledReward(["4", "5", "6", "7"]);
         }
 
         var model =

@@ -18,9 +18,16 @@ public sealed partial class Reward : Luban.BeanBase
     {
         Id = _buf.ReadString();
         Type = (reward.RewardType)_buf.ReadInt();
+        Desc = _buf.ReadString();
         MoneyMin = _buf.ReadInt();
         MoneyMax = _buf.ReadInt();
         {int n0 = System.Math.Min(_buf.ReadSize(), _buf.Size);Cards = new System.Collections.Generic.HashSet<string>(/*n0 * 3 / 2*/);for(var i0 = 0 ; i0 < n0 ; i0++) { string _e0;  _e0 = _buf.ReadString(); Cards.Add(_e0);}}
+        CharacterArg1 = _buf.ReadInt();
+        CharacterArg2 = _buf.ReadInt();
+        CharacterArg3 = _buf.ReadInt();
+        CharacterRole = (character.Role)_buf.ReadInt();
+        CharacterAttr = (pawn.Attribute)_buf.ReadInt();
+        CharacterRace = (pawn.Race)_buf.ReadInt();
     }
 
     public static Reward DeserializeReward(ByteBuf _buf)
@@ -37,6 +44,10 @@ public sealed partial class Reward : Luban.BeanBase
     /// </summary>
     public readonly reward.RewardType Type;
     /// <summary>
+    /// 展示
+    /// </summary>
+    public readonly string Desc;
+    /// <summary>
     /// 钱（最低）
     /// </summary>
     public readonly int MoneyMin;
@@ -48,6 +59,21 @@ public sealed partial class Reward : Luban.BeanBase
     /// 获得的卡牌
     /// </summary>
     public readonly System.Collections.Generic.HashSet<string> Cards;
+    /// <summary>
+    /// 角色参数1
+    /// </summary>
+    public readonly int CharacterArg1;
+    /// <summary>
+    /// 角色参数2
+    /// </summary>
+    public readonly int CharacterArg2;
+    /// <summary>
+    /// 角色参数3
+    /// </summary>
+    public readonly int CharacterArg3;
+    public readonly character.Role CharacterRole;
+    public readonly pawn.Attribute CharacterAttr;
+    public readonly pawn.Race CharacterRace;
    
     public const int __ID__ = -1862824069;
     public override int GetTypeId() => __ID__;
@@ -61,9 +87,16 @@ public sealed partial class Reward : Luban.BeanBase
         return "{ "
         + "id:" + Id + ","
         + "type:" + Type + ","
+        + "desc:" + Desc + ","
         + "moneyMin:" + MoneyMin + ","
         + "moneyMax:" + MoneyMax + ","
         + "cards:" + Luban.StringUtil.CollectionToString(Cards) + ","
+        + "characterArg1:" + CharacterArg1 + ","
+        + "characterArg2:" + CharacterArg2 + ","
+        + "characterArg3:" + CharacterArg3 + ","
+        + "characterRole:" + CharacterRole + ","
+        + "characterAttr:" + CharacterAttr + ","
+        + "characterRace:" + CharacterRace + ","
         + "}";
     }
 }

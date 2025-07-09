@@ -26,6 +26,12 @@ public partial class CardBigItem : Control, ISelectableItem
     public void Init(BaseCard card)
     {
         Card = card;
+        if (card == null)
+        {
+            Visible = false;
+            return;
+        }
+
         if (FileAccess.FileExists(card.Icon)) _icon.Texture = ResourceLoader.Load<CompressedTexture2D>(card.Icon);
         SetCost(Card.Cost);
         SetDescByTag(Card.Tags);
@@ -93,12 +99,13 @@ public partial class CardBigItem : Control, ISelectableItem
         _cardControl.Modulate = Colors.White;
         _icon.Texture = null;
         Card = null;
+        Visible = false;
     }
 
     public int Index { get; set; }
     public VirtualList List { get; set; }
 
-    public override void _EnterTree() 
+    public override void _EnterTree()
     {
         base._EnterTree();
         MouseEntered += OnMouseEntered;

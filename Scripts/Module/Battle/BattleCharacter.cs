@@ -8,19 +8,47 @@ using kemocard.Scripts.Pawn;
 
 namespace kemocard.Scripts.Module.Battle;
 
-public class BattleCharacter : BaseCharacter
+public class BattleCharacter : BaseCharacter, IBattlePawn
 {
-    public int CurrentHealth;
+    int IBattlePawn.MaxHealth
+    {
+        get => MaxHealth;
+        set => MaxHealth = value;
+    }
+
+    public int CurrentHealth { get; set; }
 
     public List<BaseBattleCard> Deck = [];
-    public List<BaseBattleCard> Hand = [];
+
+    public Dictionary<int, BaseBattleCard> Hand = new()
+    {
+        { 0, null },
+        { 1, null },
+        { 2, null },
+        { 3, null },
+        { 4, null },
+    };
+
     public List<string> Discard = [];
 
     public List<BaseBattleCard> TempUsedCard = [];
 
     public const int MaxHandSize = 5;
 
-    public bool IsDead;
+    public bool IsDead { get; set; }
+
+    int IBattlePawn.PDefense
+    {
+        get => PDefense;
+        set => PDefense = value;
+    }
+
+    int IBattlePawn.MDefense
+    {
+        get => MDefense;
+        set => MDefense = value;
+    }
+
     public bool IsResetDeck;
 
     public int Cost;
@@ -41,6 +69,11 @@ public class BattleCharacter : BaseCharacter
         Cards = character.Cards;
     }
 
+    public int GetHandCount()
+    {
+        return Hand.Values.Count(card => card != null);
+    }
+
     public void Init()
     {
         CurrentHealth = MaxHealth;
@@ -53,11 +86,22 @@ public class BattleCharacter : BaseCharacter
         StaticUtil.Shuffle(Deck);
     }
 
+    public void AddToHand(BaseBattleCard card)
+    {
+        // 找到Hand中为null的位置添加进去
+        for (var i = 0; i < Hand.Count; i++)
+        {
+            if (Hand[i] != null) continue;
+            Hand[i] = card;
+            break;
+        }
+    }
+
     public void DrawCard(int count)
     {
         for (int i = 0; i < count; i++)
         {
-            if (Hand.Count >= MaxHandSize)
+            if (GetHandCount() >= MaxHandSize)
             {
                 return;
             }
@@ -80,7 +124,7 @@ public class BattleCharacter : BaseCharacter
                 return;
             }
 
-            Hand.Add(Deck[0]);
+            AddToHand(Deck[0]);
             Deck.RemoveAt(0);
         }
     }
@@ -88,7 +132,7 @@ public class BattleCharacter : BaseCharacter
     public void UseCard(string id, List<BasePawn> target)
     {
         if (string.IsNullOrWhiteSpace(id) || target == null) return;
-        var card = Hand.Find(card => card.Id == id);
+        var card = Hand.Values.FirstOrDefault(baseBattleCard => baseBattleCard.Id == id);
         if (card == null) return;
         card.Target = target;
         card.User = this;
@@ -101,7 +145,7 @@ public class BattleCharacter : BaseCharacter
     public void CancelUseCard(string id)
     {
         if (string.IsNullOrWhiteSpace(id)) return;
-        var card = Hand.Find(card => card.Id == id);
+        var card = Hand.Values.FirstOrDefault(baseBattleCard => baseBattleCard.Id == id);
         if (card == null) return;
         card.Target = null;
         card.User = null;
