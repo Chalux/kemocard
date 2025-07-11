@@ -300,6 +300,11 @@ public static class StaticUtil
         return $"res://Scripts/Buff/B{id}.cs";
     }
 
+    public static string GetEnemyScriptPath(string id)
+    {
+        return $"res://Scripts/Enemy/E{id}.cs";
+    }
+
     public static BaseBuff NewBuffOrNullById(string id, BasePawn causer)
     {
         if (string.IsNullOrWhiteSpace(id)) return null;

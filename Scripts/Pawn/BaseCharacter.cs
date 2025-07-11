@@ -244,7 +244,7 @@ public class BaseCharacter : BasePawn
         }
     }
 
-    public string GetDetailDesc()
+    public virtual string GetDetailDesc()
     {
         string result = "";
         result += $"{Name}\n{StaticUtil.GetAttributeName(Attribute)}\n{Description}\n{GetAllCardDesc()}";

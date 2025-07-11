@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using cfg.card;
 using Godot;
@@ -17,13 +18,19 @@ public partial class BattleTeammate : Control
     [Export] private Label _costLab;
     [Export] private Button _selectTeammateBtn;
     public BattleCharacter BattleHero { get; private set; }
+    public Action OnClick;
 
     public override void _Ready()
     {
         base._Ready();
-        VisibilityChanged += OnVisibilityChanged;
+        GameCore.EventBus.AddEvent(this, CommonEvent.PlayerPropUpdate, RefreshItem);
+        GameCore.EventBus.AddEvent(this, CommonEvent.BattleEvent_Render, RefreshItem);
+        GameCore.EventBus.AddEvent(this, CommonEvent.BattleEvent_SelectCardChanged, OnSelectCardChanged);
         _usedCard.RenderHandler = RenderHandler;
         _selectTeammateBtn.Pressed += SelectTeammateBtnOnPressed;
+        RefreshItem();
+        MouseEntered += ShowHint;
+        MouseExited += StaticUtil.HideHint;
     }
 
     private void SelectTeammateBtnOnPressed()
@@ -35,38 +42,29 @@ public partial class BattleTeammate : Control
     {
         if (arg1 is CardBigItem card)
         {
-            card.Init(arg3 as BaseBattleCard);
+            card.CustomMinimumSize = new(192, 288);
+            var battleCard = arg3 as BaseBattleCard;
+            card.Init(battleCard);
+            card.SetValue(battleCard?.RealTimeValue ?? 0);
         }
     }
 
     public override void _ExitTree()
     {
-        VisibilityChanged -= OnVisibilityChanged;
         GameCore.EventBus.RemoveEvent(this, CommonEvent.PlayerPropUpdate, RefreshItem);
         GameCore.EventBus.RemoveEvent(this, CommonEvent.BattleEvent_Render, RefreshItem);
         GameCore.EventBus.RemoveEvent(this, CommonEvent.BattleEvent_SelectCardChanged, OnSelectCardChanged);
         _selectTeammateBtn.Pressed -= SelectTeammateBtnOnPressed;
+        MouseEntered -= ShowHint;
+        MouseExited -= StaticUtil.HideHint;
         base._ExitTree();
-    }
-
-    private void OnVisibilityChanged()
-    {
-        if (Visible)
-        {
-            GameCore.EventBus.AddEvent(this, CommonEvent.BattleEvent_Render, RefreshItem);
-            GameCore.EventBus.AddEvent(this, CommonEvent.BattleEvent_SelectCardChanged, OnSelectCardChanged);
-        }
-        else
-        {
-            GameCore.EventBus.RemoveEvent(this, CommonEvent.BattleEvent_Render, RefreshItem);
-            GameCore.EventBus.RemoveEvent(this, CommonEvent.BattleEvent_SelectCardChanged, OnSelectCardChanged);
-        }
     }
 
     public void SetBattleHero(BattleCharacter battleHero)
     {
-        if (BattleHero != null && BattleHero == battleHero) return;
+        if (BattleHero == battleHero) return;
         BattleHero = battleHero;
+        Visible = BattleHero != null;
         RefreshItem();
     }
 
@@ -75,6 +73,11 @@ public partial class BattleTeammate : Control
         if (BattleHero == null || string.IsNullOrWhiteSpace(BattleHero.Id))
         {
             Visible = false;
+            return;
+        }
+
+        if (o != null && (o is not BattleCharacter character || character.Id != BattleHero.Id))
+        {
             return;
         }
 
@@ -95,5 +98,19 @@ public partial class BattleTeammate : Control
     private void OnSelectCardChanged(object o)
     {
         _selectTeammateBtn.Visible = o is BattleCardItem { Card.TargetType: TargetType.ST };
+    }
+
+    public override void _GuiInput(InputEvent @event)
+    {
+        base._GuiInput(@event);
+        if (@event is InputEventMouseButton mb && mb.IsPressed() && (mb.ButtonMask & MouseButtonMask.Left) > 0)
+        {
+            OnClick.Invoke();
+        }
+    }
+
+    public void ShowHint()
+    {
+        StaticUtil.ShowHint(BattleHero.GetDetailDesc());
     }
 }

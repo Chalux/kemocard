@@ -111,6 +111,11 @@ public class BattleModel(BaseController inController) : BaseModel(inController)
             character.CanUseCost = character.Cost;
             character.IsConfirm = false;
         }
+        
+        foreach (var battleEnemy in Enemies)
+        {
+            battleEnemy.UpdateActionId();
+        }
 
         GD.Print("抽卡结束，开始执行 buff");
         object data = null;

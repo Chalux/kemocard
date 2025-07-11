@@ -159,4 +159,12 @@ public class BattleCharacter : BaseCharacter, IBattlePawn
     {
         CanUseCost = Cost - TempUsedCard.Sum(x => x.Cost);
     }
+
+    public override string GetDetailDesc()
+    {
+        string result = "";
+        result +=
+            $"{Name}\n{StaticUtil.GetAttributeName(Attribute)}  回复量:{Heal}\n血量:{CurrentHealth}/{MaxHealth}  费用:{CanUseCost}/{Cost}\n物理防御:{PDefense}  魔法防御:{MDefense}\n物理攻击:{PAttack}  魔法攻击:{MAttack}\n";
+        return result;
+    }
 }

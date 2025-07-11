@@ -60,6 +60,45 @@ public partial class BattleView : BaseView
         _cardList.RenderHandler = RenderHandler;
         _cardList.SelectedHandler = SelectedHandler;
         _cardList.CanSelectHandler = CanSelectHandler;
+
+        _teammate1.OnClick += () =>
+        {
+            var hero = _teammate1.BattleHero;
+            if (hero == null)
+            {
+                return;
+            }
+
+            var idx = _mod.Teammates.FindIndex(h => h.Id == hero.Id);
+            if (idx > -1)
+                SetTeammateByIndex(idx);
+        };
+
+        _teammate2.OnClick += () =>
+        {
+            var hero = _teammate2.BattleHero;
+            if (hero == null)
+            {
+                return;
+            }
+
+            var idx = _mod.Teammates.FindIndex(h => h.Id == hero.Id);
+            if (idx > -1)
+                SetTeammateByIndex(idx);
+        };
+
+        _teammate3.OnClick += () =>
+        {
+            var hero = _teammate3.BattleHero;
+            if (hero == null)
+            {
+                return;
+            }
+
+            var idx = _mod.Teammates.FindIndex(h => h.Id == hero.Id);
+            if (idx > -1)
+                SetTeammateByIndex(idx);
+        };
     }
 
     private bool CanSelectHandler(int index)
@@ -73,7 +112,7 @@ public partial class BattleView : BaseView
 
     private void SelectedHandler(int newIndex, int previousIndex)
     {
-        if (previousIndex == newIndex)
+        if (_currCardItem?.Index == newIndex)
         {
             _currCardItem?.SetStatus(BattleCardStatus.Normal);
             // var card = _currTeammate.TempUsedCard.Find(card => card.Id == _currCardItem.Card.Id);
@@ -242,6 +281,7 @@ public partial class BattleView : BaseView
         }
 
         _confirmBtn.Text = _currTeammate.IsConfirm ? "已确定" : "确定";
+        Render();
     }
 
     private void OnEnemyItemClicked(object o)

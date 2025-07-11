@@ -37,6 +37,18 @@ public class RunModel(BaseController inController) : BaseModel(inController)
         base.Init();
         CharacterList = [];
         _allCards = [];
+        Money = 0;
+        UnhandledRewards = [];
+        // _characterPool.Clear();
+        // _cardPool.Clear();
+        _characterPool = GameCore.Tables.TbHeroBaseProp.DataList.ToDictionary(hero => hero.Id, hero =>
+            new CharacterPoolStruct
+            {
+                Attribute = hero.Attribute,
+                Id = hero.Id,
+                Role = hero.Role
+            });
+        _cardPool = GameCore.Tables.TbCard.DataList.Select(card => card.Id).ToHashSet();
         Team[Role.ATTACKER] = null;
         Team[Role.GUARD] = null;
         Team[Role.BLOCKER] = null;

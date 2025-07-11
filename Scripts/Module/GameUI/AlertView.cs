@@ -48,6 +48,7 @@ public partial class AlertView : BaseView
     private void AgreeBtnOnPressed()
     {
         _data?.agreeCallback?.Invoke();
+        GameCore.ViewMgr.CloseView(ViewType.AlertView);
     }
 
     public override void DoClose(params object[] args)

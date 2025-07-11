@@ -18,6 +18,8 @@ public partial class EnemyItem : Control
         GameCore.EventBus.AddEvent(this, CommonEvent.BattleEvent_SelectCardChanged, OnSelectCardChanged);
         GameCore.EventBus.AddEvent(this, CommonEvent.BattleEvent_Render, UpdateItem);
         _selectEnemyBtn.Pressed += SelectEnemyBtnOnPressed;
+        MouseEntered += OnMouseEntered;
+        MouseExited += StaticUtil.HideHint;
     }
 
     public override void _ExitTree()
@@ -25,6 +27,8 @@ public partial class EnemyItem : Control
         GameCore.EventBus.RemoveEvent(this, CommonEvent.BattleEvent_SelectCardChanged, OnSelectCardChanged);
         GameCore.EventBus.RemoveEvent(this, CommonEvent.BattleEvent_Render, UpdateItem);
         _selectEnemyBtn.Pressed -= SelectEnemyBtnOnPressed;
+        MouseEntered -= OnMouseEntered;
+        MouseExited -= StaticUtil.HideHint;
         base._ExitTree();
     }
 
@@ -50,5 +54,10 @@ public partial class EnemyItem : Control
     private void SelectEnemyBtnOnPressed()
     {
         GameCore.EventBus.PostEvent(CommonEvent.BattleEvent_EnemyItemClicked, this);
+    }
+
+    private void OnMouseEntered()
+    {
+        StaticUtil.ShowHint(EnemyData.GetEnemyDesc());
     }
 }

@@ -32,6 +32,7 @@ anchors_preset = 9
 anchor_bottom = 1.0
 offset_right = 128.0
 grow_vertical = 2
+mouse_filter = 2
 
 [node name="CenterContainer" type="CenterContainer" parent="Control"]
 layout_mode = 1
@@ -70,6 +71,7 @@ offset_left = 128.0
 offset_top = 16.0
 offset_right = 400.0
 offset_bottom = 144.0
+mouse_filter = 1
 script = ExtResource("5_d77po")
 _itemScene = ExtResource("6_q25e5")
 _contentContainer = NodePath("ScrollContainer/HBoxContainer")
