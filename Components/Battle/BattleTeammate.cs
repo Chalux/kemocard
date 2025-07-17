@@ -7,6 +7,7 @@ using kemocard.Components.List;
 using kemocard.Scripts.Card;
 using kemocard.Scripts.Common;
 using kemocard.Scripts.Module.Battle;
+using kemocard.Scripts.MVC;
 
 namespace kemocard.Components.Battle;
 
@@ -17,6 +18,7 @@ public partial class BattleTeammate : Control
     [Export] private TextureProgressBar _hpBar;
     [Export] private Label _costLab;
     [Export] private Button _selectTeammateBtn;
+    [Export] private TextureRect _tauntImg;
     public BattleCharacter BattleHero { get; private set; }
     public Action OnClick;
 
@@ -88,6 +90,8 @@ public partial class BattleTeammate : Control
         _usedCard.SetData(BattleHero.TempUsedCard.ToList<object>());
         _hpBar.MaxValue = BattleHero.MaxHealth;
         _hpBar.Value = BattleHero.CurrentHealth;
+        var mod = GameCore.ControllerMgr.GetControllerModel<BattleModel>(ControllerType.Battle);
+        _tauntImg.Visible = mod != null && mod.IsTaunt(BattleHero.Taunt);
     }
 
     public void SetCost(int canUseCost, int cost)

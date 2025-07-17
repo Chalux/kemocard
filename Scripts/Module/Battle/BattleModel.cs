@@ -363,6 +363,17 @@ public class BattleModel(BaseController inController) : BaseModel(inController)
             OnBattleEnd();
         }
     }
+
+    public bool IsTaunt(int taunt)
+    {
+        int maxTaunt = 0;
+        foreach (var character in Teammates)
+        {
+            maxTaunt = Math.Max(maxTaunt, character.Taunt);
+        }
+
+        return taunt >= maxTaunt;
+    }
 }
 
 public record Damage

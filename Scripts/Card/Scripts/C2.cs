@@ -6,24 +6,12 @@ using kemocard.Scripts.MVC;
 
 namespace kemocard.Scripts.Card.Scripts;
 
-public partial class C2 : BaseCardScript
+public partial class C2 : BaseAttackCard
 {
-    public override void UseCard(BaseBattleCard parent)
+    protected override void CustomizeDamage(ref Damage damage, BaseBattleCard parent)
     {
-        var mod = GameCore.ControllerMgr.GetControllerModel<BattleModel>(ControllerType.Battle);
-        if (mod == null) return;
         if (parent.Target.Count <= 0) return;
         var isSpecial = (parent.Target[0].Attribute & (int)Attribute.FIRE) > 0;
-        Damage damage = new()
-        {
-            User = parent.User,
-            Target = parent.Target,
-            Role = Role.ATTACKER,
-            Attribute = (int)Attribute.WATER,
-            Tags = parent.Tags,
-            Value = parent.RealTimeValue,
-            Times = isSpecial ? 2 : 1,
-        };
-        mod.DoDamage(damage);
+        damage.Times = isSpecial ? 2 : 1;
     }
 }

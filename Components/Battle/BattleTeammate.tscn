@@ -1,9 +1,10 @@
-[gd_scene load_steps=9 format=3 uid="uid://cxliblnbb8mkv"]
+[gd_scene load_steps=10 format=3 uid="uid://cxliblnbb8mkv"]
 
 [ext_resource type="Script" uid="uid://hpib2kshni07" path="res://Components/Battle/BattleTeammate.cs" id="1_w1hrs"]
 [ext_resource type="Shader" uid="uid://m3ehfkvneshl" path="res://Assets/Shaders/FadeOut.gdshader" id="1_xvfj4"]
 [ext_resource type="Texture2D" uid="uid://kms2uygohqg8" path="res://Assets/Texture/GUI/GUI.png" id="2_w1hrs"]
 [ext_resource type="PackedScene" uid="uid://o730khbn4fyq" path="res://Components/TextProgressBar/TextProgressBar.tscn" id="3_0uvvf"]
+[ext_resource type="Texture2D" uid="uid://drdwdjghjvlo5" path="res://Assets/Texture/Icons/crosshair-w.png" id="4_q25e5"]
 [ext_resource type="Script" uid="uid://chmewpio17dky" path="res://Components/List/VirtualList.cs" id="5_d77po"]
 [ext_resource type="PackedScene" uid="uid://c01n24gystrqo" path="res://Components/Card/CardBigItem.tscn" id="6_q25e5"]
 
@@ -46,6 +47,21 @@ grow_vertical = 2
 material = SubResource("ShaderMaterial_11si8")
 layout_mode = 2
 texture = ExtResource("2_w1hrs")
+
+[node name="TextureRect" type="TextureRect" parent="Control"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -41.0
+offset_top = -41.0
+offset_right = 41.0
+offset_bottom = 41.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("4_q25e5")
 
 [node name="TextureProgressBar" parent="." instance=ExtResource("3_0uvvf")]
 layout_mode = 1

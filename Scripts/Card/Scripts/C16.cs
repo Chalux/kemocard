@@ -6,10 +6,10 @@ using kemocard.Scripts.MVC;
 
 namespace kemocard.Scripts.Card.Scripts;
 
-public partial class C4 : BaseAttackCard
+public partial class C16 : BaseAttackCard
 {
-    protected override void CustomizeDamage(ref Damage damage, BaseBattleCard parent)
+    public override void UpdateRealTimeValue(BaseBattleCard parent, ref float result)
     {
-        damage.Times = 3;
+        result += 5000 * parent.RealTimeChain;
     }
 }

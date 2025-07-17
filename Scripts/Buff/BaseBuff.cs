@@ -93,4 +93,7 @@ public enum BuffTag
 
     /** 被治疗 */
     Healed,
+    
+    /** 嘲讽 */
+    Taunt,
 }

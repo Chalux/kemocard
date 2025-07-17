@@ -67,7 +67,7 @@ public partial class BaseBattleCard : BaseCard
             result += User.Heal * costRate;
         }
 
-        Script.UpdateRealTimeValue(this, ref result);
+        Script?.UpdateRealTimeValue(this, ref result);
 
         var model = GameCore.ControllerMgr.GetControllerModel<BattleModel>((int)ControllerType.Battle);
         if (model is { IsInBattle: true })

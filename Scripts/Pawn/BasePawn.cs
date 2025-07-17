@@ -203,6 +203,7 @@ public struct TempPropStruct
     public float AddHeal = 0;
     public float ExtraHeal = 0;
     public int AddDraw = 0;
+    public int Taunt = 0;
 
     public TempPropStruct()
     {

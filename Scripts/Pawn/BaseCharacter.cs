@@ -43,6 +43,8 @@ public class BaseCharacter : BasePawn
 
     public int Heal;
     public int Draw;
+    /** 嘲讽优先级 */
+    public int Taunt;
 
     public override void RefreshProps()
     {
@@ -53,6 +55,7 @@ public class BaseCharacter : BasePawn
         var oldMDefense = MDefense;
         var oldHeal = Heal;
         var oldDraw = Draw;
+        var oldTaunt = Taunt;
         TempPropStruct tempProp = new();
         foreach (var buff in Buffs)
         {
@@ -66,9 +69,10 @@ public class BaseCharacter : BasePawn
         MDefense = (int)((BaseMDefense + tempProp.AddMDefense + CardMDefense) * (1 + tempProp.ExtraMDefense));
         Heal = (int)((BaseHeal + tempProp.AddHealth + CardHeal) * (1 + tempProp.ExtraHealth));
         Draw = 1 + tempProp.AddDraw;
+        Taunt = tempProp.Taunt;
 
         if (oldMaxHealth != MaxHealth || oldPAttack != PAttack || oldMAttack != MAttack || oldPDefense != PDefense ||
-            oldMDefense != MDefense || oldHeal != Heal || oldDraw != Draw)
+            oldMDefense != MDefense || oldHeal != Heal || oldDraw != Draw || oldTaunt != Taunt)
         {
             GameCore.EventBus.PostEvent(CommonEvent.PlayerPropUpdate, this);
         }
